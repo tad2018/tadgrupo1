@@ -5,10 +5,29 @@
  */
 package com.mycompany.leaguetad.dao;
 
+import com.mycompany.leaguetad.modelo.EquipoTecnico;
+import com.mycompany.leaguetad.modelo.Jugador;
+import com.mycompany.leaguetad.persistence.PersistenceJDBC;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
 /**
  *
  * @author expositod
  */
 public class EquipoDAO {
+    PersistenceJDBC conexion = new PersistenceJDBC();
+    Connection conn;
+    Statement stmt;
+    
+    public void createEquipo(String nombre, ArrayList<Jugador> jugadores, ArrayList<EquipoTecnico> equipoTecnico) throws SQLException{
+        conn = conexion.getConnection();
+        
+        stmt = conn.createStatement();
+    }
+   
+    
     
 }

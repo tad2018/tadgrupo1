@@ -20,8 +20,9 @@ public class Jugador {
     private int expulsiones;
     private int paradas;
     private int tiros;
+    private Equipo equipo;
 
-    public Jugador(String nombre, String posicion, int edad, String nacionalidad, int goles, int pases, int faltas, int expulsiones, int paradas, int tiros) {
+    public Jugador(String nombre, String posicion, int edad, String nacionalidad, int goles, int pases, int faltas, int expulsiones, int paradas, int tiros, Equipo equipo) {
         this.nombre = nombre;
         this.posicion = posicion;
         this.edad = edad;
@@ -32,6 +33,7 @@ public class Jugador {
         this.expulsiones = expulsiones;
         this.paradas = paradas;
         this.tiros = tiros;
+        this.equipo = equipo;
     }
 
     public String getNombre() {
@@ -113,6 +115,13 @@ public class Jugador {
     public void setTiros(int tiros) {
         this.tiros = tiros;
     }
-    
-    
+
+    public Equipo getEquipo() {
+        return equipo;
+    }
+
+    public void setEquipo(Equipo equipo) {
+        this.equipo = equipo;
+    }
+       
 }
