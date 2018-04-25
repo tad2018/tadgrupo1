@@ -5,10 +5,11 @@
  */
 package com.mycompany.leaguetad.dao;
 
+
 /**
  *
  * @author expositod
  */
 public class PartidoDAO {
-    
+   
 }
