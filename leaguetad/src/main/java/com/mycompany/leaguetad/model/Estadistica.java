@@ -3,13 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.leaguetad.modelo;
+package com.mycompany.leaguetad.model;
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author expositod
  */
-public class Estadistica {
+@Table
+@Entity
+public class Estadistica implements Serializable {
+    private Long id;
     private int goles;
     private int pases;
     private int faltas;
@@ -17,16 +26,17 @@ public class Estadistica {
     private int paradas;
     private int tiros;
 
-    public Estadistica(int goles, int pases, int faltas, int expulsiones, int paradas, int tiros) {
-        this.goles = goles;
-        this.pases = pases;
-        this.faltas = faltas;
-        this.expulsiones = expulsiones;
-        this.paradas = paradas;
-        this.tiros = tiros;
+    @Id
+    @GeneratedValue
+    public Long getId() {
+        return id;
     }
-    
-    
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Column
     public int getGoles() {
         return goles;
     }
@@ -35,6 +45,7 @@ public class Estadistica {
         this.goles = goles;
     }
 
+    @Column
     public int getPases() {
         return pases;
     }
@@ -43,6 +54,7 @@ public class Estadistica {
         this.pases = pases;
     }
 
+    @Column
     public int getFaltas() {
         return faltas;
     }
@@ -51,6 +63,7 @@ public class Estadistica {
         this.faltas = faltas;
     }
 
+    @Column
     public int getExpulsiones() {
         return expulsiones;
     }
@@ -59,6 +72,7 @@ public class Estadistica {
         this.expulsiones = expulsiones;
     }
 
+    @Column
     public int getParadas() {
         return paradas;
     }
@@ -67,6 +81,7 @@ public class Estadistica {
         this.paradas = paradas;
     }
 
+    @Column
     public int getTiros() {
         return tiros;
     }
@@ -74,6 +89,5 @@ public class Estadistica {
     public void setTiros(int tiros) {
         this.tiros = tiros;
     }
-    
     
 }

@@ -3,35 +3,50 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.leaguetad.modelo;
+package com.mycompany.leaguetad.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author expositod
  */
-public class Liga {
-    private ArrayList<Calendario> calendarios;
+@Table
+@Entity
+public class Liga implements Serializable {
+    private Long id;
+    private List<Calendario> calendarios;
     private String nombre;
     private String pais;
     private ArrayList<Equipo> equipos;
 
-    public Liga(ArrayList<Calendario> calendarios, String nombre, String pais, ArrayList<Equipo> equipos) {
-        this.calendarios = calendarios;
-        this.nombre = nombre;
-        this.pais = pais;
-        this.equipos = equipos;
+    @Id
+    @GeneratedValue
+    public Long getId() {
+        return id;
     }
 
-    public ArrayList<Calendario> getCalendarios() {
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Column
+    public List<Calendario> getCalendarios() {
         return calendarios;
     }
 
-    public void setCalendarios(ArrayList<Calendario> calendarios) {
+    public void setCalendarios(List<Calendario> calendarios) {
         this.calendarios = calendarios;
     }
 
+    @Column
     public String getNombre() {
         return nombre;
     }
@@ -40,6 +55,7 @@ public class Liga {
         this.nombre = nombre;
     }
 
+    @Column
     public String getPais() {
         return pais;
     }
@@ -48,6 +64,7 @@ public class Liga {
         this.pais = pais;
     }
 
+    @Column
     public ArrayList<Equipo> getEquipos() {
         return equipos;
     }
@@ -55,6 +72,6 @@ public class Liga {
     public void setEquipos(ArrayList<Equipo> equipos) {
         this.equipos = equipos;
     }
-    
-    
+
+   
 }

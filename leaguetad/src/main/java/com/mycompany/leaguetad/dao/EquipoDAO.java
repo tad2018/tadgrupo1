@@ -5,8 +5,8 @@
  */
 package com.mycompany.leaguetad.dao;
 
-import com.mycompany.leaguetad.modelo.EquipoTecnico;
-import com.mycompany.leaguetad.modelo.Jugador;
+import com.mycompany.leaguetad.model.EquipoTecnico;
+import com.mycompany.leaguetad.model.Jugador;
 import com.mycompany.leaguetad.persistence.PersistenceJDBC;
 import java.sql.Connection;
 import java.sql.SQLException;

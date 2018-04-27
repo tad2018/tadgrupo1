@@ -3,23 +3,38 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.leaguetad.modelo;
+package com.mycompany.leaguetad.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author expositod
  */
-public class Calendario {
+@Table
+@Entity
+public class Calendario implements Serializable {
+    private Long id;
     private String anyo;
     private ArrayList<Jornada> jornadas;
 
-    public Calendario(String anyo, ArrayList<Jornada> jornadas) {
-        this.anyo = anyo;
-        this.jornadas = jornadas;
+    @Id
+    @GeneratedValue
+    public Long getId() {
+        return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Column
     public String getAnyo() {
         return anyo;
     }
@@ -28,6 +43,7 @@ public class Calendario {
         this.anyo = anyo;
     }
 
+    @Column
     public ArrayList<Jornada> getJornadas() {
         return jornadas;
     }
@@ -35,5 +51,6 @@ public class Calendario {
     public void setJornadas(ArrayList<Jornada> jornadas) {
         this.jornadas = jornadas;
     }
+
     
 }

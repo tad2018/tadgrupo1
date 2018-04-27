@@ -3,23 +3,37 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.leaguetad.modelo;
+package com.mycompany.leaguetad.model;
+
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author expositod
  */
-public class Partido {
+@Table
+@Entity
+public class Partido implements Serializable {
+    private Long id;
     private Equipo local;
     private Equipo visitante;
     private Estadistica estadistica;
-
-    public Partido(Equipo local, Equipo visitante, Estadistica estadistica) {
-        this.local = local;
-        this.visitante = visitante;
-        this.estadistica = estadistica;
+    
+    @Id
+    @GeneratedValue
+    public Long getId() {
+        return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+    @Column
     public Equipo getLocal() {
         return local;
     }
@@ -27,15 +41,17 @@ public class Partido {
     public void setLocal(Equipo local) {
         this.local = local;
     }
-
+    
+    @Column
     public Equipo getVisitante() {
         return visitante;
     }
-
+    
     public void setVisitante(Equipo visitante) {
         this.visitante = visitante;
     }
 
+    @Column
     public Estadistica getEstadistica() {
         return estadistica;
     }
@@ -43,6 +59,7 @@ public class Partido {
     public void setEstadistica(Estadistica estadistica) {
         this.estadistica = estadistica;
     }
-    
+
+
     
 }
