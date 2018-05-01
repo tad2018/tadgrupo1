@@ -153,6 +153,16 @@ public class Equipo implements Serializable {
         }
         return true;
     }
+    
+    public int compareTo(Equipo e) {
+        if (puntos < e.puntos) {
+            return -1;
+        }
+        if (puntos > e.puntos) {
+            return 1;
+        }
+        return 0;
+    }
 
     @Override
     public String toString() {

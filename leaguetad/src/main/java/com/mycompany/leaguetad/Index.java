@@ -1,5 +1,7 @@
 package com.mycompany.leaguetad;
 
+import com.mycompany.leaguetad.dao.LigaDAO;
+import com.mycompany.leaguetad.model.Equipo;
 import javax.servlet.annotation.WebServlet;
 
 import com.vaadin.annotations.Theme;
@@ -13,6 +15,7 @@ import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.PasswordField;
+import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -42,11 +45,6 @@ public class Index extends UI {
         VerticalLayout content = new VerticalLayout();
         loginPanel.setContent(content);
         loginPanel.setSizeUndefined();
-
-        // No captions for fields is they are provided in the template
-//        content.addComponent(new TextField(), "username");
-//        content.addComponent(new TextField(), "password");
-//        content.addComponent(new Button("Login"), "okbutton");
         
         final Label nombreUsuarioLabel = new Label("Nombre Usuario");
         final Label passwordLabel = new Label("Contraseña");
@@ -65,9 +63,26 @@ public class Index extends UI {
         content.setSpacing(true);
         loginLayout.addComponents(loginPanel);
         
-
-        final Label liga = new Label("Ligas");
-        clasificacionesLayout.addComponent(liga);
+        final Table tablaLigaEspañola = new Table("Liga Santander");
+        //tabla.setSizeFull();
+        tablaLigaEspañola.setWidth(100, UNITS_PERCENTAGE);
+        tablaLigaEspañola.setHeight(50, UNITS_PERCENTAGE);
+        tablaLigaEspañola.setSelectable(true);
+        tablaLigaEspañola.setMultiSelect(true);
+        tablaLigaEspañola.setImmediate(true);
+        tablaLigaEspañola.addContainerProperty("", Integer.class, null);
+        tablaLigaEspañola.addContainerProperty("EQUIPOS", String.class, null);
+        tablaLigaEspañola.addContainerProperty("PUNTOS", Integer.class, null);
+        
+        LigaDAO ligadao = new LigaDAO();
+        final Equipo[] listadoEquipos = ligadao.getClasificacionLigaEspanola();
+        for(int i=0; i < listadoEquipos.length; i++){
+            Equipo e = (Equipo) listadoEquipos[i];
+            tablaLigaEspañola.addItem(new Object[]{i+1, e.getNombre(), e.getPuntos()}, i+1);
+            i++;
+        }
+        
+        clasificacionesLayout.addComponent(tablaLigaEspañola);
         
         layout.addComponents(clasificacionesLayout, loginLayout);
         layout.setSplitPosition(70, Unit.PERCENTAGE);
