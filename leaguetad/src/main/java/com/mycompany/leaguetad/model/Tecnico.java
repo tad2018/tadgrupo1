@@ -6,7 +6,6 @@
 package com.mycompany.leaguetad.model;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,22 +17,22 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author abarroso
  */
 @Entity
-@Table(name = "partido")
+@Table(name = "tecnico")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Partido.findAll", query = "SELECT p FROM Partido p")
-    , @NamedQuery(name = "Partido.findById", query = "SELECT p FROM Partido p WHERE p.id = :id")})
-public class Partido implements Serializable {
+    @NamedQuery(name = "Tecnico.findAll", query = "SELECT t FROM Tecnico t")
+    , @NamedQuery(name = "Tecnico.findById", query = "SELECT t FROM Tecnico t WHERE t.id = :id")
+    , @NamedQuery(name = "Tecnico.findByNombre", query = "SELECT t FROM Tecnico t WHERE t.nombre = :nombre")
+    , @NamedQuery(name = "Tecnico.findByPuesto", query = "SELECT t FROM Tecnico t WHERE t.puesto = :puesto")})
+public class Tecnico implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -41,22 +40,18 @@ public class Partido implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @OneToMany(mappedBy = "partidoId", fetch = FetchType.LAZY)
-    private List<Estadistica> estadisticaList;
-    @JoinColumn(name = "local_id", referencedColumnName = "id")
+    @Column(name = "nombre")
+    private String nombre;
+    @Column(name = "puesto")
+    private String puesto;
+    @JoinColumn(name = "equipo_id", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Equipo localId;
-    @JoinColumn(name = "jornada_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Jornada jornadaId;
-    @JoinColumn(name = "visitante_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Equipo visitanteId;
+    private Equipo equipoId;
 
-    public Partido() {
+    public Tecnico() {
     }
 
-    public Partido(Integer id) {
+    public Tecnico(Integer id) {
         this.id = id;
     }
 
@@ -68,37 +63,28 @@ public class Partido implements Serializable {
         this.id = id;
     }
 
-    @XmlTransient
-    public List<Estadistica> getEstadisticaList() {
-        return estadisticaList;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setEstadisticaList(List<Estadistica> estadisticaList) {
-        this.estadisticaList = estadisticaList;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public Equipo getLocalId() {
-        return localId;
+    public String getPuesto() {
+        return puesto;
     }
 
-    public void setLocalId(Equipo localId) {
-        this.localId = localId;
+    public void setPuesto(String puesto) {
+        this.puesto = puesto;
     }
 
-    public Jornada getJornadaId() {
-        return jornadaId;
+    public Equipo getEquipoId() {
+        return equipoId;
     }
 
-    public void setJornadaId(Jornada jornadaId) {
-        this.jornadaId = jornadaId;
-    }
-
-    public Equipo getVisitanteId() {
-        return visitanteId;
-    }
-
-    public void setVisitanteId(Equipo visitanteId) {
-        this.visitanteId = visitanteId;
+    public void setEquipoId(Equipo equipoId) {
+        this.equipoId = equipoId;
     }
 
     @Override
@@ -111,10 +97,10 @@ public class Partido implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Partido)) {
+        if (!(object instanceof Tecnico)) {
             return false;
         }
-        Partido other = (Partido) object;
+        Tecnico other = (Tecnico) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -123,7 +109,7 @@ public class Partido implements Serializable {
 
     @Override
     public String toString() {
-        return "com.mycompany.leaguetad.model.Partido[ id=" + id + " ]";
+        return "com.mycompany.leaguetad.model.Tecnico[ id=" + id + " ]";
     }
     
 }

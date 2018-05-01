@@ -5,7 +5,7 @@
  */
 package com.mycompany.leaguetad.dao;
 
-import com.mycompany.leaguetad.model.EquipoTecnico;
+import com.mycompany.leaguetad.model.Tecnico;
 import com.mycompany.leaguetad.model.Jugador;
 import com.mycompany.leaguetad.persistence.PersistenceJDBC;
 import java.sql.Connection;
@@ -22,7 +22,7 @@ public class EquipoDAO {
     Connection conn;
     Statement stmt;
     
-    public void createEquipo(String nombre, ArrayList<Jugador> jugadores, ArrayList<EquipoTecnico> equipoTecnico) throws SQLException{
+    public void createEquipo(String nombre, ArrayList<Jugador> jugadores, ArrayList<Tecnico> equipoTecnico) throws SQLException{
         conn = conexion.getConnection();
         
         stmt = conn.createStatement();

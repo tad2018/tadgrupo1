@@ -6,47 +6,65 @@
 package com.mycompany.leaguetad.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author expositod
+ * @author abarroso
  */
-@Table
 @Entity
+@Table(name = "liga")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Liga.findAll", query = "SELECT l FROM Liga l")
+    , @NamedQuery(name = "Liga.findById", query = "SELECT l FROM Liga l WHERE l.id = :id")
+    , @NamedQuery(name = "Liga.findByNombre", query = "SELECT l FROM Liga l WHERE l.nombre = :nombre")
+    , @NamedQuery(name = "Liga.findByPais", query = "SELECT l FROM Liga l WHERE l.pais = :pais")})
 public class Liga implements Serializable {
-    private Long id;
-    private List<Calendario> calendarios;
-    private String nombre;
-    private String pais;
-    private ArrayList<Equipo> equipos;
 
+    private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue
-    public Long getId() {
-        return id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "id")
+    private Integer id;
+    @Column(name = "nombre")
+    private String nombre;
+    @Column(name = "pais")
+    private String pais;
+    @OneToMany(mappedBy = "ligaId", fetch = FetchType.LAZY)
+    private List<Equipo> equipoList;
+    @OneToMany(mappedBy = "ligaId", fetch = FetchType.LAZY)
+    private List<Calendario> calendarioList;
+
+    public Liga() {
     }
 
-    public void setId(Long id) {
+    public Liga(Integer id) {
         this.id = id;
     }
 
-    @Column
-    public List<Calendario> getCalendarios() {
-        return calendarios;
+    public Integer getId() {
+        return id;
     }
 
-    public void setCalendarios(List<Calendario> calendarios) {
-        this.calendarios = calendarios;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    @Column
     public String getNombre() {
         return nombre;
     }
@@ -55,7 +73,6 @@ public class Liga implements Serializable {
         this.nombre = nombre;
     }
 
-    @Column
     public String getPais() {
         return pais;
     }
@@ -64,14 +81,47 @@ public class Liga implements Serializable {
         this.pais = pais;
     }
 
-    @Column
-    public ArrayList<Equipo> getEquipos() {
-        return equipos;
+    @XmlTransient
+    public List<Equipo> getEquipoList() {
+        return equipoList;
     }
 
-    public void setEquipos(ArrayList<Equipo> equipos) {
-        this.equipos = equipos;
+    public void setEquipoList(List<Equipo> equipoList) {
+        this.equipoList = equipoList;
     }
 
-   
+    @XmlTransient
+    public List<Calendario> getCalendarioList() {
+        return calendarioList;
+    }
+
+    public void setCalendarioList(List<Calendario> calendarioList) {
+        this.calendarioList = calendarioList;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Liga)) {
+            return false;
+        }
+        Liga other = (Liga) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "com.mycompany.leaguetad.model.Liga[ id=" + id + " ]";
+    }
+    
 }
