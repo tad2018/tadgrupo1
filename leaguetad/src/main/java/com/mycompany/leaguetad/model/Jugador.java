@@ -3,13 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.leaguetad.modelo;
+package com.mycompany.leaguetad.model;
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author expositod
  */
-public class Jugador {
+@Table
+@Entity
+public class Jugador implements Serializable {
+    private Long id;
     private String nombre;
     private String posicion;
     private int edad;
@@ -22,20 +31,17 @@ public class Jugador {
     private int tiros;
     private Equipo equipo;
 
-    public Jugador(String nombre, String posicion, int edad, String nacionalidad, int goles, int pases, int faltas, int expulsiones, int paradas, int tiros, Equipo equipo) {
-        this.nombre = nombre;
-        this.posicion = posicion;
-        this.edad = edad;
-        this.nacionalidad = nacionalidad;
-        this.goles = goles;
-        this.pases = pases;
-        this.faltas = faltas;
-        this.expulsiones = expulsiones;
-        this.paradas = paradas;
-        this.tiros = tiros;
-        this.equipo = equipo;
+    @Id
+    @GeneratedValue
+    public Long getId() {
+        return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Column
     public String getNombre() {
         return nombre;
     }
@@ -44,6 +50,7 @@ public class Jugador {
         this.nombre = nombre;
     }
 
+    @Column
     public String getPosicion() {
         return posicion;
     }
@@ -52,6 +59,7 @@ public class Jugador {
         this.posicion = posicion;
     }
 
+    @Column
     public int getEdad() {
         return edad;
     }
@@ -60,6 +68,7 @@ public class Jugador {
         this.edad = edad;
     }
 
+    @Column
     public String getNacionalidad() {
         return nacionalidad;
     }
@@ -68,6 +77,7 @@ public class Jugador {
         this.nacionalidad = nacionalidad;
     }
 
+    @Column
     public int getGoles() {
         return goles;
     }
@@ -76,6 +86,7 @@ public class Jugador {
         this.goles = goles;
     }
 
+    @Column
     public int getPases() {
         return pases;
     }
@@ -84,6 +95,7 @@ public class Jugador {
         this.pases = pases;
     }
 
+    @Column
     public int getFaltas() {
         return faltas;
     }
@@ -92,6 +104,7 @@ public class Jugador {
         this.faltas = faltas;
     }
 
+    @Column
     public int getExpulsiones() {
         return expulsiones;
     }
@@ -100,6 +113,7 @@ public class Jugador {
         this.expulsiones = expulsiones;
     }
 
+    @Column
     public int getParadas() {
         return paradas;
     }
@@ -108,6 +122,7 @@ public class Jugador {
         this.paradas = paradas;
     }
 
+    @Column
     public int getTiros() {
         return tiros;
     }
@@ -116,6 +131,7 @@ public class Jugador {
         this.tiros = tiros;
     }
 
+    @Column
     public Equipo getEquipo() {
         return equipo;
     }
@@ -123,5 +139,6 @@ public class Jugador {
     public void setEquipo(Equipo equipo) {
         this.equipo = equipo;
     }
+
        
 }
