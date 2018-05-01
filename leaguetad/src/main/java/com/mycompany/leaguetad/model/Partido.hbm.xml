@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 01-may-2018 19:11:13 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="com.mycompany.leaguetad.Partido" table="partido" catalog="leaguetad" optimistic-lock="version">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="equipoByLocalId" class="com.mycompany.leaguetad.Equipo" fetch="select">
+            <column name="local_id" />
+        </many-to-one>
+        <many-to-one name="equipoByVisitanteId" class="com.mycompany.leaguetad.Equipo" fetch="select">
+            <column name="visitante_id" />
+        </many-to-one>
+        <many-to-one name="jornada" class="com.mycompany.leaguetad.Jornada" fetch="select">
+            <column name="jornada_id" />
+        </many-to-one>
+        <set name="estadisticas" table="estadistica" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="partido_id" />
+            </key>
+            <one-to-many class="com.mycompany.leaguetad.Estadistica" />
+        </set>
+    </class>
+</hibernate-mapping>
