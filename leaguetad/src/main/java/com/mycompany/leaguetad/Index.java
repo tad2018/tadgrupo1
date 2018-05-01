@@ -39,12 +39,12 @@ public class Index extends UI {
         final TextField nombreUsuarioText = new TextField();
         final PasswordField passwordText = new PasswordField();
         
-        Button button = new Button("Iniciar Sesión");
-        button.addClickListener( e -> {
+        Button buttonIniciarSesion = new Button("Iniciar Sesión");
+        buttonIniciarSesion.addClickListener( e -> {
             layout.addComponent(new Label("Hey"));
         });
 
-        loginLayout.addComponents(iniciarSesionLabel, nombreUsuarioLabel, nombreUsuarioText, passwordLabel, passwordText);
+        loginLayout.addComponents(iniciarSesionLabel, nombreUsuarioLabel, nombreUsuarioText, passwordLabel, passwordText, buttonIniciarSesion);
         
 
         final Label liga = new Label("Ligas");
