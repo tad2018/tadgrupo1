@@ -9,7 +9,6 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author abarroso
  */
 @Entity
-@Table(name = "jugador")
+@Table(name = "jugador", catalog = "leaguetad", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Jugador.findAll", query = "SELECT j FROM Jugador j")
@@ -69,7 +68,7 @@ public class Jugador implements Serializable {
     @Column(name = "tiros")
     private Integer tiros;
     @JoinColumn(name = "equipo_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Equipo equipoId;
 
     public Jugador() {

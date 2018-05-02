@@ -41,12 +41,12 @@ Contributor(s):
 -->
 <hibernate-reverse-engineering>
   <schema-selection match-catalog="leaguetad"/>
-  <table-filter match-name="calendario"/>
-  <table-filter match-name="partido"/>
-  <table-filter match-name="jugador"/>
-  <table-filter match-name="tecnico"/>
-  <table-filter match-name="jornada"/>
-  <table-filter match-name="equipo"/>
   <table-filter match-name="estadistica"/>
+  <table-filter match-name="calendario"/>
+  <table-filter match-name="tecnico"/>
+  <table-filter match-name="equipo"/>
+  <table-filter match-name="jugador"/>
+  <table-filter match-name="partido"/>
+  <table-filter match-name="jornada"/>
   <table-filter match-name="liga"/>
 </hibernate-reverse-engineering>

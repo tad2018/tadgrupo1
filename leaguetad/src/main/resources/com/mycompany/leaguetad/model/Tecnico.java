@@ -6,34 +6,32 @@
 package com.mycompany.leaguetad.model;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author abarroso
  */
 @Entity
-@Table(name = "liga")
+@Table(name = "tecnico", catalog = "leaguetad", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Liga.findAll", query = "SELECT l FROM Liga l")
-    , @NamedQuery(name = "Liga.findById", query = "SELECT l FROM Liga l WHERE l.id = :id")
-    , @NamedQuery(name = "Liga.findByNombre", query = "SELECT l FROM Liga l WHERE l.nombre = :nombre")
-    , @NamedQuery(name = "Liga.findByPais", query = "SELECT l FROM Liga l WHERE l.pais = :pais")})
-public class Liga implements Serializable {
+    @NamedQuery(name = "Tecnico.findAll", query = "SELECT t FROM Tecnico t")
+    , @NamedQuery(name = "Tecnico.findById", query = "SELECT t FROM Tecnico t WHERE t.id = :id")
+    , @NamedQuery(name = "Tecnico.findByNombre", query = "SELECT t FROM Tecnico t WHERE t.nombre = :nombre")
+    , @NamedQuery(name = "Tecnico.findByPuesto", query = "SELECT t FROM Tecnico t WHERE t.puesto = :puesto")})
+public class Tecnico implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -43,17 +41,16 @@ public class Liga implements Serializable {
     private Integer id;
     @Column(name = "nombre")
     private String nombre;
-    @Column(name = "pais")
-    private String pais;
-    @OneToMany(mappedBy = "ligaId", fetch = FetchType.LAZY)
-    private List<Equipo> equipoList;
-    @OneToMany(mappedBy = "ligaId", fetch = FetchType.LAZY)
-    private List<Calendario> calendarioList;
+    @Column(name = "puesto")
+    private String puesto;
+    @JoinColumn(name = "equipo_id", referencedColumnName = "id")
+    @ManyToOne
+    private Equipo equipoId;
 
-    public Liga() {
+    public Tecnico() {
     }
 
-    public Liga(Integer id) {
+    public Tecnico(Integer id) {
         this.id = id;
     }
 
@@ -73,30 +70,20 @@ public class Liga implements Serializable {
         this.nombre = nombre;
     }
 
-    public String getPais() {
-        return pais;
+    public String getPuesto() {
+        return puesto;
     }
 
-    public void setPais(String pais) {
-        this.pais = pais;
+    public void setPuesto(String puesto) {
+        this.puesto = puesto;
     }
 
-    @XmlTransient
-    public List<Equipo> getEquipoList() {
-        return equipoList;
+    public Equipo getEquipoId() {
+        return equipoId;
     }
 
-    public void setEquipoList(List<Equipo> equipoList) {
-        this.equipoList = equipoList;
-    }
-
-    @XmlTransient
-    public List<Calendario> getCalendarioList() {
-        return calendarioList;
-    }
-
-    public void setCalendarioList(List<Calendario> calendarioList) {
-        this.calendarioList = calendarioList;
+    public void setEquipoId(Equipo equipoId) {
+        this.equipoId = equipoId;
     }
 
     @Override
@@ -109,10 +96,10 @@ public class Liga implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Liga)) {
+        if (!(object instanceof Tecnico)) {
             return false;
         }
-        Liga other = (Liga) object;
+        Tecnico other = (Tecnico) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -121,7 +108,7 @@ public class Liga implements Serializable {
 
     @Override
     public String toString() {
-        return "com.mycompany.leaguetad.model.Liga[ id=" + id + " ]";
+        return "com.mycompany.leaguetad.model.Tecnico[ id=" + id + " ]";
     }
     
 }

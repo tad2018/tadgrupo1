@@ -6,10 +6,11 @@
 package com.mycompany.leaguetad.model;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,22 +18,25 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author abarroso
  */
 @Entity
-@Table(name = "tecnico")
+@Table(name = "calendario", catalog = "leaguetad", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Tecnico.findAll", query = "SELECT t FROM Tecnico t")
-    , @NamedQuery(name = "Tecnico.findById", query = "SELECT t FROM Tecnico t WHERE t.id = :id")
-    , @NamedQuery(name = "Tecnico.findByNombre", query = "SELECT t FROM Tecnico t WHERE t.nombre = :nombre")
-    , @NamedQuery(name = "Tecnico.findByPuesto", query = "SELECT t FROM Tecnico t WHERE t.puesto = :puesto")})
-public class Tecnico implements Serializable {
+    @NamedQuery(name = "Calendario.findAll", query = "SELECT c FROM Calendario c")
+    , @NamedQuery(name = "Calendario.findById", query = "SELECT c FROM Calendario c WHERE c.id = :id")
+    , @NamedQuery(name = "Calendario.findByAnyo", query = "SELECT c FROM Calendario c WHERE c.anyo = :anyo")})
+public class Calendario implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -40,18 +44,19 @@ public class Tecnico implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "nombre")
-    private String nombre;
-    @Column(name = "puesto")
-    private String puesto;
-    @JoinColumn(name = "equipo_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Equipo equipoId;
+    @Column(name = "anyo")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date anyo;
+    @OneToMany(mappedBy = "calendarioId")
+    private List<Jornada> jornadaList;
+    @JoinColumn(name = "liga_id", referencedColumnName = "id")
+    @ManyToOne
+    private Liga ligaId;
 
-    public Tecnico() {
+    public Calendario() {
     }
 
-    public Tecnico(Integer id) {
+    public Calendario(Integer id) {
         this.id = id;
     }
 
@@ -63,28 +68,29 @@ public class Tecnico implements Serializable {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public Date getAnyo() {
+        return anyo;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setAnyo(Date anyo) {
+        this.anyo = anyo;
     }
 
-    public String getPuesto() {
-        return puesto;
+    @XmlTransient
+    public List<Jornada> getJornadaList() {
+        return jornadaList;
     }
 
-    public void setPuesto(String puesto) {
-        this.puesto = puesto;
+    public void setJornadaList(List<Jornada> jornadaList) {
+        this.jornadaList = jornadaList;
     }
 
-    public Equipo getEquipoId() {
-        return equipoId;
+    public Liga getLigaId() {
+        return ligaId;
     }
 
-    public void setEquipoId(Equipo equipoId) {
-        this.equipoId = equipoId;
+    public void setLigaId(Liga ligaId) {
+        this.ligaId = ligaId;
     }
 
     @Override
@@ -97,10 +103,10 @@ public class Tecnico implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Tecnico)) {
+        if (!(object instanceof Calendario)) {
             return false;
         }
-        Tecnico other = (Tecnico) object;
+        Calendario other = (Calendario) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -109,7 +115,7 @@ public class Tecnico implements Serializable {
 
     @Override
     public String toString() {
-        return "com.mycompany.leaguetad.model.Tecnico[ id=" + id + " ]";
+        return "com.mycompany.leaguetad.model.Calendario[ id=" + id + " ]";
     }
     
 }

@@ -11,7 +11,6 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +30,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author abarroso
  */
 @Entity
-@Table(name = "jornada")
+@Table(name = "jornada", catalog = "leaguetad", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Jornada.findAll", query = "SELECT j FROM Jornada j")
@@ -52,9 +51,9 @@ public class Jornada implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     @JoinColumn(name = "calendario_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Calendario calendarioId;
-    @OneToMany(mappedBy = "jornadaId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "jornadaId")
     private List<Partido> partidoList;
 
     public Jornada() {

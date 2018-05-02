@@ -2,14 +2,14 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="com.mycompany_leaguetad_war_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <class>com.mycompany.leaguetad.model.Liga</class>
     <class>com.mycompany.leaguetad.model.Equipo</class>
-    <class>com.mycompany.leaguetad.model.Jugador</class>
     <class>com.mycompany.leaguetad.model.Jornada</class>
     <class>com.mycompany.leaguetad.model.Estadistica</class>
-    <class>com.mycompany.leaguetad.model.Partido</class>
-    <class>com.mycompany.leaguetad.model.Tecnico</class>
-    <class>com.mycompany.leaguetad.model.Liga</class>
     <class>com.mycompany.leaguetad.model.Calendario</class>
+    <class>com.mycompany.leaguetad.model.Tecnico</class>
+    <class>com.mycompany.leaguetad.model.Partido</class>
+    <class>com.mycompany.leaguetad.model.Jugador</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/leaguetad?zeroDateTimeBehavior=convertToNull"/>

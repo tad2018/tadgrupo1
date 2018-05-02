@@ -6,23 +6,17 @@
 package com.mycompany.leaguetad.model;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -31,13 +25,14 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author abarroso
  */
 @Entity
-@Table(name = "calendario")
+@Table(name = "liga", catalog = "leaguetad", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Calendario.findAll", query = "SELECT c FROM Calendario c")
-    , @NamedQuery(name = "Calendario.findById", query = "SELECT c FROM Calendario c WHERE c.id = :id")
-    , @NamedQuery(name = "Calendario.findByAnyo", query = "SELECT c FROM Calendario c WHERE c.anyo = :anyo")})
-public class Calendario implements Serializable {
+    @NamedQuery(name = "Liga.findAll", query = "SELECT l FROM Liga l")
+    , @NamedQuery(name = "Liga.findById", query = "SELECT l FROM Liga l WHERE l.id = :id")
+    , @NamedQuery(name = "Liga.findByNombre", query = "SELECT l FROM Liga l WHERE l.nombre = :nombre")
+    , @NamedQuery(name = "Liga.findByPais", query = "SELECT l FROM Liga l WHERE l.pais = :pais")})
+public class Liga implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -45,19 +40,19 @@ public class Calendario implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "anyo")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date anyo;
-    @OneToMany(mappedBy = "calendarioId", fetch = FetchType.LAZY)
-    private List<Jornada> jornadaList;
-    @JoinColumn(name = "liga_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Liga ligaId;
+    @Column(name = "nombre")
+    private String nombre;
+    @Column(name = "pais")
+    private String pais;
+    @OneToMany(mappedBy = "ligaId")
+    private List<Equipo> equipoList;
+    @OneToMany(mappedBy = "ligaId")
+    private List<Calendario> calendarioList;
 
-    public Calendario() {
+    public Liga() {
     }
 
-    public Calendario(Integer id) {
+    public Liga(Integer id) {
         this.id = id;
     }
 
@@ -69,29 +64,38 @@ public class Calendario implements Serializable {
         this.id = id;
     }
 
-    public Date getAnyo() {
-        return anyo;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setAnyo(Date anyo) {
-        this.anyo = anyo;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getPais() {
+        return pais;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
     }
 
     @XmlTransient
-    public List<Jornada> getJornadaList() {
-        return jornadaList;
+    public List<Equipo> getEquipoList() {
+        return equipoList;
     }
 
-    public void setJornadaList(List<Jornada> jornadaList) {
-        this.jornadaList = jornadaList;
+    public void setEquipoList(List<Equipo> equipoList) {
+        this.equipoList = equipoList;
     }
 
-    public Liga getLigaId() {
-        return ligaId;
+    @XmlTransient
+    public List<Calendario> getCalendarioList() {
+        return calendarioList;
     }
 
-    public void setLigaId(Liga ligaId) {
-        this.ligaId = ligaId;
+    public void setCalendarioList(List<Calendario> calendarioList) {
+        this.calendarioList = calendarioList;
     }
 
     @Override
@@ -104,10 +108,10 @@ public class Calendario implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Calendario)) {
+        if (!(object instanceof Liga)) {
             return false;
         }
-        Calendario other = (Calendario) object;
+        Liga other = (Liga) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -116,7 +120,7 @@ public class Calendario implements Serializable {
 
     @Override
     public String toString() {
-        return "com.mycompany.leaguetad.model.Calendario[ id=" + id + " ]";
+        return "com.mycompany.leaguetad.model.Liga[ id=" + id + " ]";
     }
     
 }

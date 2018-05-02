@@ -10,7 +10,6 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,7 +27,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author abarroso
  */
 @Entity
-@Table(name = "equipo")
+@Table(name = "equipo", catalog = "leaguetad", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Equipo.findAll", query = "SELECT e FROM Equipo e")
@@ -47,16 +46,16 @@ public class Equipo implements Serializable {
     private String nombre;
     @Column(name = "puntos")
     private Integer puntos;
-    @OneToMany(mappedBy = "equipoId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "equipoId")
     private List<Jugador> jugadorList;
     @JoinColumn(name = "liga_id", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Liga ligaId;
-    @OneToMany(mappedBy = "equipoId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "equipoId")
     private List<Tecnico> tecnicoList;
-    @OneToMany(mappedBy = "localId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "localId")
     private List<Partido> partidoList;
-    @OneToMany(mappedBy = "visitanteId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "visitanteId")
     private List<Partido> partidoList1;
 
     public Equipo() {
@@ -152,16 +151,6 @@ public class Equipo implements Serializable {
             return false;
         }
         return true;
-    }
-    
-    public int compareTo(Equipo e) {
-        if (puntos < e.puntos) {
-            return -1;
-        }
-        if (puntos > e.puntos) {
-            return 1;
-        }
-        return 0;
     }
 
     @Override
