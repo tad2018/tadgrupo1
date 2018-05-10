@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
--- http://www.phpmyadmin.net
+-- version 4.8.0
+-- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-05-2018 a las 20:39:45
--- Versión del servidor: 10.1.19-MariaDB
--- Versión de PHP: 7.0.13
+-- Tiempo de generación: 10-05-2018 a las 20:02:43
+-- Versión del servidor: 10.1.31-MariaDB
+-- Versión de PHP: 5.6.35
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -19,56 +21,83 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `leaguetad`
 --
+CREATE DATABASE IF NOT EXISTS `leaguetad` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `leaguetad`;
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `calendario`
 --
+-- Creación: 10-05-2018 a las 16:10:16
+--
 
-CREATE TABLE `calendario` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `calendario`;
+CREATE TABLE IF NOT EXISTS `calendario` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `anyo` datetime DEFAULT NULL,
-  `liga_id` int(11) DEFAULT NULL
+  `liga_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_calendario_liga_idx` (`liga_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- RELACIONES PARA LA TABLA `calendario`:
+--   `liga_id`
+--       `liga` -> `id`
+--
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `equipo`
 --
+-- Creación: 10-05-2018 a las 16:10:16
+--
 
-CREATE TABLE `equipo` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `equipo`;
+CREATE TABLE IF NOT EXISTS `equipo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) DEFAULT NULL,
   `liga_id` int(11) DEFAULT NULL,
-  `puntos` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `puntos` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_equipo_liga_idx` (`liga_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+
+--
+-- RELACIONES PARA LA TABLA `equipo`:
+--   `liga_id`
+--       `liga` -> `id`
+--
 
 --
 -- Volcado de datos para la tabla `equipo`
 --
 
 INSERT INTO `equipo` (`id`, `nombre`, `liga_id`, `puntos`) VALUES
-(10, 'Real Betis Balompie', 100, 59),
-(11, 'Barcelona FC', 100, 55),
-(12, 'Real Madrid', 100, 54),
-(13, 'Valencia CF', 100, 50),
-(14, 'Sevilla FC', 100, 35),
-(15, 'Liverpool', 101, 60),
-(16, 'Manchester united', 101, 58),
-(17, 'Chelsea', 101, 49),
-(18, 'Arsenal', 101, 49),
-(19, 'Tottenham', 101, 45);
+(10, 'Real Betis Balompie', 1, 59),
+(11, 'Barcelona FC', 1, 55),
+(12, 'Real Madrid', 1, 54),
+(13, 'Valencia CF', 1, 50),
+(14, 'Sevilla FC', 1, 35),
+(15, 'Liverpool', 3, 60),
+(16, 'Manchester united', 3, 58),
+(17, 'Chelsea', 3, 49),
+(18, 'Arsenal', 3, 49),
+(19, 'Tottenham', 3, 45);
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `estadistica`
 --
+-- Creación: 10-05-2018 a las 16:10:16
+--
 
-CREATE TABLE `estadistica` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `estadistica`;
+CREATE TABLE IF NOT EXISTS `estadistica` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `golesLocal` int(11) DEFAULT NULL,
   `golesVisitante` int(11) DEFAULT NULL,
   `pasesLocal` int(11) DEFAULT NULL,
@@ -77,30 +106,54 @@ CREATE TABLE `estadistica` (
   `faltasVisitante` int(11) DEFAULT NULL,
   `tirosLocal` int(11) DEFAULT NULL,
   `tirosVisitante` int(11) DEFAULT NULL,
-  `partido_id` int(11) DEFAULT NULL
+  `partido_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_estadistica_partido_idx` (`partido_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- RELACIONES PARA LA TABLA `estadistica`:
+--   `partido_id`
+--       `partido` -> `id`
+--
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `jornada`
 --
+-- Creación: 10-05-2018 a las 16:10:16
+--
 
-CREATE TABLE `jornada` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `jornada`;
+CREATE TABLE IF NOT EXISTS `jornada` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `numero` int(11) DEFAULT NULL,
   `fecha` datetime DEFAULT NULL,
-  `calendario_id` int(11) DEFAULT NULL
+  `calendario_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_jornada_calendario_idx` (`calendario_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- RELACIONES PARA LA TABLA `jornada`:
+--   `calendario_id`
+--       `calendario` -> `id`
+--   `calendario_id`
+--       `calendario` -> `id`
+--
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `jugador`
 --
+-- Creación: 10-05-2018 a las 16:10:16
+--
 
-CREATE TABLE `jugador` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `jugador`;
+CREATE TABLE IF NOT EXISTS `jugador` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) DEFAULT NULL,
   `nacionalidad` varchar(100) DEFAULT NULL,
   `posicion` varchar(45) DEFAULT NULL,
@@ -111,8 +164,18 @@ CREATE TABLE `jugador` (
   `expulsiones` int(11) DEFAULT NULL,
   `paradas` int(11) DEFAULT NULL,
   `tiros` int(11) DEFAULT NULL,
-  `equipo_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `equipo_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_jugador_equipo_idx` (`equipo_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+
+--
+-- RELACIONES PARA LA TABLA `jugador`:
+--   `equipo_id`
+--       `equipo` -> `id`
+--   `equipo_id`
+--       `equipo` -> `id`
+--
 
 --
 -- Volcado de datos para la tabla `jugador`
@@ -145,12 +208,20 @@ INSERT INTO `jugador` (`id`, `nombre`, `nacionalidad`, `posicion`, `edad`, `gole
 --
 -- Estructura de tabla para la tabla `liga`
 --
+-- Creación: 10-05-2018 a las 16:10:16
+--
 
-CREATE TABLE `liga` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `liga`;
+CREATE TABLE IF NOT EXISTS `liga` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) DEFAULT NULL,
-  `pais` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `pais` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+--
+-- RELACIONES PARA LA TABLA `liga`:
+--
 
 --
 -- Volcado de datos para la tabla `liga`
@@ -158,140 +229,71 @@ CREATE TABLE `liga` (
 
 INSERT INTO `liga` (`id`, `nombre`, `pais`) VALUES
 (1, 'Liga Santander', 'España'),
-(100, 'Liga Santander', 'España'),
-(101, 'Premier League', 'Inglaterra');
+(2, 'Calcio', 'Italia'),
+(3, 'Premier League', 'Inglaterra');
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `partido`
 --
+-- Creación: 10-05-2018 a las 16:10:16
+--
 
-CREATE TABLE `partido` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `partido`;
+CREATE TABLE IF NOT EXISTS `partido` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `local_id` int(11) DEFAULT NULL,
   `visitante_id` int(11) DEFAULT NULL,
-  `jornada_id` int(11) DEFAULT NULL
+  `jornada_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_visitante_idx` (`visitante_id`),
+  KEY `fk_local_idx` (`local_id`),
+  KEY `fk_partido_jornada_idx` (`jornada_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- RELACIONES PARA LA TABLA `partido`:
+--   `jornada_id`
+--       `jornada` -> `id`
+--   `visitante_id`
+--       `equipo` -> `id`
+--   `local_id`
+--       `equipo` -> `id`
+--   `local_id`
+--       `equipo` -> `id`
+--   `jornada_id`
+--       `jornada` -> `id`
+--   `visitante_id`
+--       `equipo` -> `id`
+--
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `tecnico`
 --
+-- Creación: 10-05-2018 a las 16:10:16
+--
 
-CREATE TABLE `tecnico` (
-  `id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `tecnico`;
+CREATE TABLE IF NOT EXISTS `tecnico` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) DEFAULT NULL,
   `puesto` varchar(100) DEFAULT NULL,
-  `equipo_id` int(11) DEFAULT NULL
+  `equipo_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_tecnico_equipo_idx` (`equipo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Índices para tablas volcadas
+-- RELACIONES PARA LA TABLA `tecnico`:
+--   `equipo_id`
+--       `equipo` -> `id`
+--   `equipo_id`
+--       `equipo` -> `id`
 --
 
---
--- Indices de la tabla `calendario`
---
-ALTER TABLE `calendario`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_calendario_liga_idx` (`liga_id`);
-
---
--- Indices de la tabla `equipo`
---
-ALTER TABLE `equipo`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_equipo_liga_idx` (`liga_id`);
-
---
--- Indices de la tabla `estadistica`
---
-ALTER TABLE `estadistica`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_estadistica_partido_idx` (`partido_id`);
-
---
--- Indices de la tabla `jornada`
---
-ALTER TABLE `jornada`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_jornada_calendario_idx` (`calendario_id`);
-
---
--- Indices de la tabla `jugador`
---
-ALTER TABLE `jugador`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_jugador_equipo_idx` (`equipo_id`);
-
---
--- Indices de la tabla `liga`
---
-ALTER TABLE `liga`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `partido`
---
-ALTER TABLE `partido`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_visitante_idx` (`visitante_id`),
-  ADD KEY `fk_local_idx` (`local_id`),
-  ADD KEY `fk_partido_jornada_idx` (`jornada_id`);
-
---
--- Indices de la tabla `tecnico`
---
-ALTER TABLE `tecnico`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_tecnico_equipo_idx` (`equipo_id`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `calendario`
---
-ALTER TABLE `calendario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `equipo`
---
-ALTER TABLE `equipo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
---
--- AUTO_INCREMENT de la tabla `estadistica`
---
-ALTER TABLE `estadistica`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `jornada`
---
-ALTER TABLE `jornada`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `jugador`
---
-ALTER TABLE `jugador`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
---
--- AUTO_INCREMENT de la tabla `liga`
---
-ALTER TABLE `liga`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
---
--- AUTO_INCREMENT de la tabla `partido`
---
-ALTER TABLE `partido`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `tecnico`
---
-ALTER TABLE `tecnico`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- Restricciones para tablas volcadas
 --
@@ -318,18 +320,23 @@ ALTER TABLE `estadistica`
 -- Filtros para la tabla `jornada`
 --
 ALTER TABLE `jornada`
+  ADD CONSTRAINT `FK6mkt8n4khlmcq7jntaho9igpc` FOREIGN KEY (`calendario_id`) REFERENCES `calendario` (`id`),
   ADD CONSTRAINT `fk_jornada_calendario` FOREIGN KEY (`calendario_id`) REFERENCES `calendario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `jugador`
 --
 ALTER TABLE `jugador`
+  ADD CONSTRAINT `FKaum61vdoi1f4v3nb6e27tdpdt` FOREIGN KEY (`equipo_id`) REFERENCES `equipo` (`id`),
   ADD CONSTRAINT `fk_jugador_equipo` FOREIGN KEY (`equipo_id`) REFERENCES `equipo` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `partido`
 --
 ALTER TABLE `partido`
+  ADD CONSTRAINT `FK6kfgivo09t0abinel3wdrxkbu` FOREIGN KEY (`jornada_id`) REFERENCES `jornada` (`id`),
+  ADD CONSTRAINT `FK8holox9q23gyen9w53t8rrnys` FOREIGN KEY (`visitante_id`) REFERENCES `equipo` (`id`),
+  ADD CONSTRAINT `FKhvg714ja4vkwrdgks4lrenlty` FOREIGN KEY (`local_id`) REFERENCES `equipo` (`id`),
   ADD CONSTRAINT `fk_local` FOREIGN KEY (`local_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_partido_jornada` FOREIGN KEY (`jornada_id`) REFERENCES `jornada` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_visitante` FOREIGN KEY (`visitante_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -338,7 +345,9 @@ ALTER TABLE `partido`
 -- Filtros para la tabla `tecnico`
 --
 ALTER TABLE `tecnico`
+  ADD CONSTRAINT `FKgux7jbudl70cjxgcqrdj70bp2` FOREIGN KEY (`equipo_id`) REFERENCES `equipo` (`id`),
   ADD CONSTRAINT `fk_tecnico_equipo` FOREIGN KEY (`equipo_id`) REFERENCES `equipo` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
