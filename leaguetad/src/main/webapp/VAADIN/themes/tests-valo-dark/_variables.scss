@@ -14,22 +14,6 @@ $v-app-loading-text: "Dark Valo";
     background-size: 100% 100%;
 }
 
-.buttonSuccess{
-    background-color: #42a638;
-    border: none;
-    color: green;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-}
-.panelLogin{
-    margin-top: 10px;
-}
-
 $v-focus-color: #07a9ca;
 $v-focus-style: 0 0 3px 2px $v-focus-color;
 $v-bevel-depth: 40%;
@@ -47,3 +31,32 @@ $v-overlay-shadow: 0 0 0 3px (v-shade 8), 0 5px 10px (v-shade 4);
 $v-component-group-spacing: 6px;
 
 @import "../valo/valo";
+
+.titleLigaEspanola{
+    color: white;
+    margin-top: 30px;
+}
+.titleLigaInglesa{
+    color: white;
+    margin-top: 30px;
+}
+
+.panelLogin{
+    margin-top: 50px;
+    padding: 20px;
+    width: 250px;
+    height: 300px;
+}
+
+.buttonSuccess{
+    background-color: #42a638;
+    border: none;
+    color: green;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}

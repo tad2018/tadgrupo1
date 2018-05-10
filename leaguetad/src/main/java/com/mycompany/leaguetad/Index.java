@@ -8,6 +8,7 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
@@ -38,8 +39,6 @@ public class Index extends UI {
         
         Panel loginPanel = new Panel("Login");
         loginPanel.setStyleName("panelLogin");
-        loginPanel.setWidth(150, Unit.PIXELS);
-        loginPanel.setHeight(150, Unit.PIXELS);
         VerticalLayout content = new VerticalLayout();
         loginPanel.setContent(content);
         loginPanel.setSizeUndefined();
@@ -59,12 +58,15 @@ public class Index extends UI {
 
         content.addComponents(nombreUsuarioLabel, nombreUsuarioText, passwordLabel, passwordText, buttonIniciarSesion);
         content.setSpacing(true);
-        loginLayout.addComponents(loginPanel);
         
-        final Table tablaLigaEspañola = new Table("Liga Santander");
+        loginLayout.addComponents(loginPanel);
+        loginLayout.setComponentAlignment(loginPanel, Alignment.TOP_CENTER);
+        
+        final Label titleLigaEspanola = new Label("LIGA SANTANDER");
+        titleLigaEspanola.setStyleName("titleLigaEspanola");
+        final Table tablaLigaEspañola = new Table();
         //tabla.setSizeFull();
         tablaLigaEspañola.setWidth(100, UNITS_PERCENTAGE);
-        tablaLigaEspañola.setHeight(50, UNITS_PERCENTAGE);
         tablaLigaEspañola.setSelectable(true);
         tablaLigaEspañola.setMultiSelect(true);
         tablaLigaEspañola.setImmediate(true);
@@ -77,10 +79,31 @@ public class Index extends UI {
         for(int i=0; i < listadoEquipos.length; i++){
             Equipo e = (Equipo) listadoEquipos[i];
             tablaLigaEspañola.addItem(new Object[]{i+1, e.getNombre(), e.getPuntos()}, i+1);
-            i++;
         }
+        tablaLigaEspañola.setPageLength(listadoEquipos.length);
+        tablaLigaEspañola.setStyleName("tablaClasificacion");
+
+        final Label titleLigaInglesa = new Label("PREMIER LEAGUE");
+        titleLigaInglesa.setStyleName("titleLigaInglesa");
+        final Table tablaLigaInglesa = new Table();
+        //tabla.setSizeFull();
+        tablaLigaInglesa.setWidth(100, UNITS_PERCENTAGE);
+        tablaLigaInglesa.setSelectable(true);
+        tablaLigaInglesa.setMultiSelect(true);
+        tablaLigaInglesa.setImmediate(true);
+        tablaLigaInglesa.addContainerProperty("", Integer.class, null);
+        tablaLigaInglesa.addContainerProperty("EQUIPOS", String.class, null);
+        tablaLigaInglesa.addContainerProperty("PUNTOS", Integer.class, null);
         
-        clasificacionesLayout.addComponent(tablaLigaEspañola);
+        final Equipo[] listadoEquiposInglesa = ligadao.getClasificacionLigaInglesa();
+        for(int i=0; i < listadoEquiposInglesa.length; i++){
+            Equipo e = (Equipo) listadoEquiposInglesa[i];
+            tablaLigaInglesa.addItem(new Object[]{i+1, e.getNombre(), e.getPuntos()}, i+1);
+        }
+        tablaLigaInglesa.setPageLength(listadoEquipos.length);
+        
+        
+        clasificacionesLayout.addComponents(titleLigaEspanola,tablaLigaEspañola,titleLigaInglesa,tablaLigaInglesa);
         
         layout.addComponents(clasificacionesLayout, loginLayout);
         layout.setSplitPosition(70, Unit.PERCENTAGE);
