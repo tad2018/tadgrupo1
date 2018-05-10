@@ -5,32 +5,47 @@
  */
 package com.mycompany.leaguetad.persistence;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Properties;
+import org.hibernate.HibernateException;
+import org.hibernate.Metamodel;
+import org.hibernate.query.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import javax.persistence.metamodel.EntityType;
 
-/**
- *
- * @author expositod
- */
 public class PersistenceJDBC {
-    private static final String USER = "root";
-    private static final String PASSWORD = "";
-    private static final String DB = "leaguetad";
-    private static final String HOST = "localhost";
-    private static final String PORT = "3306";
-    
-    public Connection getConnection() throws SQLException {
+    private static final SessionFactory ourSessionFactory;
 
-        Connection conn;
-        
-        Properties connectionProps = new Properties();
-        connectionProps.put("user", USER);
-        connectionProps.put("password", PASSWORD);
-        
-        conn = DriverManager.getConnection("jdbc:"+DB+"://"+HOST+":"+PORT+"/",connectionProps);
-        System.out.println("Connected to database");
-        return conn;
+    static {
+        try {
+            Configuration configuration = new Configuration();
+            configuration.configure();
+
+            ourSessionFactory = configuration.buildSessionFactory();
+        } catch (Throwable ex) {
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
+
+    public static Session getSession() throws HibernateException {
+        return ourSessionFactory.openSession();
+    }
+
+    public static void main(final String[] args) throws Exception {
+        final Session session = getSession();
+        try {
+            System.out.println("querying all the managed entities...");
+            final Metamodel metamodel = session.getSessionFactory().getMetamodel();
+            for (EntityType<?> entityType : metamodel.getEntities()) {
+                final String entityName = entityType.getName();
+                final Query query = session.createQuery("from " + entityName);
+                System.out.println("executing: " + query.getQueryString());
+                for (Object o : query.list()) {
+                    System.out.println("  " + o);
+                }
+            }
+        } finally {
+            session.close();
+        }
     }
 }

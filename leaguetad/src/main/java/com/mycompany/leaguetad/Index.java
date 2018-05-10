@@ -1,7 +1,7 @@
 package com.mycompany.leaguetad;
 
 import com.mycompany.leaguetad.dao.LigaDAO;
-import com.mycompany.leaguetad.model.Equipo;
+import com.mycompany.leaguetad.persistence.Equipo;
 import javax.servlet.annotation.WebServlet;
 
 import com.vaadin.annotations.Theme;

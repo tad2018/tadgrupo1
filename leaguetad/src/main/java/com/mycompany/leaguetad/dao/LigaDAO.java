@@ -5,10 +5,8 @@
  */
 package com.mycompany.leaguetad.dao;
 
-import com.mycompany.leaguetad.model.Equipo;
-import com.mycompany.leaguetad.model.HibernateUtil;
-import com.mycompany.leaguetad.model.Liga;
-import java.util.ArrayList;
+import com.mycompany.leaguetad.persistence.Equipo;
+import com.mycompany.leaguetad.persistence.Liga;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -22,12 +20,14 @@ import org.hibernate.Transaction;
  */
 public class LigaDAO {
     Session session = null;
+    /**
     public LigaDAO(){
         this.session = HibernateUtil.getSessionFactory().getCurrentSession();
     }
-    
+    **/
     public Equipo[] getClasificacionLigaEspanola(){
-        Liga liga = null;
+     /**
+     Liga liga = null;
         this.session = HibernateUtil.getSessionFactory().getCurrentSession();
         Transaction tx = session.beginTransaction();
         Query q = session.createQuery("from Liga where pais = 'España'");
@@ -44,5 +44,8 @@ public class LigaDAO {
         }
         Arrays.sort(clasificacion);
         return clasificacion;
+
+      **/
+        return new Equipo[1];
     }
 }

@@ -5,8 +5,8 @@
  */
 package com.mycompany.leaguetad.dao;
 
-import com.mycompany.leaguetad.model.Tecnico;
-import com.mycompany.leaguetad.model.Jugador;
+import com.mycompany.leaguetad.persistence.Tecnico;
+import com.mycompany.leaguetad.persistence.Jugador;
 import com.mycompany.leaguetad.persistence.PersistenceJDBC;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -23,9 +23,10 @@ public class EquipoDAO {
     Statement stmt;
     
     public void createEquipo(String nombre, ArrayList<Jugador> jugadores, ArrayList<Tecnico> equipoTecnico) throws SQLException{
-        conn = conexion.getConnection();
+
+        //conn = conexion.getConnection();
         
-        stmt = conn.createStatement();
+        //stmt = conn.createStatement();
     }
    
     
