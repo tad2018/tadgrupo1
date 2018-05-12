@@ -7,15 +7,18 @@ import javax.servlet.annotation.WebServlet;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.FileResource;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.server.WrappedSession;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.Table;
@@ -59,7 +62,18 @@ public class Index extends UI {
         
         Button buttonIniciarSesion = new Button("Iniciar Sesión");
         buttonIniciarSesion.addClickListener( e -> {
-            layout.addComponent(new Label("Hey"));
+            if (nombreUsuarioText.getValue().equals("admin") && passwordText.getValue().equals("admin")){
+                WrappedSession session = getSession().getSession();
+                session.setAttribute("user", nombreUsuarioText.getValue());
+                getPage().setLocation("/dashboard");
+            }
+            else{
+                Notification n = new Notification("User not exists",Notification.Type.ERROR_MESSAGE);
+                n.setDelayMsec(1000);
+                n.setPosition(Notification.POSITION_CENTERED_BOTTOM);
+                n.show(Page.getCurrent());
+            }
+            
         });
         
         buttonIniciarSesion.setStyleName("buttonSuccess");
