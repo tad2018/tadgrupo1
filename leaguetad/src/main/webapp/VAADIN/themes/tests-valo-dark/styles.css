@@ -1550,9 +1550,8 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .panelLogin {
-	margin-top: 50px;
 	padding: 20px;
-	width: 250px;
+	width: 500px;
 	height: 300px;
 }
 
@@ -1567,6 +1566,10 @@ div.v-layout.v-horizontal.v-widget {
 	font-size: 16px;
 	margin: 4px 2px;
 	cursor: pointer;
+}
+
+.inputLogin {
+	width: 400px;
 }
 
 /**
