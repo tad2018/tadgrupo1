@@ -70,8 +70,8 @@ public class Index extends UI {
         tablaLigaEspañola.setSelectable(true);
         tablaLigaEspañola.setMultiSelect(true);
         tablaLigaEspañola.setImmediate(true);
-        tablaLigaEspañola.addContainerProperty("", Integer.class, null);
-        tablaLigaEspañola.addContainerProperty("EQUIPOS", String.class, null);
+        tablaLigaEspañola.addContainerProperty("POSICION", Integer.class, null);
+        tablaLigaEspañola.addContainerProperty("EQUIPO", String.class, null);
         tablaLigaEspañola.addContainerProperty("PUNTOS", Integer.class, null);
         
         LigaDAO ligadao = new LigaDAO();
@@ -91,8 +91,8 @@ public class Index extends UI {
         tablaLigaInglesa.setSelectable(true);
         tablaLigaInglesa.setMultiSelect(true);
         tablaLigaInglesa.setImmediate(true);
-        tablaLigaInglesa.addContainerProperty("", Integer.class, null);
-        tablaLigaInglesa.addContainerProperty("EQUIPOS", String.class, null);
+        tablaLigaInglesa.addContainerProperty("POSICION", Integer.class, null);
+        tablaLigaInglesa.addContainerProperty("EQUIPO", String.class, null);
         tablaLigaInglesa.addContainerProperty("PUNTOS", Integer.class, null);
         
         final Equipo[] listadoEquiposInglesa = ligadao.getClasificacionLigaInglesa();
