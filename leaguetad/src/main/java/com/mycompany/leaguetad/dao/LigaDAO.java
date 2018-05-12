@@ -25,6 +25,22 @@ public class LigaDAO {
         this.session = PersistenceJDBC.getSession();
     }
 
+    public Liga[] getLigas(){
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        Query q = session.createQuery("from Liga");
+        List<Liga> ligas = (List<Liga>) q.list();
+        tx.commit();
+        Liga[] listaLigas = new Liga[ligas.size()];
+        Iterator it = ligas.iterator();
+        int cont = 0;
+        while(it.hasNext()){
+            Liga l = (Liga)it.next();
+            listaLigas[cont++] = l;
+        }
+        return listaLigas;
+    }
+    
     public Equipo[] getClasificacionLigaEspanola(){
 
      Liga liga = null;
@@ -51,6 +67,26 @@ public class LigaDAO {
         this.session = PersistenceJDBC.getSession();
         Transaction tx = session.beginTransaction();
         Query q = session.createQuery("from Liga where pais = 'Inglaterra'");
+        liga = (Liga) q.uniqueResult();
+        Query q2 = session.createQuery("from Equipo where liga_id = "+ liga.getId() +"");
+        List equipos = (List<Equipo>) q2.list();
+        tx.commit();
+        Equipo[] clasificacion = new Equipo[equipos.size()];
+        Iterator it = equipos.iterator();
+        int cont = 0;
+        while(it.hasNext()){
+            Equipo e = (Equipo)it.next();
+            clasificacion[cont++] = e;
+        }
+//        Arrays.sort(clasificacion);
+        return clasificacion;
+    }
+    
+    public Equipo[] getClasificacionLigaItaliana(){
+        Liga liga = null;
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        Query q = session.createQuery("from Liga where pais = 'Italia'");
         liga = (Liga) q.uniqueResult();
         Query q2 = session.createQuery("from Equipo where liga_id = "+ liga.getId() +"");
         List equipos = (List<Equipo>) q2.list();
