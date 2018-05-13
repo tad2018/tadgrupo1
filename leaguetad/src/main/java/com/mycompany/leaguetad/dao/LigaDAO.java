@@ -101,4 +101,57 @@ public class LigaDAO {
 //        Arrays.sort(clasificacion);
         return clasificacion;
     }
+    
+    public List<Equipo> getClasificacionPais(String pais){
+        Liga liga = null;
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        Query q = session.createQuery("from Liga where pais = '"+pais+"'");
+        liga = (Liga) q.uniqueResult();
+        Query q2 = session.createQuery("from Equipo where liga_id = "+ liga.getId() +"");
+        List equipos = (List<Equipo>) q2.list();
+        tx.commit();
+        return equipos;
+    }
+    
+    
+    public Liga buscarLigaporPais(String pais){
+        Liga liga = null;
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        Query q = session.createQuery("from Liga where pais = '"+pais+"'");
+        liga = (Liga) q.uniqueResult();
+        tx.commit();
+        return liga;
+    }
+    
+    public Liga buscarLigaporNombre(String nombre){
+        Liga liga = null;
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        Query q = session.createQuery("from Liga where nombre = '"+nombre+"'");
+        liga = (Liga) q.uniqueResult();
+        tx.commit();
+        return liga;
+    }
+    
+    public Integer buscarIdLigaPais(String pais){
+        Liga liga = null;
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        Query q = session.createQuery("from Liga where pais = '"+pais+"'");
+        liga = (Liga) q.uniqueResult();
+        tx.commit();
+        return liga.getId();
+    }
+    
+    public Integer buscarIdLigaNombre(String nombre){
+        Liga liga = null;
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        Query q = session.createQuery("from Liga where nombre = '"+nombre+"'");
+        liga = (Liga) q.uniqueResult();
+        tx.commit();
+        return liga.getId();
+    }
 }

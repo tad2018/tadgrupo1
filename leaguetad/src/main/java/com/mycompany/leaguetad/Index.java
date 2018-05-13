@@ -124,7 +124,7 @@ public class Index extends UI {
         setContent(layout);
     }
 
-    @WebServlet(urlPatterns = "/*", name = "IndexServlet", asyncSupported = true)
+    @WebServlet(urlPatterns = "/admin/*", name = "IndexServlet", asyncSupported = true)
     @VaadinServletConfiguration(ui = Index.class, productionMode = false)
     public static class IndexServlet extends VaadinServlet {
     }

@@ -67,8 +67,17 @@ public class Dashboard extends UI{
             Liga l = (Liga) listadoLigas[i];
             ligas.addItem(l.getNombre(), null, null);
             panel = new Panel("<center>"+l.getNombre()+"</center>");
-            panel.setWidth("400px");
-            gridLigas.addComponent(panel);
+            panel.setWidth("280px");
+            VerticalLayout content = new VerticalLayout();
+            String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+            FileResource resourceSantander = new FileResource(new File(basepath +"/VAADIN/themes/tests-valo-dark/ligas/"+l.getId()+".png"));
+            Image logo = new Image("", resourceSantander);
+            logo.setWidth("200px");
+            logo.setHeight("190px");
+            content.addComponent(logo);
+            content.setComponentAlignment(logo, Alignment.TOP_CENTER);
+            panel.setContent(content);
+            gridLigas.addComponents(panel);
         }
 
         

@@ -16,6 +16,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
@@ -38,10 +39,13 @@ public class Clasificacion extends UI{
         VerticalLayout layout = new VerticalLayout();
         layout.setSizeFull();
         layout.setStyleName("fondo");
+        Button dashboard = new Button("Volver al Dashboard");
         
+        dashboard.addClickListener( e -> {
+            getPage().setLocation("/dashboard");
+        });
         TabSheet sample = new TabSheet();
-        sample.setHeight(100.0f, Unit.PERCENTAGE);
- 
+        
         final VerticalLayout layoutSantander = new VerticalLayout();
         layoutSantander.setSizeFull();
         layoutSantander.setMargin(true);
@@ -131,7 +135,8 @@ public class Clasificacion extends UI{
         layoutCalcio.addComponents(logoCalcio, tablaLigaItaliana);
         layoutCalcio.setComponentAlignment(logoCalcio, Alignment.TOP_CENTER);
         
-        layout.addComponent(sample);
+        layout.addComponents(sample,dashboard);
+        layout.setComponentAlignment(dashboard, Alignment.BOTTOM_RIGHT);
         setContent(layout);
     }
     
