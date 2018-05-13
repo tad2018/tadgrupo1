@@ -122,7 +122,12 @@ public class LigaDAO {
         Query q = session.createQuery("from Liga where pais = '"+pais+"'");
         liga = (Liga) q.uniqueResult();
         tx.commit();
-        return liga;
+        if(liga!=null){
+            return liga;
+        }
+        else{
+            return null;
+        }
     }
     
     public Liga buscarLigaporNombre(String nombre){
@@ -132,7 +137,12 @@ public class LigaDAO {
         Query q = session.createQuery("from Liga where nombre = '"+nombre+"'");
         liga = (Liga) q.uniqueResult();
         tx.commit();
-        return liga;
+        if(liga!=null){
+            return liga;
+        }
+        else{
+            return null;
+        }
     }
     
     public Integer buscarIdLigaPais(String pais){
@@ -142,7 +152,13 @@ public class LigaDAO {
         Query q = session.createQuery("from Liga where pais = '"+pais+"'");
         liga = (Liga) q.uniqueResult();
         tx.commit();
-        return liga.getId();
+        if(liga!=null){
+            return liga.getId();
+        }
+        else{
+            return null;
+        }
+        
     }
     
     public Integer buscarIdLigaNombre(String nombre){
@@ -152,6 +168,11 @@ public class LigaDAO {
         Query q = session.createQuery("from Liga where nombre = '"+nombre+"'");
         liga = (Liga) q.uniqueResult();
         tx.commit();
-        return liga.getId();
+        if(liga!=null){
+            return liga.getId();
+        }
+        else{
+            return null;
+        }
     }
 }

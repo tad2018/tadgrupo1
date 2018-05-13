@@ -6,8 +6,10 @@
 package com.mycompany.leaguetad;
 
 import com.mycompany.leaguetad.dao.EquipoDAO;
+import com.mycompany.leaguetad.dao.JugadorDAO;
 import com.mycompany.leaguetad.dao.LigaDAO;
 import com.mycompany.leaguetad.persistence.Equipo;
+import com.mycompany.leaguetad.persistence.Jugador;
 import com.mycompany.leaguetad.persistence.Liga;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -44,6 +46,9 @@ public class Main extends UI{
     @Override
     protected void init(VaadinRequest request) {
         HorizontalSplitPanel layout = new HorizontalSplitPanel();
+        LigaDAO ligadao = new LigaDAO();
+        EquipoDAO equipodao = new EquipoDAO();
+                
         String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
         FileResource resourceSantander = new FileResource(new File(basepath +"/VAADIN/themes/tests-valo-dark/img/logo.png"));
         Image logo = new Image("", resourceSantander);
@@ -59,7 +64,6 @@ public class Main extends UI{
         tree.addItem(clasificacion);
         tree.setChildrenAllowed(clasificacion, true);
         
-        LigaDAO ligadao = new LigaDAO();
         final Liga[] ligas = ligadao.getLigas();
         for(int i=0; i < ligas.length; i++){
             Liga l = (Liga) ligas[i];
@@ -72,7 +76,6 @@ public class Main extends UI{
         String equipos = new String("Equipos");
         tree.addItem(equipos);
         
-        EquipoDAO equipodao = new EquipoDAO();
         Hashtable<String, List<Equipo>> equiposLigas = equipodao.getEquiposPorLiga();
         for (Entry<String, List<Equipo>> entry : equiposLigas.entrySet()) {
             String nombreLiga = new String(entry.getKey());
@@ -101,6 +104,9 @@ public class Main extends UI{
                 }
                 else if(ligadao.buscarLigaporNombre(itemSelected) != null){
                     mostrarEquiposPais(verticalLayout, itemSelected);
+                }
+                else if(equipodao.buscarIdEquipoNombre(itemSelected) != null){
+                    mostrarJugadoresEquipo(verticalLayout, itemSelected);
                 }
             }
         });
@@ -248,6 +254,9 @@ public class Main extends UI{
         EquipoDAO equipodao = new EquipoDAO();
         List<Equipo> equipos = equipodao.getEquiposIdLiga(idLiga);
         int filas = (int)Math.ceil((equipos.size()/4));
+        if(filas == 0){
+            filas = 1;
+        }
         GridLayout gridEquipos = new GridLayout(4, filas);
         gridEquipos.setSizeFull();
         gridEquipos.setSpacing(true);
@@ -268,9 +277,47 @@ public class Main extends UI{
             panel.setContent(content);
             gridEquipos.addComponents(panel);
         }
-        
         verticalLayout.removeAllComponents();
         verticalLayout.addComponent(gridEquipos);
+    }
+        
+    public static void mostrarJugadoresEquipo(VerticalLayout verticalLayout, String nombre){
+        verticalLayout.setMargin(true);
+        EquipoDAO equipodao = new EquipoDAO();
+        Integer idEquipo = equipodao.buscarIdEquipoNombre(nombre);
+        JugadorDAO jugadordao = new JugadorDAO();
+        List<Jugador> jugadores = jugadordao.getJugadoresIdEquipo(idEquipo);
+        int filas = (int)Math.ceil((jugadores.size()/4));
+        if(filas == 0){
+            filas = 1;
+        }
+        GridLayout gridJugadores = new GridLayout(4, filas);
+        gridJugadores.setSizeFull();
+        gridJugadores.setSpacing(true);
+        Panel panel;
+
+        Iterator it = jugadores.iterator();
+        while(it.hasNext()){
+            Jugador j = (Jugador)it.next();
+            panel = new Panel("<center>"+j.getNombre()+"</center>");
+            VerticalLayout content = new VerticalLayout();
+            String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+            FileResource resource = new FileResource(new File(basepath +"/VAADIN/themes/tests-valo-dark/jugadores/"+j.getId()+".jpg"));
+            Image logo = new Image("", resource);
+            logo.setWidth("130px");
+            logo.setHeight("190px");
+            Label posicion = new Label("POSICIÓN: "+j.getPosicion());
+            Label nacionalidad = new Label("NACIONALIDAD: "+j.getNacionalidad());
+            Label edad = new Label("EDAD: "+j.getEdad());
+            content.addComponents(logo,posicion,edad,nacionalidad);
+            content.setComponentAlignment(logo, Alignment.TOP_CENTER);
+            content.setMargin(true);
+            panel.setContent(content);
+            gridJugadores.addComponents(panel);
+        }
+        
+        verticalLayout.removeAllComponents();
+        verticalLayout.addComponent(gridJugadores);
         
     }
     

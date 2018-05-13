@@ -60,4 +60,18 @@ public class EquipoDAO {
         return equipos;
     }
     
+    public Integer buscarIdEquipoNombre(String nombre){
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        Query q = session.createQuery("from Equipo where nombre = '"+nombre+"'");
+        Equipo equipo = (Equipo) q.uniqueResult();
+        tx.commit();
+        if(equipo!=null){
+            return equipo.getId();
+        }
+        else{
+            return null;
+        }
+    }
+    
 }
