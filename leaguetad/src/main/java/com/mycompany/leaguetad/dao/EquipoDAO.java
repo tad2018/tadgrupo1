@@ -74,4 +74,31 @@ public class EquipoDAO {
         }
     }
     
+    public List<Equipo> getEquiposSinLiga(){
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        Query q = session.createQuery("from Equipo where liga_id is null");
+        List<Equipo> equipos = (List<Equipo>) q.list();
+        tx.commit();
+        return equipos;
+    }
+    
+    public Equipo getEquipoPorId(int id){
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        Query q = session.createQuery("from Equipo where id = " + id);
+        Equipo equipo = (Equipo) q.uniqueResult();
+        tx.commit();
+        return equipo;
+    }
+
+    public void añadirEquipoALiga(Object itemId, int idLiga) {
+        Equipo e = (Equipo) itemId;
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        Query q = session.createQuery("update Equipo set liga_id = " + idLiga + " where nombre = '" + e.getNombre() + "'");
+        q.executeUpdate();
+        tx.commit();
+    }
+    
 }
