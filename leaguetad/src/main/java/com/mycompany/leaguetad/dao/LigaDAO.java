@@ -8,6 +8,7 @@ package com.mycompany.leaguetad.dao;
 import com.mycompany.leaguetad.persistence.Equipo;
 import com.mycompany.leaguetad.persistence.Liga;
 import com.mycompany.leaguetad.persistence.PersistenceJDBC;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -64,5 +65,15 @@ public class LigaDAO {
         }
 //        Arrays.sort(clasificacion);
         return clasificacion;
+    }
+    
+    public List<Equipo> getEquipos(int idLiga){
+        List<Equipo> lstEquipos = new ArrayList<>();
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        Query q = session.createQuery("from Equipo where liga_id = " + idLiga);
+        lstEquipos = q.getResultList();
+        
+        return lstEquipos;
     }
 }

@@ -5,11 +5,39 @@
  */
 package com.mycompany.leaguetad.dao;
 
+import com.mycompany.leaguetad.persistence.Calendario;
+import com.mycompany.leaguetad.persistence.Jornada;
+import com.mycompany.leaguetad.persistence.Partido;
+import com.mycompany.leaguetad.persistence.PersistenceJDBC;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.Persistence;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 
 /**
  *
  * @author expositod
  */
 public class PartidoDAO {
-   
+    Session session = null;
+
+    public PartidoDAO() {
+        this.session = PersistenceJDBC.getSession();
+    }
+    
+    public List<Partido> getPartidosPorJornada(Jornada jornada){
+        List<Partido> lstPartidos = new ArrayList<>();
+        
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        Query q = session.createQuery("from Partido where jornada_id = '" + jornada.getId() + "'");
+        lstPartidos = (List<Partido>) q.getResultList();
+        tx.commit();
+        return lstPartidos;
+    }
+    
+    
 }
