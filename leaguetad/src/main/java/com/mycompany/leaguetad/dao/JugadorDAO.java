@@ -28,7 +28,6 @@ public class JugadorDAO {
         Transaction tx = session.beginTransaction();
         Query q = session.createQuery("from Jugador where equipo_id = "+ id);
         List<Jugador> jugadores = (List<Jugador>) q.list();
-        Iterator it = jugadores.iterator();
         tx.commit();
         return jugadores;
     }

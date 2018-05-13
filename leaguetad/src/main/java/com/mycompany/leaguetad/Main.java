@@ -6,11 +6,13 @@
 package com.mycompany.leaguetad;
 
 import com.mycompany.leaguetad.dao.EquipoDAO;
+import com.mycompany.leaguetad.dao.EquipoTecnicoDAO;
 import com.mycompany.leaguetad.dao.JugadorDAO;
 import com.mycompany.leaguetad.dao.LigaDAO;
 import com.mycompany.leaguetad.persistence.Equipo;
 import com.mycompany.leaguetad.persistence.Jugador;
 import com.mycompany.leaguetad.persistence.Liga;
+import com.mycompany.leaguetad.persistence.Tecnico;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.FileResource;
@@ -283,6 +285,14 @@ public class Main extends UI{
         
     public static void mostrarJugadoresEquipo(VerticalLayout verticalLayout, String nombre){
         verticalLayout.setMargin(true);
+        TabSheet sample = new TabSheet();
+        
+        /* JUGADORES */
+        final VerticalLayout layoutJugadores = new VerticalLayout();
+        layoutJugadores.setSizeFull();
+        layoutJugadores.setMargin(true);
+        sample.addTab(layoutJugadores,"JUGADORES");
+        
         EquipoDAO equipodao = new EquipoDAO();
         Integer idEquipo = equipodao.buscarIdEquipoNombre(nombre);
         JugadorDAO jugadordao = new JugadorDAO();
@@ -315,9 +325,46 @@ public class Main extends UI{
             panel.setContent(content);
             gridJugadores.addComponents(panel);
         }
+        layoutJugadores.addComponent(gridJugadores);
+        
+        /* CUERPO TECNICO */
+        final VerticalLayout layoutCuerpoTecnico = new VerticalLayout();
+        layoutCuerpoTecnico.setSizeFull();
+        layoutCuerpoTecnico.setMargin(true);
+        sample.addTab(layoutCuerpoTecnico,"CUERPO TÉCNICO");
+        
+        EquipoTecnicoDAO tecnicodao = new EquipoTecnicoDAO();
+        List<Tecnico> tecnicos = tecnicodao.getEquipoTecnicoIdEquipo(idEquipo);
+        filas = (int)Math.ceil((tecnicos.size()/4));
+        if(filas == 0){
+            filas = 1;
+        }
+        GridLayout gridTecnicos = new GridLayout(4, filas);
+        gridTecnicos.setSizeFull();
+        gridTecnicos.setSpacing(true);
+        Panel panelTecnicos;
+
+        Iterator it1 = tecnicos.iterator();
+        while(it1.hasNext()){
+            Tecnico t = (Tecnico)it1.next();
+            panelTecnicos = new Panel("<center>"+t.getNombre()+"</center>");
+            VerticalLayout content = new VerticalLayout();
+            String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
+            FileResource resource = new FileResource(new File(basepath +"/VAADIN/themes/tests-valo-dark/tecnicos/"+t.getId()+".jpg"));
+            Image logo = new Image("", resource);
+            logo.setWidth("130px");
+            logo.setHeight("190px");
+            Label puesto = new Label("PUESTO: "+t.getPuesto());
+            content.addComponents(logo,puesto);
+            content.setComponentAlignment(logo, Alignment.TOP_CENTER);
+            content.setMargin(true);
+            panelTecnicos.setContent(content);
+            gridTecnicos.addComponents(panelTecnicos);
+        }
+        layoutCuerpoTecnico.addComponent(gridTecnicos);
         
         verticalLayout.removeAllComponents();
-        verticalLayout.addComponent(gridJugadores);
+        verticalLayout.addComponent(sample);
         
     }
     
