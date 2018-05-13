@@ -60,4 +60,15 @@ public class CalendarioDAO {
         return null;
     }
     
+    public Calendario getCalendario(int liga, int anyo){
+        Calendario calendario = null;
+        
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        Query q = session.createQuery("from Calendario where liga_id = '" + liga + "' and anyo like '" + anyo + "%'");
+        tx.commit();
+        calendario = (Calendario) q.uniqueResult();
+        
+        return calendario;
+    } 
 }
