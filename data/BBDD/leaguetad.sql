@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-05-2018 a las 20:02:43
+-- Tiempo de generación: 13-05-2018 a las 20:00:42
 -- Versión del servidor: 10.1.31-MariaDB
--- Versión de PHP: 5.6.35
+-- Versión de PHP: 7.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -29,16 +29,11 @@ USE `leaguetad`;
 --
 -- Estructura de tabla para la tabla `calendario`
 --
--- Creación: 10-05-2018 a las 16:10:16
---
 
-DROP TABLE IF EXISTS `calendario`;
-CREATE TABLE IF NOT EXISTS `calendario` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `calendario` (
+  `id` int(11) NOT NULL,
   `anyo` datetime DEFAULT NULL,
-  `liga_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_calendario_liga_idx` (`liga_id`)
+  `liga_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -47,23 +42,27 @@ CREATE TABLE IF NOT EXISTS `calendario` (
 --       `liga` -> `id`
 --
 
+--
+-- Volcado de datos para la tabla `calendario`
+--
+
+INSERT INTO `calendario` (`id`, `anyo`, `liga_id`) VALUES
+(1, '2018-08-01 00:00:00', 1),
+(2, '2018-08-01 00:00:00', 3),
+(3, '2018-08-01 00:00:00', 2);
+
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `equipo`
 --
--- Creación: 10-05-2018 a las 16:10:16
---
 
-DROP TABLE IF EXISTS `equipo`;
-CREATE TABLE IF NOT EXISTS `equipo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `equipo` (
+  `id` int(11) NOT NULL,
   `nombre` varchar(100) DEFAULT NULL,
   `liga_id` int(11) DEFAULT NULL,
-  `puntos` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_equipo_liga_idx` (`liga_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+  `puntos` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- RELACIONES PARA LA TABLA `equipo`:
@@ -85,19 +84,21 @@ INSERT INTO `equipo` (`id`, `nombre`, `liga_id`, `puntos`) VALUES
 (16, 'Manchester united', 3, 58),
 (17, 'Chelsea', 3, 49),
 (18, 'Arsenal', 3, 49),
-(19, 'Tottenham', 3, 45);
+(19, 'Tottenham', 3, 45),
+(20, 'Juventus', 2, 91),
+(21, 'Nápoles', 2, 85),
+(22, 'Roma', 2, 73),
+(23, 'Lazio', 2, 71),
+(24, 'Inter Milán', 2, 69);
 
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `estadistica`
 --
--- Creación: 10-05-2018 a las 16:10:16
---
 
-DROP TABLE IF EXISTS `estadistica`;
-CREATE TABLE IF NOT EXISTS `estadistica` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `estadistica` (
+  `id` int(11) NOT NULL,
   `golesLocal` int(11) DEFAULT NULL,
   `golesVisitante` int(11) DEFAULT NULL,
   `pasesLocal` int(11) DEFAULT NULL,
@@ -106,9 +107,7 @@ CREATE TABLE IF NOT EXISTS `estadistica` (
   `faltasVisitante` int(11) DEFAULT NULL,
   `tirosLocal` int(11) DEFAULT NULL,
   `tirosVisitante` int(11) DEFAULT NULL,
-  `partido_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_estadistica_partido_idx` (`partido_id`)
+  `partido_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -122,17 +121,12 @@ CREATE TABLE IF NOT EXISTS `estadistica` (
 --
 -- Estructura de tabla para la tabla `jornada`
 --
--- Creación: 10-05-2018 a las 16:10:16
---
 
-DROP TABLE IF EXISTS `jornada`;
-CREATE TABLE IF NOT EXISTS `jornada` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `jornada` (
+  `id` int(11) NOT NULL,
   `numero` int(11) DEFAULT NULL,
   `fecha` datetime DEFAULT NULL,
-  `calendario_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_jornada_calendario_idx` (`calendario_id`)
+  `calendario_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -143,17 +137,24 @@ CREATE TABLE IF NOT EXISTS `jornada` (
 --       `calendario` -> `id`
 --
 
+--
+-- Volcado de datos para la tabla `jornada`
+--
+
+INSERT INTO `jornada` (`id`, `numero`, `fecha`, `calendario_id`) VALUES
+(1, 1, '2018-08-03 00:00:00', 1),
+(2, 1, '2018-08-03 00:00:00', 2),
+(3, 1, '2018-08-03 00:00:00', 3),
+(4, 2, '2018-08-11 00:00:00', 1);
+
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `jugador`
 --
--- Creación: 10-05-2018 a las 16:10:16
---
 
-DROP TABLE IF EXISTS `jugador`;
-CREATE TABLE IF NOT EXISTS `jugador` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `jugador` (
+  `id` int(11) NOT NULL,
   `nombre` varchar(100) DEFAULT NULL,
   `nacionalidad` varchar(100) DEFAULT NULL,
   `posicion` varchar(45) DEFAULT NULL,
@@ -164,10 +165,8 @@ CREATE TABLE IF NOT EXISTS `jugador` (
   `expulsiones` int(11) DEFAULT NULL,
   `paradas` int(11) DEFAULT NULL,
   `tiros` int(11) DEFAULT NULL,
-  `equipo_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_jugador_equipo_idx` (`equipo_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+  `equipo_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- RELACIONES PARA LA TABLA `jugador`:
@@ -208,16 +207,12 @@ INSERT INTO `jugador` (`id`, `nombre`, `nacionalidad`, `posicion`, `edad`, `gole
 --
 -- Estructura de tabla para la tabla `liga`
 --
--- Creación: 10-05-2018 a las 16:10:16
---
 
-DROP TABLE IF EXISTS `liga`;
-CREATE TABLE IF NOT EXISTS `liga` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `liga` (
+  `id` int(11) NOT NULL,
   `nombre` varchar(100) DEFAULT NULL,
-  `pais` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+  `pais` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- RELACIONES PARA LA TABLA `liga`:
@@ -229,7 +224,7 @@ CREATE TABLE IF NOT EXISTS `liga` (
 
 INSERT INTO `liga` (`id`, `nombre`, `pais`) VALUES
 (1, 'Liga Santander', 'España'),
-(2, 'Calcio', 'Italia'),
+(2, 'Lega Calcio', 'Italia'),
 (3, 'Premier League', 'Inglaterra');
 
 -- --------------------------------------------------------
@@ -237,19 +232,12 @@ INSERT INTO `liga` (`id`, `nombre`, `pais`) VALUES
 --
 -- Estructura de tabla para la tabla `partido`
 --
--- Creación: 10-05-2018 a las 16:10:16
---
 
-DROP TABLE IF EXISTS `partido`;
-CREATE TABLE IF NOT EXISTS `partido` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `partido` (
+  `id` int(11) NOT NULL,
   `local_id` int(11) DEFAULT NULL,
   `visitante_id` int(11) DEFAULT NULL,
-  `jornada_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_visitante_idx` (`visitante_id`),
-  KEY `fk_local_idx` (`local_id`),
-  KEY `fk_partido_jornada_idx` (`jornada_id`)
+  `jornada_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -268,22 +256,27 @@ CREATE TABLE IF NOT EXISTS `partido` (
 --       `equipo` -> `id`
 --
 
+--
+-- Volcado de datos para la tabla `partido`
+--
+
+INSERT INTO `partido` (`id`, `local_id`, `visitante_id`, `jornada_id`) VALUES
+(1, 11, 10, 1),
+(2, 16, 15, 2),
+(3, 12, 14, 1),
+(4, 13, 10, 4);
+
 -- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `tecnico`
 --
--- Creación: 10-05-2018 a las 16:10:16
---
 
-DROP TABLE IF EXISTS `tecnico`;
-CREATE TABLE IF NOT EXISTS `tecnico` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `tecnico` (
+  `id` int(11) NOT NULL,
   `nombre` varchar(100) DEFAULT NULL,
   `puesto` varchar(100) DEFAULT NULL,
-  `equipo_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_tecnico_equipo_idx` (`equipo_id`)
+  `equipo_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -293,6 +286,126 @@ CREATE TABLE IF NOT EXISTS `tecnico` (
 --   `equipo_id`
 --       `equipo` -> `id`
 --
+
+--
+-- Volcado de datos para la tabla `tecnico`
+--
+
+INSERT INTO `tecnico` (`id`, `nombre`, `puesto`, `equipo_id`) VALUES
+(1, 'Quique Setién', 'Entrenador', 10);
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `calendario`
+--
+ALTER TABLE `calendario`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_calendario_liga_idx` (`liga_id`);
+
+--
+-- Indices de la tabla `equipo`
+--
+ALTER TABLE `equipo`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_equipo_liga_idx` (`liga_id`);
+
+--
+-- Indices de la tabla `estadistica`
+--
+ALTER TABLE `estadistica`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_estadistica_partido_idx` (`partido_id`);
+
+--
+-- Indices de la tabla `jornada`
+--
+ALTER TABLE `jornada`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_jornada_calendario_idx` (`calendario_id`);
+
+--
+-- Indices de la tabla `jugador`
+--
+ALTER TABLE `jugador`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_jugador_equipo_idx` (`equipo_id`);
+
+--
+-- Indices de la tabla `liga`
+--
+ALTER TABLE `liga`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `partido`
+--
+ALTER TABLE `partido`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_visitante_idx` (`visitante_id`),
+  ADD KEY `fk_local_idx` (`local_id`),
+  ADD KEY `fk_partido_jornada_idx` (`jornada_id`);
+
+--
+-- Indices de la tabla `tecnico`
+--
+ALTER TABLE `tecnico`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_tecnico_equipo_idx` (`equipo_id`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `calendario`
+--
+ALTER TABLE `calendario`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `equipo`
+--
+ALTER TABLE `equipo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- AUTO_INCREMENT de la tabla `estadistica`
+--
+ALTER TABLE `estadistica`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `jornada`
+--
+ALTER TABLE `jornada`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `jugador`
+--
+ALTER TABLE `jugador`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT de la tabla `liga`
+--
+ALTER TABLE `liga`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `partido`
+--
+ALTER TABLE `partido`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `tecnico`
+--
+ALTER TABLE `tecnico`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas
