@@ -41,6 +41,15 @@ public class LigaDAO {
         return listaLigas;
     }
     
+    public List<Liga> getLigasLista(){
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        Query q = session.createQuery("from Liga");
+        List<Liga> ligas = (List<Liga>) q.list();
+        tx.commit();
+        return ligas;
+    }
+    
     public Equipo[] getClasificacionLigaEspanola(){
 
      Liga liga = null;

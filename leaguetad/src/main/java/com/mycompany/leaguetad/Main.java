@@ -5,26 +5,38 @@
  */
 package com.mycompany.leaguetad;
 
+import com.mycompany.leaguetad.dao.CalendarioDAO;
 import com.mycompany.leaguetad.dao.EquipoDAO;
 import com.mycompany.leaguetad.dao.EquipoTecnicoDAO;
+import com.mycompany.leaguetad.dao.JornadaDAO;
 import com.mycompany.leaguetad.dao.JugadorDAO;
 import com.mycompany.leaguetad.dao.LigaDAO;
+import com.mycompany.leaguetad.dao.PartidoDAO;
+import com.mycompany.leaguetad.model.CalendarioFrontend;
+import com.mycompany.leaguetad.persistence.Calendario;
 import com.mycompany.leaguetad.persistence.Equipo;
+import com.mycompany.leaguetad.persistence.Jornada;
 import com.mycompany.leaguetad.persistence.Jugador;
 import com.mycompany.leaguetad.persistence.Liga;
+import com.mycompany.leaguetad.persistence.Partido;
 import com.mycompany.leaguetad.persistence.Tecnico;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.FileResource;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Accordion;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.Table;
@@ -32,11 +44,13 @@ import com.vaadin.ui.Tree;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
-import javax.servlet.annotation.WebServlet;;
+import javax.servlet.annotation.WebServlet;
 
 /**
  *
@@ -91,27 +105,84 @@ public class Main extends UI{
                 tree.addItem(e.getNombre());
                 tree.setParent(e.getNombre(), nombreLiga);
                 tree.setChildrenAllowed(e.getNombre(), false);
-            }
-            
+            }   
         }
         
+        String calendario = new String("Calendario");
+        tree.addItem(calendario);
+        tree.setChildrenAllowed(calendario, false);
+        final Button buscarCalendario = new Button("Buscar Calendario");
+        final ComboBox select = new ComboBox("AÑO");
+        final ComboBox selectLigas = new ComboBox("LIGAS");
         tree.addItemClickListener( e -> {
             String itemSelected = e.getItemId().toString();
             if(itemSelected.equals("Clasificación")){
                 mostrarClasificacion(verticalLayout);
             }
-            else{
-                if(ligadao.buscarLigaporPais(itemSelected) != null){
-                    mostrarClasificacionPais(verticalLayout, itemSelected);
+            else if(ligadao.buscarLigaporPais(itemSelected) != null){
+                mostrarClasificacionPais(verticalLayout, itemSelected);
+            }
+            else if(ligadao.buscarLigaporNombre(itemSelected) != null){
+                mostrarEquiposPais(verticalLayout, itemSelected);
+            }
+            else if(equipodao.buscarIdEquipoNombre(itemSelected) != null){
+                mostrarJugadoresEquipo(verticalLayout, itemSelected);
+            }
+            else if(itemSelected.equals("Calendario")){
+                verticalLayout.setMargin(true);
+                FormLayout form = new FormLayout();
+                form.setStyleName("formCalendario");
+                form.setSizeUndefined();
+                form.setMargin(true);
+                form.setSpacing(true);
+
+                /* Select año */
+                List<CalendarioFrontend> calendarios = new ArrayList<>();
+                CalendarioFrontend anyo1 = new CalendarioFrontend("2017");
+                CalendarioFrontend anyo2 = new CalendarioFrontend("2018");
+                CalendarioFrontend anyo3 = new CalendarioFrontend("2019");
+                
+                select.addItem(anyo1);
+                select.addItem(anyo2);
+                select.addItem(anyo3);
+
+                select.setItemCaption(anyo1, anyo1.getAnyo());
+                select.setItemCaption(anyo2, anyo2.getAnyo());
+                select.setItemCaption(anyo3, anyo3.getAnyo());
+
+                select.setNullSelectionAllowed(false);
+
+                /* Select Liga */        
+                List<Liga> listaLigas = ligadao.getLigasLista();
+                Iterator it = listaLigas.iterator();
+                while(it.hasNext()){
+                    Liga l = (Liga)it.next();
+                    selectLigas.addItem(l);
+                    selectLigas.setItemCaption(l, l.getNombre());
                 }
-                else if(ligadao.buscarLigaporNombre(itemSelected) != null){
-                    mostrarEquiposPais(verticalLayout, itemSelected);
-                }
-                else if(equipodao.buscarIdEquipoNombre(itemSelected) != null){
-                    mostrarJugadoresEquipo(verticalLayout, itemSelected);
-                }
+
+                selectLigas.setNullSelectionAllowed(false);
+
+                form.addComponents(select,selectLigas,buscarCalendario);
+                verticalLayout.removeAllComponents();
+                verticalLayout.addComponent(form);
             }
         });
+        
+        buscarCalendario.addClickListener( e -> {
+            CalendarioFrontend anyo = (CalendarioFrontend)select.getValue();
+            Liga liga = (Liga)selectLigas.getValue();
+            if(anyo == null || liga == null){
+                Notification n = new Notification("Enter the fields",Notification.Type.ERROR_MESSAGE);
+                n.setDelayMsec(1000);
+                n.setPosition(Notification.POSITION_CENTERED_TOP);
+                n.show(Page.getCurrent());
+            }else{
+                mostrarJornadas(verticalLayout, anyo.getAnyo(), liga);
+            }
+        });
+        
+        
         verticalTree.addComponents(logo,tree);
         verticalTree.setComponentAlignment(logo, Alignment.TOP_CENTER);
         layout.addComponents(verticalTree,verticalLayout);
@@ -366,6 +437,56 @@ public class Main extends UI{
         verticalLayout.removeAllComponents();
         verticalLayout.addComponent(sample);
         
+    }
+    
+    public static void mostrarJornadas(VerticalLayout verticalLayout, String anyo, Liga liga){
+        verticalLayout.setMargin(true);
+        CalendarioDAO calendariodao = new CalendarioDAO();
+        JornadaDAO jornadadao = new JornadaDAO();
+        PartidoDAO partidodao = new PartidoDAO();
+        Calendario calendario = calendariodao.getCalendario(Integer.parseInt(anyo), liga.getId());
+        if (calendario != null){
+            List<Jornada> listaJornadas = jornadadao.getJornadas(calendario.getId());
+            Iterator it = listaJornadas.iterator();
+            int filas = (int)Math.ceil((listaJornadas.size()/4));
+            if(filas == 0){
+                filas = 1;
+            }
+            GridLayout gridJornadas = new GridLayout(4, filas);
+            gridJornadas.setSizeFull();
+            gridJornadas.setSpacing(true);
+            Panel panel;
+            while(it.hasNext()){
+                Jornada j = (Jornada)it.next();
+                long timestamp = j.getFecha().getTime();
+                Calendar cal = Calendar.getInstance();
+                cal.setTimeInMillis(timestamp);
+                System.out.println("Año: "+cal.get(Calendar.YEAR));
+                panel = new Panel("<center>JORNADA "+j.getNumero()+ " - "+ cal.get(Calendar.DAY_OF_MONTH) +"/"+ cal.get(Calendar.MONTH)+"/"+cal.get(Calendar.YEAR)+"</center>");
+                VerticalLayout content = new VerticalLayout();
+                List<Partido> partidos = partidodao.getPartidos(j.getId());
+                Iterator it1 = partidos.iterator();
+                while(it1.hasNext()){
+                    Partido p = (Partido)it1.next();
+                    Label partido = new Label(p.getEquipoByLocalId().getNombre()+ " - " +p.getEquipoByVisitanteId().getNombre());
+                    content.setSizeFull();
+                    content.addComponent(partido);
+                    content.setComponentAlignment(partido, Alignment.MIDDLE_CENTER);
+                    content.setMargin(true);
+                }
+                panel.setContent(content);
+                
+                gridJornadas.addComponent(panel);
+            }
+            verticalLayout.removeAllComponents();
+            verticalLayout.addComponent(gridJornadas);
+        }
+        else{
+            Notification n = new Notification("Calendar not exists",Notification.Type.ERROR_MESSAGE);
+            n.setDelayMsec(1000);
+            n.setPosition(Notification.POSITION_CENTERED_TOP);
+            n.show(Page.getCurrent());
+        }
     }
     
     @WebServlet(urlPatterns = "/*", name = "MainServlet", asyncSupported = true)

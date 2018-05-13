@@ -4,6 +4,10 @@
 	background-size: 100% 100%;
 }
 
+.formCalendario {
+	background-color: white;
+}
+
 /**
  * Checks if a list contains a certain value.
  * 
