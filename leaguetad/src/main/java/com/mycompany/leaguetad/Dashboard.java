@@ -5,17 +5,24 @@
  */
 package com.mycompany.leaguetad;
 
+import com.mycompany.leaguetad.dao.CalendarioDAO;
 import com.mycompany.leaguetad.dao.LigaDAO;
+import com.mycompany.leaguetad.persistence.Calendario;
+import com.mycompany.leaguetad.persistence.Equipo;
 import com.mycompany.leaguetad.persistence.Liga;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.FileResource;
+import com.vaadin.server.Page;
+import static com.vaadin.server.Sizeable.UNITS_PERCENTAGE;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
@@ -23,12 +30,24 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.Table;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.VerticalSplitPanel;
 import java.io.File;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.annotation.WebServlet;
 
 /**
@@ -38,13 +57,15 @@ import javax.servlet.annotation.WebServlet;
 @Theme("tests-valo-dark")
 public class Dashboard extends UI {
 
-    String nombreLigaSelected = new String();
+    static String nombreLigaSelected = new String();
     static Button buttonCalendario = new Button("Ir a Calendario");
     static Button buttonJornada = new Button("Ir a Jornada");
     static Button buttonPartido = new Button("Ir a Partido");
     static Button buttonEquipo = new Button("Ir a Equipo");
     static Button buttonJugador = new Button("Ir a Jugador");
     static Button buttonTecnico = new Button("Ir a Técnico");
+    static Button buttonCrearCalendario = new Button("Crear Calendario");
+    static TextField fieldAnyoCalendario = new TextField("Año Calendario");
 
     @Override
     protected void init(VaadinRequest request) {
@@ -122,6 +143,21 @@ public class Dashboard extends UI {
             nombreLigaSelected = "Lega Calcio";
             mostrarMenuDashboard(menuLigas);
         });
+        
+        buttonCalendario.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            mostrarTablaCalendario(menuLigas);
+        });
+        
+        buttonCrearCalendario.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            try {
+                crearCalendario();
+            } catch (ParseException ex) {
+                Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            mostrarTablaCalendario(menuLigas);
+        });
 
         menuHorizontal.addComponents(selection, menu);
         menuLigas.addComponent(gridLigas);
@@ -149,7 +185,7 @@ public class Dashboard extends UI {
         logoCalendario.setHeight("130px");
         contentCalendario.addComponents(logoCalendario,buttonCalendario);
         contentCalendario.setComponentAlignment(logoCalendario, Alignment.TOP_CENTER);
-        contentCalendario.setComponentAlignment(buttonCalendario, Alignment.MIDDLE_CENTER);
+        contentCalendario.setComponentAlignment(buttonCalendario, Alignment.BOTTOM_CENTER);
         contentCalendario.setMargin(true);
         panelCalendario.setContent(contentCalendario);
         gridDashboard.addComponent(panelCalendario);
@@ -163,7 +199,7 @@ public class Dashboard extends UI {
         logoJornada.setHeight("130px");
         contentJornada.addComponents(logoJornada,buttonJornada);
         contentJornada.setComponentAlignment(logoJornada, Alignment.TOP_CENTER);
-        contentJornada.setComponentAlignment(buttonJornada, Alignment.MIDDLE_CENTER);
+        contentJornada.setComponentAlignment(buttonJornada, Alignment.BOTTOM_CENTER);
         contentJornada.setMargin(true);
         panelJornada.setContent(contentJornada);
         gridDashboard.addComponent(panelJornada);
@@ -177,7 +213,7 @@ public class Dashboard extends UI {
         logoPartido.setHeight("130px");
         contentPartido.addComponents(logoPartido,buttonPartido);
         contentPartido.setComponentAlignment(logoPartido, Alignment.TOP_CENTER);
-        contentPartido.setComponentAlignment(buttonPartido, Alignment.MIDDLE_CENTER);
+        contentPartido.setComponentAlignment(buttonPartido, Alignment.BOTTOM_CENTER);
         contentPartido.setMargin(true);
         panelPartido.setContent(contentPartido);
         gridDashboard.addComponent(panelPartido);
@@ -191,7 +227,7 @@ public class Dashboard extends UI {
         logoEquipo.setHeight("130px");
         contentEquipo.addComponents(logoEquipo,buttonEquipo);
         contentEquipo.setComponentAlignment(logoEquipo, Alignment.TOP_CENTER);
-        contentEquipo.setComponentAlignment(buttonEquipo, Alignment.MIDDLE_CENTER);
+        contentEquipo.setComponentAlignment(buttonEquipo, Alignment.BOTTOM_CENTER);
         contentEquipo.setMargin(true);
         panelEquipo.setContent(contentEquipo);
         gridDashboard.addComponent(panelEquipo);
@@ -205,7 +241,7 @@ public class Dashboard extends UI {
         logoJugador.setHeight("130px");
         contentJugador.addComponents(logoJugador,buttonJugador);
         contentJugador.setComponentAlignment(logoJugador, Alignment.TOP_CENTER);
-        contentJugador.setComponentAlignment(buttonJugador, Alignment.MIDDLE_CENTER);
+        contentJugador.setComponentAlignment(buttonJugador, Alignment.BOTTOM_CENTER);
         contentJugador.setMargin(true);
         panelJugador.setContent(contentJugador);
         gridDashboard.addComponent(panelJugador);
@@ -219,7 +255,7 @@ public class Dashboard extends UI {
         logoTecnico.setHeight("130px");
         contentTecnico.addComponents(logoTecnico,buttonTecnico);
         contentTecnico.setComponentAlignment(logoTecnico, Alignment.TOP_CENTER);
-        contentTecnico.setComponentAlignment(buttonTecnico, Alignment.MIDDLE_CENTER);
+        contentTecnico.setComponentAlignment(buttonTecnico, Alignment.BOTTOM_CENTER);
         contentTecnico.setMargin(true);
         panelTecnico.setContent(contentTecnico);
         gridDashboard.addComponent(panelTecnico);
@@ -227,6 +263,67 @@ public class Dashboard extends UI {
         menuLigas.addComponent(gridDashboard);
         menuLigas.setMargin(true);
         gridDashboard.setSizeFull();
+    }
+    
+    public static void mostrarTablaCalendario(HorizontalLayout menuLigas) {
+        menuLigas.removeAllComponents();
+        LigaDAO ligadao = new LigaDAO();
+        //Tabla
+        final Table tabla = new Table();
+        tabla.setWidth(100, UNITS_PERCENTAGE);
+        tabla.setSelectable(true);
+        tabla.setMultiSelect(true);
+        tabla.setImmediate(true);
+        tabla.addContainerProperty("AÑO", Integer.class, null);
+        
+        CalendarioDAO calendariodao = new CalendarioDAO();
+        Liga liga = ligadao.buscarLigaporNombre(nombreLigaSelected);
+        List<Calendario> calendarios = calendariodao.getCalendarios(liga.getId());
+        Iterator it1 = calendarios.iterator();
+        int i = 1;
+        while(it1.hasNext()){
+            Calendario c = (Calendario)it1.next();
+            long timestamp = c.getAnyo().getTime();
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(timestamp);
+            tabla.addItem(new Object[]{cal.get(Calendar.YEAR)}, i);
+            i++;
+        }
+        tabla.addItem(new Object[]{i, 1}, i);
+        tabla.setPageLength(calendarios.size());
+        
+        
+        //Formulario
+        FormLayout form = new FormLayout();
+        form.setSizeUndefined();
+        form.addComponents(fieldAnyoCalendario,buttonCrearCalendario);
+        form.setStyleName("formCalendario");
+        form.setMargin(true);
+        menuLigas.addComponents(tabla,form);
+        menuLigas.setSpacing(true);
+    }
+    
+    public static void crearCalendario() throws ParseException{
+        String anyo = fieldAnyoCalendario.getValue();
+        if (!anyo.equals("")){
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
+            Date parsedDate = dateFormat.parse(anyo);
+            Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+            LigaDAO ligadao = new LigaDAO();
+            Liga liga = ligadao.buscarLigaporNombre(nombreLigaSelected);
+            Calendario calendario = new Calendario();
+            calendario.setAnyo(timestamp);
+            calendario.setLigaId(liga);
+            CalendarioDAO calendariodao = new CalendarioDAO();
+            calendariodao.crearCalendario(calendario);
+            fieldAnyoCalendario.setValue("");
+        }
+        else{
+            Notification n = new Notification("Enter the fields",Notification.Type.ERROR_MESSAGE);
+            n.setDelayMsec(1000);
+            n.setPosition(Notification.POSITION_CENTERED_TOP);
+            n.show(Page.getCurrent());
+        }
     }
 
     @WebServlet(urlPatterns = "/dashboard/*", name = "DashboardServlet", asyncSupported = true)
