@@ -6,9 +6,11 @@
 package com.mycompany.leaguetad;
 
 import com.mycompany.leaguetad.dao.CalendarioDAO;
+import com.mycompany.leaguetad.dao.JornadaDAO;
 import com.mycompany.leaguetad.dao.LigaDAO;
 import com.mycompany.leaguetad.persistence.Calendario;
 import com.mycompany.leaguetad.persistence.Equipo;
+import com.mycompany.leaguetad.persistence.Jornada;
 import com.mycompany.leaguetad.persistence.Liga;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -22,6 +24,7 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -65,7 +68,11 @@ public class Dashboard extends UI {
     static Button buttonJugador = new Button("Ir a Jugador");
     static Button buttonTecnico = new Button("Ir a Técnico");
     static Button buttonCrearCalendario = new Button("Crear Calendario");
+    static Button buttonCrearJornada = new Button("Crear Jornada");
     static TextField fieldAnyoCalendario = new TextField("Año Calendario");
+    static TextField fieldNumeroJornada = new TextField("Número de la Jornada");
+    static ComboBox selectCalendario = new ComboBox("Calendarios");
+    static DateField fieldfechaJornada = new DateField("Fecha Jornada");
 
     @Override
     protected void init(VaadinRequest request) {
@@ -157,6 +164,21 @@ public class Dashboard extends UI {
                 Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
             }
             mostrarTablaCalendario(menuLigas);
+        });
+        
+        buttonJornada.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            mostrarTablaJornada(menuLigas);
+        });
+        
+        buttonCrearJornada.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            try {
+                crearJornada();
+            } catch (ParseException ex) {
+                Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            mostrarTablaJornada(menuLigas);
         });
 
         menuHorizontal.addComponents(selection, menu);
@@ -289,7 +311,6 @@ public class Dashboard extends UI {
             tabla.addItem(new Object[]{cal.get(Calendar.YEAR)}, i);
             i++;
         }
-        tabla.addItem(new Object[]{i, 1}, i);
         tabla.setPageLength(calendarios.size());
         
         
@@ -297,6 +318,54 @@ public class Dashboard extends UI {
         FormLayout form = new FormLayout();
         form.setSizeUndefined();
         form.addComponents(fieldAnyoCalendario,buttonCrearCalendario);
+        form.setStyleName("formCalendario");
+        form.setMargin(true);
+        menuLigas.addComponents(tabla,form);
+        menuLigas.setSpacing(true);
+    }
+    
+    public static void mostrarTablaJornada(HorizontalLayout menuLigas) {
+        menuLigas.removeAllComponents();
+        JornadaDAO jornadadao = new JornadaDAO();
+        //Tabla
+        final Table tabla = new Table();
+        tabla.setWidth(100, UNITS_PERCENTAGE);
+        tabla.setSelectable(true);
+        tabla.setMultiSelect(true);
+        tabla.setImmediate(true);
+        tabla.addContainerProperty("NÚMERO", Integer.class, null);
+        tabla.addContainerProperty("FECHA", String.class, null);
+        tabla.addContainerProperty("CALENDARIO", Integer.class, null);
+        
+        LigaDAO ligadao = new LigaDAO();
+        Liga liga = ligadao.buscarLigaporNombre(nombreLigaSelected);
+        CalendarioDAO calendariodao = new CalendarioDAO();
+        List<Calendario> calendarios = calendariodao.getCalendarios(liga.getId());
+        Iterator it = calendarios.iterator();
+        int i = 1;
+        while(it.hasNext()){
+            Calendario c = (Calendario)it.next();
+            long timestamp = c.getAnyo().getTime();
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(timestamp);
+            List<Jornada> listaJornadas = jornadadao.getJornadas(c.getId());
+            Iterator it1 = listaJornadas.iterator();
+            while(it1.hasNext()){
+                Jornada j = (Jornada)it1.next();
+                tabla.addItem(new Object[]{j.getNumero(),new SimpleDateFormat("MM/dd/yyyy").format(j.getFecha()),cal.get(Calendar.YEAR)}, i);
+                i++;
+            }
+            selectCalendario.addItem(c);
+            selectCalendario.setItemCaption(c, String.valueOf(cal.get(Calendar.YEAR)));
+            selectCalendario.setNullSelectionAllowed(false);
+        }
+        tabla.setPageLength(i-1);
+        
+        
+        //Formulario
+        FormLayout form = new FormLayout();
+        form.setSizeUndefined();
+        form.addComponents(fieldNumeroJornada,selectCalendario,fieldfechaJornada,buttonCrearJornada);
         form.setStyleName("formCalendario");
         form.setMargin(true);
         menuLigas.addComponents(tabla,form);
@@ -317,6 +386,33 @@ public class Dashboard extends UI {
             CalendarioDAO calendariodao = new CalendarioDAO();
             calendariodao.crearCalendario(calendario);
             fieldAnyoCalendario.setValue("");
+        }
+        else{
+            Notification n = new Notification("Enter the fields",Notification.Type.ERROR_MESSAGE);
+            n.setDelayMsec(1000);
+            n.setPosition(Notification.POSITION_CENTERED_TOP);
+            n.show(Page.getCurrent());
+        }
+    }
+    
+    public static void crearJornada() throws ParseException{
+        Integer numero = Integer.parseInt(fieldNumeroJornada.getValue());
+        Calendario c = (Calendario)selectCalendario.getValue();
+        Date fecha = fieldfechaJornada.getValue();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(fecha);
+        cal.set(Calendar.MILLISECOND, 0);
+        Timestamp timestamp = new java.sql.Timestamp(fecha.getTime());
+        if (!numero.equals("")){
+            LigaDAO ligadao = new LigaDAO();
+            Liga liga = ligadao.buscarLigaporNombre(nombreLigaSelected);
+            Jornada jornada = new Jornada();
+            jornada.setNumero(numero);
+            jornada.setCalendarioByCalendarioId(c);
+            jornada.setFecha(timestamp);
+            JornadaDAO jornadadao = new JornadaDAO();
+            jornadadao.crearJornada(jornada);
+            fieldNumeroJornada.setValue("");
         }
         else{
             Notification n = new Notification("Enter the fields",Notification.Type.ERROR_MESSAGE);
