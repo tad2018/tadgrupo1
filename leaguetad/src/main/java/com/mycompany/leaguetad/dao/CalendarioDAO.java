@@ -70,4 +70,18 @@ public class CalendarioDAO {
         this.session.save(calendario);
         tx.commit();
     }
+    
+     public void actualizarCalendario(Calendario calendario){
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        this.session.update(calendario);
+        tx.commit();
+    }
+
+    public void borrarCalendario(Calendario calendario){
+         this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        this.session.delete(calendario);
+        tx.commit();
+    }
 }

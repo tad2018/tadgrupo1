@@ -14,6 +14,7 @@ import com.mycompany.leaguetad.persistence.Jornada;
 import com.mycompany.leaguetad.persistence.Liga;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.event.ItemClickEvent;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.Page;
 import static com.vaadin.server.Sizeable.UNITS_PERCENTAGE;
@@ -42,9 +43,11 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.VerticalSplitPanel;
 import java.io.File;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -68,11 +71,23 @@ public class Dashboard extends UI {
     static Button buttonJugador = new Button("Ir a Jugador");
     static Button buttonTecnico = new Button("Ir a Técnico");
     static Button buttonCrearCalendario = new Button("Crear Calendario");
+    static Button buttonActualizarCalendario = new Button("Actualizar Calendario");
+    static Button buttonBorrarCalendario = new Button("Borrar Calendario");
     static Button buttonCrearJornada = new Button("Crear Jornada");
+    static Button buttonCrearJugador = new Button("Crear Jugador");
+    static Button buttonCrearTecnico = new Button("Crear Técnico");
     static TextField fieldAnyoCalendario = new TextField("Año Calendario");
+    final static Table tablaCalendario = new Table();
+    static FormLayout formCalendario = new FormLayout();
+    static Calendario calendarioSeleccionado = new Calendario();
+    static List<Calendario> calendarios = new ArrayList<>();
     static TextField fieldNumeroJornada = new TextField("Número de la Jornada");
     static ComboBox selectCalendario = new ComboBox("Calendarios");
     static DateField fieldfechaJornada = new DateField("Fecha Jornada");
+    final static Table tablaJornada = new Table();
+    static FormLayout formJornada = new FormLayout();
+    static List<Jornada> jornadas = new ArrayList<>();
+    static Jornada jornadaSeleccionada = new Jornada();
 
     @Override
     protected void init(VaadinRequest request) {
@@ -81,6 +96,9 @@ public class Dashboard extends UI {
         HorizontalLayout menuLigas = new HorizontalLayout();
         layout.setStyleName("fondo");
         MenuBar menu = new MenuBar();
+        
+        tablaCalendario.setSelectable(true);
+        tablaJornada.setSelectable(true);
 
         // A feedback component
         final Label selection = new Label("");
@@ -91,9 +109,22 @@ public class Dashboard extends UI {
                 getPage().setLocation("/clasificacion");
             }
         };
+        
+        MenuBar.Command mycommandDashboard = new MenuBar.Command() {
+            public void menuSelected(MenuItem selectedItem) {
+                getPage().setLocation("/dashboard");
+            }
+        };
+        
+        MenuBar.Command mycommandLiga = new MenuBar.Command() {
+            public void menuSelected(MenuItem selectedItem) {
+                getPage().setLocation("/dashboard");
+            }
+        };
         // A top-level menu item that opens a submenu
         MenuItem ligas = menu.addItem("Ligas", null, null);
         MenuItem clasificacion = menu.addItem("Clasificación", null, mycommand);
+        MenuItem dashboard = menu.addItem("Dashboard", null, mycommandDashboard);
 
         LigaDAO ligadao = new LigaDAO();
         final Liga[] listadoLigas = ligadao.getLigas();
@@ -107,7 +138,25 @@ public class Dashboard extends UI {
 
         for (int i = 0; i < listadoLigas.length; i++) {
             Liga l = (Liga) listadoLigas[i];
-            ligas.addItem(l.getNombre(), null, null);
+            ligas.addItem(l.getNombre(), new Command() {
+                public void menuSelected(MenuItem selectedItem) {
+                    if(l.getNombre().equals("Liga Santander")){
+                        menuLigas.removeAllComponents();
+                        nombreLigaSelected = "Liga Santander";
+                        mostrarMenuDashboard(menuLigas);
+                    }
+                    else if(l.getNombre().equals("Premier League")){
+                        menuLigas.removeAllComponents();
+                        nombreLigaSelected = "Premier League";
+                        mostrarMenuDashboard(menuLigas);
+                    }
+                    else if(l.getNombre().equals("Lega Calcio")){
+                        menuLigas.removeAllComponents();
+                        nombreLigaSelected = "Lega Calcio";
+                        mostrarMenuDashboard(menuLigas);
+                    }
+                }
+            });
             panel = new Panel("<center>" + l.getNombre() + "</center>");
             panel.setWidth("280px");
             VerticalLayout content = new VerticalLayout();
@@ -153,6 +202,40 @@ public class Dashboard extends UI {
         
         buttonCalendario.addClickListener(e -> {
             menuLigas.removeAllComponents();
+            calendarios = mostrarTablaCalendario(menuLigas);
+        });
+        
+        buttonCrearCalendario.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            try {
+                crearCalendario();
+            } catch (ParseException ex) {
+                Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            mostrarTablaCalendario(menuLigas);
+        });
+        
+        buttonActualizarCalendario.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            CalendarioDAO calendariodao = new CalendarioDAO();
+            String anyo = fieldAnyoCalendario.getValue();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
+            Date parsedDate = null;
+            try {
+                parsedDate = dateFormat.parse(anyo);
+            } catch (ParseException ex) {
+                Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+            calendarioSeleccionado.setAnyo(timestamp);
+            calendariodao.actualizarCalendario(calendarioSeleccionado);
+            mostrarTablaCalendario(menuLigas);
+        });
+        
+        buttonBorrarCalendario.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            CalendarioDAO calendariodao = new CalendarioDAO();
+            calendariodao.borrarCalendario(calendarioSeleccionado);
             mostrarTablaCalendario(menuLigas);
         });
         
@@ -166,9 +249,21 @@ public class Dashboard extends UI {
             mostrarTablaCalendario(menuLigas);
         });
         
+        this.tablaCalendario.addItemClickListener(new ItemClickEvent.ItemClickListener() {
+            @Override
+            public void itemClick(ItemClickEvent event) {
+                int calendarioSelec = (Integer) event.getItemId() - 1;
+                Calendario calendario = calendarios.get(calendarioSelec);
+                Object value = event.getItem().getItemProperty("AÑO").getValue();
+                fieldAnyoCalendario.setValue(value.toString());
+                calendarioSeleccionado =  calendario;
+            }
+        });
+        
+        
         buttonJornada.addClickListener(e -> {
             menuLigas.removeAllComponents();
-            mostrarTablaJornada(menuLigas);
+            jornadas = mostrarTablaJornada(menuLigas);
         });
         
         buttonCrearJornada.addClickListener(e -> {
@@ -179,6 +274,17 @@ public class Dashboard extends UI {
                 Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
             }
             mostrarTablaJornada(menuLigas);
+        });
+        
+        this.tablaJornada.addItemClickListener(new ItemClickEvent.ItemClickListener() {
+            public void itemClick(ItemClickEvent event) {
+                int jornadaSelec = (Integer) event.getItemId() - 1;
+                Jornada jornada = jornadas.get(jornadaSelec);
+                selectCalendario.setValue(jornada.getCalendarioByCalendarioId());
+                fieldNumeroJornada.setValue(String.valueOf(jornada.getNumero()));
+                fieldfechaJornada.setValue(jornada.getFecha());
+                jornadaSeleccionada = jornada;
+            }
         });
 
         menuHorizontal.addComponents(selection, menu);
@@ -287,16 +393,16 @@ public class Dashboard extends UI {
         gridDashboard.setSizeFull();
     }
     
-    public static void mostrarTablaCalendario(HorizontalLayout menuLigas) {
+    public static List<Calendario> mostrarTablaCalendario(HorizontalLayout menuLigas) {
         menuLigas.removeAllComponents();
         LigaDAO ligadao = new LigaDAO();
         //Tabla
-        final Table tabla = new Table();
-        tabla.setWidth(100, UNITS_PERCENTAGE);
-        tabla.setSelectable(true);
-        tabla.setMultiSelect(true);
-        tabla.setImmediate(true);
-        tabla.addContainerProperty("AÑO", Integer.class, null);
+        tablaCalendario.removeAllItems();
+        tablaCalendario.setWidth(100, UNITS_PERCENTAGE);
+        tablaCalendario.setSelectable(true);
+        tablaCalendario.setMultiSelect(false);
+        tablaCalendario.setImmediate(true);
+        tablaCalendario.addContainerProperty("AÑO", Integer.class, null);
         
         CalendarioDAO calendariodao = new CalendarioDAO();
         Liga liga = ligadao.buscarLigaporNombre(nombreLigaSelected);
@@ -308,34 +414,34 @@ public class Dashboard extends UI {
             long timestamp = c.getAnyo().getTime();
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(timestamp);
-            tabla.addItem(new Object[]{cal.get(Calendar.YEAR)}, i);
+            tablaCalendario.addItem(new Object[]{cal.get(Calendar.YEAR)}, i);
             i++;
         }
-        tabla.setPageLength(calendarios.size());
+        tablaCalendario.setPageLength(calendarios.size());
         
         
         //Formulario
-        FormLayout form = new FormLayout();
-        form.setSizeUndefined();
-        form.addComponents(fieldAnyoCalendario,buttonCrearCalendario);
-        form.setStyleName("formCalendario");
-        form.setMargin(true);
-        menuLigas.addComponents(tabla,form);
+        formCalendario = new FormLayout();
+        formCalendario.setSizeUndefined();
+        formCalendario.addComponents(fieldAnyoCalendario,buttonCrearCalendario,buttonActualizarCalendario,buttonBorrarCalendario);
+        formCalendario.setStyleName("formCalendario");
+        formCalendario.setMargin(true);
+        menuLigas.addComponents(tablaCalendario,formCalendario);
         menuLigas.setSpacing(true);
+        return calendarios;
     }
     
-    public static void mostrarTablaJornada(HorizontalLayout menuLigas) {
+    public static List<Jornada> mostrarTablaJornada(HorizontalLayout menuLigas) {
         menuLigas.removeAllComponents();
         JornadaDAO jornadadao = new JornadaDAO();
         //Tabla
-        final Table tabla = new Table();
-        tabla.setWidth(100, UNITS_PERCENTAGE);
-        tabla.setSelectable(true);
-        tabla.setMultiSelect(true);
-        tabla.setImmediate(true);
-        tabla.addContainerProperty("NÚMERO", Integer.class, null);
-        tabla.addContainerProperty("FECHA", String.class, null);
-        tabla.addContainerProperty("CALENDARIO", Integer.class, null);
+        tablaJornada.setWidth(100, UNITS_PERCENTAGE);
+        tablaJornada.setSelectable(true);
+        tablaJornada.setMultiSelect(false);
+        tablaJornada.setImmediate(true);
+        tablaJornada.addContainerProperty("NÚMERO", Integer.class, null);
+        tablaJornada.addContainerProperty("FECHA", String.class, null);
+        tablaJornada.addContainerProperty("CALENDARIO", Integer.class, null);
         
         LigaDAO ligadao = new LigaDAO();
         Liga liga = ligadao.buscarLigaporNombre(nombreLigaSelected);
@@ -343,6 +449,7 @@ public class Dashboard extends UI {
         List<Calendario> calendarios = calendariodao.getCalendarios(liga.getId());
         Iterator it = calendarios.iterator();
         int i = 1;
+        List<Jornada> returnJornadas = new ArrayList<Jornada>();
         while(it.hasNext()){
             Calendario c = (Calendario)it.next();
             long timestamp = c.getAnyo().getTime();
@@ -352,24 +459,26 @@ public class Dashboard extends UI {
             Iterator it1 = listaJornadas.iterator();
             while(it1.hasNext()){
                 Jornada j = (Jornada)it1.next();
-                tabla.addItem(new Object[]{j.getNumero(),new SimpleDateFormat("MM/dd/yyyy").format(j.getFecha()),cal.get(Calendar.YEAR)}, i);
+                returnJornadas.add(j);
+                tablaJornada.addItem(new Object[]{j.getNumero(),new SimpleDateFormat("dd/MM/yyyy").format(j.getFecha()),cal.get(Calendar.YEAR)}, i);
                 i++;
             }
             selectCalendario.addItem(c);
             selectCalendario.setItemCaption(c, String.valueOf(cal.get(Calendar.YEAR)));
             selectCalendario.setNullSelectionAllowed(false);
         }
-        tabla.setPageLength(i-1);
+        tablaJornada.setPageLength(i-1);
         
         
         //Formulario
-        FormLayout form = new FormLayout();
-        form.setSizeUndefined();
-        form.addComponents(fieldNumeroJornada,selectCalendario,fieldfechaJornada,buttonCrearJornada);
-        form.setStyleName("formCalendario");
-        form.setMargin(true);
-        menuLigas.addComponents(tabla,form);
+        formJornada = new FormLayout();
+        formJornada.setSizeUndefined();
+        formJornada.addComponents(fieldNumeroJornada,selectCalendario,fieldfechaJornada,buttonCrearJornada);
+        formJornada.setStyleName("formCalendario");
+        formJornada.setMargin(true);
+        menuLigas.addComponents(tablaJornada,formJornada);
         menuLigas.setSpacing(true);
+        return returnJornadas;
     }
     
     public static void crearCalendario() throws ParseException{
