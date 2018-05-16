@@ -32,4 +32,28 @@ public class JugadorDAO {
         this.session.close();
         return jugadores;
     }
+    
+    public void crearJugador(Jugador jugador){
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        this.session.save(jugador);
+        tx.commit();
+        this.session.close();
+    }
+    
+    public void actualizarJugador(Jugador jugador){
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        this.session.update(jugador);
+        tx.commit();
+        this.session.close();
+    }
+
+    public void borrarJugador(Jugador jugador){
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        this.session.delete(jugador);
+        tx.commit();
+        this.session.close();
+    }
 }

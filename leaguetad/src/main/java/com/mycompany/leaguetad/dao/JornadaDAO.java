@@ -69,4 +69,20 @@ public class JornadaDAO {
         tx.commit();
         this.session.close();
     }
+    
+    public void actualizarJornada(Jornada jornada){
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        this.session.update(jornada);
+        tx.commit();
+        this.session.close();
+    }
+
+    public void borrarJornada(Jornada jornada){
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        this.session.delete(jornada);
+        tx.commit();
+        this.session.close();
+    }
 }
