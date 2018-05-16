@@ -22,11 +22,16 @@ import com.mycompany.leaguetad.persistence.Partido;
 import com.mycompany.leaguetad.persistence.Tecnico;
 import com.vaadin.addon.charts.Chart;
 import com.vaadin.addon.charts.ChartOptions;
+import com.vaadin.addon.charts.model.AxisType;
 import com.vaadin.addon.charts.model.ChartType;
 import com.vaadin.addon.charts.model.Configuration;
 import com.vaadin.addon.charts.model.DataSeries;
 import com.vaadin.addon.charts.model.DataSeriesItem;
+import com.vaadin.addon.charts.model.Options3d;
+import com.vaadin.addon.charts.model.PlotOptionsColumn;
 import com.vaadin.addon.charts.model.PlotOptionsPie;
+import com.vaadin.addon.charts.model.XAxis;
+import com.vaadin.addon.charts.model.YAxis;
 import com.vaadin.addon.charts.themes.GridTheme;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -36,11 +41,12 @@ import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.ui.Accordion;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
+
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Image;
@@ -72,6 +78,7 @@ public class Main extends UI{
     @Override
     protected void init(VaadinRequest request) {
         HorizontalSplitPanel layout = new HorizontalSplitPanel();
+        layout.setSizeFull();
         LigaDAO ligadao = new LigaDAO();
         EquipoDAO equipodao = new EquipoDAO();
                 
@@ -453,25 +460,27 @@ public class Main extends UI{
         layoutEstadistica.setMargin(true);
         
         /* GOLES */
-        Chart chart = new Chart(ChartType.PIE);
-        Configuration conf = chart.getConfiguration();
+        Chart chartGoles = new Chart(ChartType.PIE);
+        Configuration confGoles = chartGoles.getConfiguration();
         ChartOptions.get().setTheme(new GridTheme());
-        PlotOptionsPie options = new PlotOptionsPie();
-        options.setInnerSize("0");//0
-        options.setSize("75%");//75
-        options.setCenter("50%", "50%");//50 50
-        conf.setPlotOptions(options);
-        conf.setTitle("GOLES DEL EQUIPO");
+        PlotOptionsPie optionsGoles = new PlotOptionsPie();
+        optionsGoles.setDepth(45);
+        optionsGoles.setInnerSize("80");//0
+        optionsGoles.setSize("75%");//75
+        optionsGoles.setCenter("50%", "50%");//50 50
+        confGoles.setPlotOptions(optionsGoles);
+        confGoles.setTitle("GOLES DEL EQUIPO");
 
-        DataSeries series = new DataSeries();
-        series.setName("GOLES");
+        DataSeries seriesGoles = new DataSeries();
+        seriesGoles.setName("GOLES");
         
         /* PASES */
         Chart chartPases = new Chart(ChartType.PIE);
         Configuration confPases = chartPases.getConfiguration();
         ChartOptions.get().setTheme(new GridTheme());
         PlotOptionsPie optionsPases = new PlotOptionsPie();
-        optionsPases.setInnerSize("0");//0
+        optionsPases.setDepth(45);
+        optionsPases.setInnerSize("80");//0
         optionsPases.setSize("75%");//75
         optionsPases.setCenter("50%", "50%");//50 50
         confPases.setPlotOptions(optionsPases);
@@ -479,23 +488,67 @@ public class Main extends UI{
 
         DataSeries seriesPases = new DataSeries();
         seriesPases.setName("PASES");
+//        Iterator it2= jugadores.iterator();
+//        while(it2.hasNext()){
+//            Jugador j = (Jugador)it2.next();
+//            series.add(new DataSeriesItem(j.getNombre(), j.getGoles()));
+//            seriesPases.add(new DataSeriesItem(j.getNombre(), j.getPases()));
+//        }
+        
+        //TIROS
+        Chart chartTiros = new Chart(ChartType.COLUMN);
+        Configuration confTiros = chartTiros.getConfiguration();
+        ChartOptions.get().setTheme(new GridTheme());
+        PlotOptionsColumn optionsTiros = new PlotOptionsColumn();
+        confTiros.setPlotOptions(optionsPases);
+        confTiros.setTitle("TIROS DEL EQUIPO");
+        confTiros.getLegend().setEnabled(false);
+        
+        XAxis x = new XAxis();
+        x.setType(AxisType.CATEGORY);
+        confTiros.addxAxis(x);
+        
+        YAxis y = new YAxis();
+        y.setTitle("Goles");
+        confTiros.addyAxis(y);
+        
+        DataSeries seriesTiros = new DataSeries();
+        PlotOptionsColumn plotOptionsColumnTiros = new PlotOptionsColumn();
+        plotOptionsColumnTiros.setColorByPoint(true);
+        seriesTiros.setPlotOptions(plotOptionsColumnTiros);
+        
+        DataSeriesItem seriesItemTiros;
+        DataSeries drillSeriesTiros;
+
         Iterator it2= jugadores.iterator();
         while(it2.hasNext()){
             Jugador j = (Jugador)it2.next();
-            series.add(new DataSeriesItem(j.getNombre(), j.getGoles()));
+            //Items goles
+            seriesGoles.add(new DataSeriesItem(j.getNombre(), j.getGoles()));
+            //Items pases
             seriesPases.add(new DataSeriesItem(j.getNombre(), j.getPases()));
+            //Items tiros
+            seriesItemTiros = new DataSeriesItem(j.getNombre(), j.getTiros());
+            seriesTiros.addItemWithDrilldown(seriesItemTiros);
         }
 
-        conf.addSeries(series);
+        Options3d options3d = new Options3d();
+        options3d.setEnabled(true);
+        options3d.setAlpha(60);
+        confPases.getChart().setOptions3d(options3d);
+        confGoles.getChart().setOptions3d(options3d);
+        
+        confGoles.addSeries(seriesGoles);
         confPases.addSeries(seriesPases);
+        confTiros.addSeries(seriesTiros);
 
-        layoutEstadistica.addComponents(chart,chartPases);
+        layoutEstadistica.addComponents(chartGoles, chartTiros);
         
         verticalLayout.removeAllComponents();
         verticalLayout.addComponent(sample);
         
     }
-    
+        
     public static void mostrarJornadas(VerticalLayout verticalLayout, String anyo, Liga liga){
         verticalLayout.setMargin(true);
         CalendarioDAO calendariodao = new CalendarioDAO();

@@ -32,6 +32,7 @@ public class LigaDAO {
         Query q = session.createQuery("from Liga");
         List<Liga> ligas = (List<Liga>) q.list();
         tx.commit();
+        this.session.close();
         Liga[] listaLigas = new Liga[ligas.size()];
         Iterator it = ligas.iterator();
         int cont = 0;
@@ -48,6 +49,7 @@ public class LigaDAO {
         Query q = session.createQuery("from Liga");
         List<Liga> ligas = (List<Liga>) q.list();
         tx.commit();
+        this.session.close();
         return ligas;
     }
     
@@ -61,6 +63,7 @@ public class LigaDAO {
         Query q2 = session.createQuery("from Equipo where liga_id = "+ liga.getId() +"");
         List equipos = (List<Equipo>) q2.list();
         tx.commit();
+        this.session.close();
         Equipo[] clasificacion = new Equipo[equipos.size()];
         Iterator it = equipos.iterator();
         int cont = 0;
@@ -81,6 +84,7 @@ public class LigaDAO {
         Query q2 = session.createQuery("from Equipo where liga_id = "+ liga.getId() +"");
         List equipos = (List<Equipo>) q2.list();
         tx.commit();
+        this.session.close();
         Equipo[] clasificacion = new Equipo[equipos.size()];
         Iterator it = equipos.iterator();
         int cont = 0;
@@ -98,7 +102,8 @@ public class LigaDAO {
         Transaction tx = session.beginTransaction();
         Query q = session.createQuery("from Equipo where liga_id = " + idLiga);
         lstEquipos = q.getResultList();
-        
+        tx.commit();
+        this.session.close();
         return lstEquipos;
     }
     
@@ -111,6 +116,7 @@ public class LigaDAO {
         Query q2 = session.createQuery("from Equipo where liga_id = "+ liga.getId() +"");
         List equipos = (List<Equipo>) q2.list();
         tx.commit();
+        this.session.close();
         Equipo[] clasificacion = new Equipo[equipos.size()];
         Iterator it = equipos.iterator();
         int cont = 0;
@@ -131,6 +137,7 @@ public class LigaDAO {
         Query q2 = session.createQuery("from Equipo where liga_id = "+ liga.getId() +"");
         List equipos = (List<Equipo>) q2.list();
         tx.commit();
+        this.session.close();
         return equipos;
     }
     
@@ -142,6 +149,7 @@ public class LigaDAO {
         Query q = session.createQuery("from Liga where pais = '"+pais+"'");
         liga = (Liga) q.uniqueResult();
         tx.commit();
+        this.session.close();
         if(liga!=null){
             return liga;
         }
@@ -157,6 +165,7 @@ public class LigaDAO {
         Query q = session.createQuery("from Liga where nombre = '"+nombre+"'");
         liga = (Liga) q.uniqueResult();
         tx.commit();
+        this.session.close();
         if(liga!=null){
             return liga;
         }
@@ -172,6 +181,7 @@ public class LigaDAO {
         Query q = session.createQuery("from Liga where pais = '"+pais+"'");
         liga = (Liga) q.uniqueResult();
         tx.commit();
+        this.session.close();
         if(liga!=null){
             return liga.getId();
         }
@@ -188,6 +198,7 @@ public class LigaDAO {
         Query q = session.createQuery("from Liga where nombre = '"+nombre+"'");
         liga = (Liga) q.uniqueResult();
         tx.commit();
+        this.session.close();
         if(liga!=null){
             return liga.getId();
         }
