@@ -36,6 +36,7 @@ import com.vaadin.ui.components.calendar.CalendarTargetDetails;
 import com.vaadin.ui.components.calendar.event.BasicEvent;
 import com.vaadin.ui.components.calendar.event.BasicEventProvider;
 import com.vaadin.ui.components.calendar.handler.BasicDateClickHandler;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -53,9 +54,9 @@ public class CalendarioLiga extends UI {
     CalendarioDAO calendarioDAO = new CalendarioDAO();
     Calendario c = calendarioDAO.getCalendario(1, 2018);
     JornadaDAO jornadaDAO = new JornadaDAO();
-    Jornada j = jornadaDAO.getJornada(1, c);
     PartidoDAO partidoDAO = new PartidoDAO();
-    List<Partido> p = partidoDAO.getPartidosPorJornada(j);
+    List<Partido> psj = partidoDAO.getPartidosSinJornada();
+    List<Partido> pp = partidoDAO.getPartidos();
 
     Table tablaPartidos = new Table();
     Calendar calendar = new Calendar();
@@ -63,6 +64,7 @@ public class CalendarioLiga extends UI {
     @Override
     protected void init(VaadinRequest request) {
         final VerticalLayout layout = new VerticalLayout();
+        layout.setStyleName("fondo");
         layout.setMargin(true);
         layout.setSpacing(true);
 
@@ -85,13 +87,15 @@ public class CalendarioLiga extends UI {
     private void mostrarTablaPartidos() {
         //Tabla Partidos
         tablaPartidos.setCaptionAsHtml(true);
-        tablaPartidos.setCaption("<b>PARTIDOS</b>");
+        tablaPartidos.setCaption("<b style='color:white'>PARTIDOS SIN DÍA Y HORA ASIGNADOS</b>");
+        tablaPartidos.addContainerProperty("Liga", String.class, null);
         tablaPartidos.addContainerProperty("Local", String.class, null);
         tablaPartidos.addContainerProperty("Visitante", String.class, null);
+        
 
-        for (int i = 0; i < p.size(); i++) {
-            Partido par = (Partido) p.get(i);
-            tablaPartidos.addItem(new Object[]{par.getEquipoByLocalId().getNombre(), par.getEquipoByVisitanteId().getNombre()}, i + 1);
+        for (int i = 0; i < psj.size(); i++) {
+            Partido par = (Partido) psj.get(i);
+            tablaPartidos.addItem(new Object[]{partidoDAO.obtenerLigaPartido(par.getEquipoByLocalId()), par.getEquipoByLocalId().getNombre(), par.getEquipoByVisitanteId().getNombre()}, par.getId());
         }
         tablaPartidos.setPageLength(tablaPartidos.size());
         tablaPartidos.setSelectable(true);
@@ -101,74 +105,10 @@ public class CalendarioLiga extends UI {
     private void mostrarCalendario() {
         // Create the calendar
         calendar.setCaptionAsHtml(true);
-        calendar.setCaption("<b>PARTIDOS POR JORNADA</b>");
+        calendar.setCaption("<b style='color:white'>PARTIDOS POR JORNADA</b>");
         calendar.setWidth("800px");  // Undefined by default
         calendar.setHeight("500px"); // Undefined by default
-        calendar.setDropHandler(new DropHandler() {
-            @Override
-            public void drop(DragAndDropEvent event) {
-                CalendarTargetDetails details
-                        = (CalendarTargetDetails) event.getTargetDetails();
-
-                TableTransferable transferable
-                        = (TableTransferable) event.getTransferable();
-
-                createEvent(details, transferable);
-                removeTableRow(transferable);
-            }
-
-            @Override
-            public AcceptCriterion getAcceptCriterion() {
-                return AcceptAll.get();
-            }
-
-            private void createEvent(CalendarTargetDetails details, TableTransferable transferable) {
-                Date dropTime = details.getDropTime();
-                java.util.Calendar timeCalendar = details.getTargetCalendar()
-                        .getInternalCalendar();
-                timeCalendar.setTime(dropTime);
-                timeCalendar.add(java.util.Calendar.MINUTE, 120);
-                Date endTime = timeCalendar.getTime();
-
-                Item draggedItem = transferable.getSourceComponent().
-                        getItem(transferable.getItemId());
-
-//                String eventType = (String) draggedItem.
-//                        getItemProperty("type").getValue();
-
-//                String eventDescription = "Attending: "
-//                        + getParticipantString(
-//                                (String[]) draggedItem.
-//                                        getItemProperty("participants").getValue());
-
-                Partido p = (Partido) draggedItem;
-                BasicEvent newEvent = null;
-//                newEvent.setAllDay(!details.hasDropTime());
-//                newEvent.setCaption(eventType);
-//                newEvent.setDescription(eventDescription);
-//                newEvent.setStart(dropTime);
-//                newEvent.setEnd(endTime);
-
-                newEvent = new BasicEvent(p.getEquipoByLocalId().getNombre() + " - " + p.getEquipoByVisitanteId().getNombre(),
-                        "Jornada " + j.getNumero() + ": " + p.getEquipoByLocalId().getNombre() + " - " + p.getEquipoByVisitanteId().getNombre(),
-                        dropTime);
-                newEvent.setAllDay(true);
-                calendar.addEvent(newEvent);
-
-//                BasicEventProvider ep = (BasicEventProvider) details
-//                        .getTargetCalendar().getEventProvider();
-//                ep.addEvent(newEvent);
-            }
-
-            private void removeTableRow(TableTransferable transferable) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-//            private String getParticipantString(String[] string) {
-//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//            }
-        });
-
+        
         calendar.setLocale(new Locale("es", "ES"));
 
         // Set start date to first date in this month
@@ -184,18 +124,77 @@ public class CalendarioLiga extends UI {
 
         // Add an all-day event
         GregorianCalendar today = new GregorianCalendar();
-        Iterator it = p.iterator();
+        Iterator it = pp.iterator();
         BasicEvent dayEvent = null;
         while (it.hasNext()) {
             Partido pp = (Partido) it.next();
             dayEvent = new BasicEvent(pp.getEquipoByLocalId().getNombre() + " - " + pp.getEquipoByVisitanteId().getNombre(),
-                    "Jornada " + j.getNumero() + ": " + pp.getEquipoByLocalId().getNombre() + " - " + pp.getEquipoByVisitanteId().getNombre(),
-                    j.getFecha());
+                    partidoDAO.obtenerLigaPartido(pp.getEquipoByLocalId()) + ", Jornada " + partidoDAO.obtenerJornadaPartido(pp.getId()) + ": " + pp.getEquipoByLocalId().getNombre() + " - " + pp.getEquipoByVisitanteId().getNombre(),
+                    partidoDAO.obtenerFechaPartido(pp.getId()));
             dayEvent.setAllDay(true);
             calendar.addEvent(dayEvent);
         }
+        
+        calendar.setDropHandler(new DropHandler() {
+            public void drop(DragAndDropEvent event) {
+                CalendarTargetDetails details
+                        = (CalendarTargetDetails) event.getTargetDetails();
 
-        //Handle clicks on dates
+                TableTransferable transferable
+                        = (TableTransferable) event.getTransferable();
+
+                createEvent(details, transferable);
+                removeTableRow(transferable);
+            }
+
+            public AcceptCriterion getAcceptCriterion() {
+                return AcceptAll.get();
+            }
+
+            private void createEvent(CalendarTargetDetails details, TableTransferable transferable) {
+                Date dropTime = details.getDropTime();
+                java.util.Calendar timeCalendar = details.getTargetCalendar()
+                        .getInternalCalendar();
+                timeCalendar.setTime(dropTime);
+                timeCalendar.add(java.util.Calendar.MINUTE, 120);
+                Date endTime = timeCalendar.getTime();
+
+                Item draggedItem = transferable.getSourceComponent().
+                        getItem(transferable.getItemId());
+
+                String eventType = (String) draggedItem.getItemProperty("Local").getValue() + "-" + (String) draggedItem.getItemProperty("Visitante").getValue();
+
+                String eventDescription = (String) draggedItem.getItemProperty("Local").getValue() + "-" + (String) draggedItem.getItemProperty("Visitante").getValue();
+
+                BasicEvent newEvent = new BasicEvent();
+                newEvent.setAllDay(!details.hasDropTime());
+                newEvent.setCaption(eventType);
+                newEvent.setDescription(eventDescription);
+                newEvent.setStart(dropTime);
+                newEvent.setEnd(endTime);
+                
+                Date fecha = dropTime;
+                
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String fechaFormat = sdf.format(fecha);
+                
+                int idPartido = (int) transferable.getItemId();
+                
+                Jornada jornada = jornadaDAO.obtenerJornadaPorFecha(fechaFormat);
+                partidoDAO.updateJornadaAPartido(jornada, idPartido);
+
+                BasicEventProvider ep = (BasicEventProvider) details
+                        .getTargetCalendar().getEventProvider();
+                ep.addEvent(newEvent);
+            }
+
+            private void removeTableRow(TableTransferable transferable) {
+                tablaPartidos.removeItem(transferable.getItemId());
+            }
+
+        });
+
+//        //Handle clicks on dates
         calendar.setHandler(new BasicDateClickHandler() {
             public void dateClick(DateClickEvent event) {
                 Calendar cal = event.getComponent();
@@ -230,7 +229,7 @@ public class CalendarioLiga extends UI {
         });
     }
 
-    @WebServlet(urlPatterns = "/calendarioLiga", name = "CalendarioLigaServlet", asyncSupported = true)
+    @WebServlet(urlPatterns = "/calendarioLiga/*", name = "CalendarioLigaServlet", asyncSupported = true)
     @VaadinServletConfiguration(ui = CalendarioLiga.class, productionMode = false)
     public static class CalendarioLigaServlet extends VaadinServlet {
     }

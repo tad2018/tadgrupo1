@@ -5,12 +5,15 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Equipo {
     private int id;
     private String nombre;
     private Integer puntos;
+    private Liga ligaByLigaId;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -40,6 +43,16 @@ public class Equipo {
 
     public void setPuntos(Integer puntos) {
         this.puntos = puntos;
+    }
+    
+    @ManyToOne
+    @JoinColumn(name = "liga_id", referencedColumnName = "id")
+    public Liga getLigaByLigaId() {
+        return ligaByLigaId;
+    }
+
+    public void setLigaByLigaId(Liga ligaByLigaId) {
+        this.ligaByLigaId = ligaByLigaId;
     }
 
     @Override
