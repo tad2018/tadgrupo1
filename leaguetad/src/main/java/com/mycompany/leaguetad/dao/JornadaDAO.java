@@ -49,6 +49,16 @@ public class JornadaDAO {
         this.session.close();
         return jornada;
     }
+
+    public Jornada obtenerJornadaPorFecha(String fecha) {
+        Jornada jornada = null;
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        Query q = session.createQuery("from Jornada where fecha = '" + fecha + "'");
+        jornada = (Jornada) q.uniqueResult();
+        tx.commit();
+        return jornada;
+    }
     
     public void crearJornada(Jornada jornada){
         this.session = PersistenceJDBC.getSession();
