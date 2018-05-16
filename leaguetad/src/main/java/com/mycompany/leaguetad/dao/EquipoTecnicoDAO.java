@@ -39,6 +39,7 @@ public class EquipoTecnicoDAO {
         Query q = session.createQuery("from Tecnico where nombre = '"+nombre+"'");
         Tecnico tecnico = (Tecnico) q.uniqueResult();
         tx.commit();
+        this.session.close();
         if(tecnico!=null){
             return tecnico;
         }
@@ -52,6 +53,7 @@ public class EquipoTecnicoDAO {
         Transaction tx = session.beginTransaction();
         this.session.save(tecnico);
         tx.commit();
+        this.session.close();
     }
 
     public void actualizarTecnico(Tecnico tecnico){
@@ -59,6 +61,7 @@ public class EquipoTecnicoDAO {
         Transaction tx = session.beginTransaction();
         this.session.update(tecnico);
         tx.commit();
+        this.session.close();
     }
 
     public void borrarTecnico(Tecnico tecnico){
@@ -66,5 +69,6 @@ public class EquipoTecnicoDAO {
         Transaction tx = session.beginTransaction();
         this.session.delete(tecnico);
         tx.commit();
+        this.session.close();
     }
 }
