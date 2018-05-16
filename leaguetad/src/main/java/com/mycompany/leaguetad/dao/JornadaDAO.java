@@ -57,4 +57,11 @@ public class JornadaDAO {
         tx.commit();
         return jornada;
     }
+    
+    public void crearJornada(Jornada jornada){
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        this.session.save(jornada);
+        tx.commit();
+    }
 }

@@ -24,20 +24,12 @@ public class CalendarioDAO {
         this.session = PersistenceJDBC.getSession();
     }
 
-    public List<Calendario> getAnyos(){
+    public List<Calendario> getCalendarios(Integer idLiga){
         this.session = PersistenceJDBC.getSession();
         Transaction tx = session.beginTransaction();
-        Query q = session.createQuery("from Calendario");
+        Query q = session.createQuery("from Calendario where liga_id = "+idLiga);
         List<Calendario> calendarios = (List<Calendario>) q.list();
         tx.commit();
-        Iterator it = calendarios.iterator();
-        while(it.hasNext()){
-            Calendario c = (Calendario)it.next();
-            long timestamp = c.getAnyo().getTime();
-            Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(timestamp);
-            System.out.println("Año: "+cal.get(Calendar.YEAR));
-        }
         return calendarios;
     }
     
@@ -71,4 +63,25 @@ public class CalendarioDAO {
         
         return calendario;
     } 
+    
+    public void crearCalendario(Calendario calendario){
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        this.session.save(calendario);
+        tx.commit();
+    }
+    
+     public void actualizarCalendario(Calendario calendario){
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        this.session.update(calendario);
+        tx.commit();
+    }
+
+    public void borrarCalendario(Calendario calendario){
+         this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        this.session.delete(calendario);
+        tx.commit();
+    }
 }

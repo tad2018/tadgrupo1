@@ -20,8 +20,17 @@ import com.mycompany.leaguetad.persistence.Jugador;
 import com.mycompany.leaguetad.persistence.Liga;
 import com.mycompany.leaguetad.persistence.Partido;
 import com.mycompany.leaguetad.persistence.Tecnico;
+import com.vaadin.addon.charts.Chart;
+import com.vaadin.addon.charts.ChartOptions;
+import com.vaadin.addon.charts.model.ChartType;
+import com.vaadin.addon.charts.model.Configuration;
+import com.vaadin.addon.charts.model.DataSeries;
+import com.vaadin.addon.charts.model.DataSeriesItem;
+import com.vaadin.addon.charts.model.PlotOptionsPie;
+import com.vaadin.addon.charts.themes.GridTheme;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
@@ -57,6 +66,7 @@ import javax.servlet.annotation.WebServlet;
  * @author expositod
  */
 @Theme("tests-valo-dark")
+@Widgetset("com.mycompany.leaguetad.MyAppWidgetset")
 public class Main extends UI{
 
     @Override
@@ -111,6 +121,7 @@ public class Main extends UI{
         String calendario = new String("Calendario");
         tree.addItem(calendario);
         tree.setChildrenAllowed(calendario, false);
+        
         final Button buscarCalendario = new Button("Buscar Calendario");
         final ComboBox select = new ComboBox("AÑO");
         final ComboBox selectLigas = new ComboBox("LIGAS");
@@ -433,6 +444,52 @@ public class Main extends UI{
             gridTecnicos.addComponents(panelTecnicos);
         }
         layoutCuerpoTecnico.addComponent(gridTecnicos);
+        
+        /* ESTADISTICA */
+        final VerticalLayout layoutEstadistica = new VerticalLayout();
+        layoutEstadistica.setSizeFull();
+        layoutEstadistica.setMargin(true);
+        sample.addTab(layoutEstadistica,"ESTADÍSTICA EQUIPO");
+        layoutEstadistica.setMargin(true);
+        
+        /* GOLES */
+        Chart chart = new Chart(ChartType.PIE);
+        Configuration conf = chart.getConfiguration();
+        ChartOptions.get().setTheme(new GridTheme());
+        PlotOptionsPie options = new PlotOptionsPie();
+        options.setInnerSize("0");//0
+        options.setSize("75%");//75
+        options.setCenter("50%", "50%");//50 50
+        conf.setPlotOptions(options);
+        conf.setTitle("GOLES DEL EQUIPO");
+
+        DataSeries series = new DataSeries();
+        series.setName("GOLES");
+        
+        /* PASES */
+        Chart chartPases = new Chart(ChartType.PIE);
+        Configuration confPases = chartPases.getConfiguration();
+        ChartOptions.get().setTheme(new GridTheme());
+        PlotOptionsPie optionsPases = new PlotOptionsPie();
+        optionsPases.setInnerSize("0");//0
+        optionsPases.setSize("75%");//75
+        optionsPases.setCenter("50%", "50%");//50 50
+        confPases.setPlotOptions(optionsPases);
+        confPases.setTitle("PASES DEL EQUIPO");
+
+        DataSeries seriesPases = new DataSeries();
+        seriesPases.setName("PASES");
+        Iterator it2= jugadores.iterator();
+        while(it2.hasNext()){
+            Jugador j = (Jugador)it2.next();
+            series.add(new DataSeriesItem(j.getNombre(), j.getGoles()));
+            seriesPases.add(new DataSeriesItem(j.getNombre(), j.getPases()));
+        }
+
+        conf.addSeries(series);
+        confPases.addSeries(seriesPases);
+
+        layoutEstadistica.addComponents(chart,chartPases);
         
         verticalLayout.removeAllComponents();
         verticalLayout.addComponent(sample);
