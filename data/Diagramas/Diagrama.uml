@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.mycompany.leaguetad.model.Calendario</OriginalElement>
+  <nodes>
+    <node x="0.0" y="921.0">com.mycompany.leaguetad.model.Tecnico</node>
+    <node x="691.0" y="715.0">com.mycompany.leaguetad.model.Partido</node>
+    <node x="1204.0" y="881.0">com.mycompany.leaguetad.model.Jornada</node>
+    <node x="367.0" y="995.0">com.mycompany.leaguetad.model.Equipo</node>
+    <node x="1012.0" y="0.0">com.mycompany.leaguetad.model.Estadistica</node>
+    <node x="80.0" y="1406.0">com.mycompany.leaguetad.model.Jugador</node>
+    <node x="800.0" y="1430.0">com.mycompany.leaguetad.model.Liga</node>
+    <node x="1260.0" y="1415.0">com.mycompany.leaguetad.model.Calendario</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.mycompany.leaguetad.model.Tecnico" target="com.mycompany.leaguetad.model.Equipo">
+      <point x="0.0" y="-16.935772989037304" />
+      <point x="0.0" y="-16.935772989037275" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.model.Partido" target="com.mycompany.leaguetad.model.Estadistica">
+      <point x="-5.678115156945751" y="0.0" />
+      <point x="0.0" y="-10.550551811892433" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.model.Partido" target="com.mycompany.leaguetad.model.Jornada">
+      <point x="0.0" y="-5.272591808176514" />
+      <point x="0.0" y="-5.272591808176529" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.model.Estadistica" target="com.mycompany.leaguetad.model.Partido">
+      <point x="4.402869492602463" y="2.3695443087460717" />
+      <point x="4.402869492602434" y="2.3695443087460433" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.model.Calendario" target="com.mycompany.leaguetad.model.Jornada">
+      <point x="-4.965685332700673" y="0.5847813066453682" />
+      <point x="-4.965685332700673" y="0.5847813066453824" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.model.Jugador" target="com.mycompany.leaguetad.model.Equipo">
+      <point x="-4.361091288740397" y="-2.4455843414759784" />
+      <point x="-4.361091288740425" y="-2.4455843414759784" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.model.Liga" target="com.mycompany.leaguetad.model.Equipo">
+      <point x="-3.0" y="4.0" />
+      <point x="-3.0" y="4.0" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.model.Calendario" target="com.mycompany.leaguetad.model.Liga">
+      <point x="0.0" y="15.087400593996051" />
+      <point x="2.8421709430404007E-14" y="15.087400593995994" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.model.Jornada" target="com.mycompany.leaguetad.model.Partido">
+      <point x="-1.586873361009225" y="4.741501126871025" />
+      <point x="-1.5868733610092534" y="4.7415011268710145" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.model.Equipo" target="com.mycompany.leaguetad.model.Tecnico">
+      <point x="-2.3212980668012335" y="4.428495826470311" />
+      <point x="-2.321298066801205" y="4.428495826470304" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.model.Liga" target="com.mycompany.leaguetad.model.Calendario">
+      <point x="0.0" y="-5.029133531332036" />
+      <point x="0.0" y="-5.029133531332036" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.model.Equipo" target="com.mycompany.leaguetad.model.Partido">
+      <point x="0.0" y="-22.573831703234163" />
+      <point x="0.0" y="-22.573831703234163" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.model.Partido" target="com.mycompany.leaguetad.model.Equipo">
+      <point x="0.0" y="7.524610567744702" />
+      <point x="0.0" y="7.52461056774473" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.model.Equipo" target="com.mycompany.leaguetad.model.Liga">
+      <point x="0.0" y="-6.25" />
+      <point x="0.0" y="-6.25" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.model.Equipo" target="com.mycompany.leaguetad.model.Jugador">
+      <point x="0.0" y="30.667517258773216" />
+      <point x="0.0" y="30.667517258773273" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.model.Jornada" target="com.mycompany.leaguetad.model.Calendario">
+      <point x="5.034551793962237" y="0.0" />
+      <point x="5.0345517939623505" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.30000000000000016" x="1669.0" y="1296.3333333333326" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>Project Files</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

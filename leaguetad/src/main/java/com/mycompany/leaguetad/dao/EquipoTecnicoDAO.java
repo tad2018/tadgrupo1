@@ -31,4 +31,39 @@ public class EquipoTecnicoDAO {
         tx.commit();
         return tecnicos;
     }
+
+    public Tecnico getTecnico(String nombre) {
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        Query q = session.createQuery("from Tecnico where nombre = '"+nombre+"'");
+        Tecnico tecnico = (Tecnico) q.uniqueResult();
+        tx.commit();
+        if(tecnico!=null){
+            return tecnico;
+        }
+        else{
+            return null;
+        }
+    }
+
+    public void crearTecnico(Tecnico tecnico){
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        this.session.save(tecnico);
+        tx.commit();
+    }
+
+    public void actualizarTecnico(Tecnico tecnico){
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        this.session.update(tecnico);
+        tx.commit();
+    }
+
+    public void borrarTecnico(Tecnico tecnico){
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        this.session.delete(tecnico);
+        tx.commit();
+    }
 }
