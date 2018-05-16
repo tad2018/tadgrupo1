@@ -71,7 +71,7 @@ public class CalendarioDAO {
         tx.commit();
     }
     
-     public void actualizarCalendario(Calendario calendario){
+    public void actualizarCalendario(Calendario calendario){
         this.session = PersistenceJDBC.getSession();
         Transaction tx = session.beginTransaction();
         this.session.update(calendario);

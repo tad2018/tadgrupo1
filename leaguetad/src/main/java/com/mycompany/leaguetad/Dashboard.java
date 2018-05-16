@@ -74,8 +74,14 @@ public class Dashboard extends UI {
     static Button buttonActualizarCalendario = new Button("Actualizar Calendario");
     static Button buttonBorrarCalendario = new Button("Borrar Calendario");
     static Button buttonCrearJornada = new Button("Crear Jornada");
+    static Button buttonActualizarJornada = new Button("Actualizar Jornada");
+    static Button buttonBorrarJornada = new Button("Borrar Jornada");
     static Button buttonCrearJugador = new Button("Crear Jugador");
+    static Button buttonActualizarJugador = new Button("Actualizar Jugador");
+    static Button buttonBorrarJugador = new Button("Borrar Jugador");
     static Button buttonCrearTecnico = new Button("Crear Técnico");
+    static Button buttonActualizarTecnico = new Button("Actualizar Técnico");
+    static Button buttonBorrarTecnico = new Button("Borrar Técnico");
     static TextField fieldAnyoCalendario = new TextField("Año Calendario");
     final static Table tablaCalendario = new Table();
     static FormLayout formCalendario = new FormLayout();
@@ -239,16 +245,6 @@ public class Dashboard extends UI {
             mostrarTablaCalendario(menuLigas);
         });
         
-        buttonCrearCalendario.addClickListener(e -> {
-            menuLigas.removeAllComponents();
-            try {
-                crearCalendario();
-            } catch (ParseException ex) {
-                Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            mostrarTablaCalendario(menuLigas);
-        });
-        
         this.tablaCalendario.addItemClickListener(new ItemClickEvent.ItemClickListener() {
             @Override
             public void itemClick(ItemClickEvent event) {
@@ -273,7 +269,30 @@ public class Dashboard extends UI {
             } catch (ParseException ex) {
                 Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
             }
-            mostrarTablaJornada(menuLigas);
+            jornadas = mostrarTablaJornada(menuLigas);
+        });
+        
+        buttonActualizarJornada.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            JornadaDAO jornadadao = new JornadaDAO();
+            
+            Calendario calendario = (Calendario) selectCalendario.getValue();
+            int numero = Integer.parseInt(fieldNumeroJornada.getValue());
+            Date fecha = fieldfechaJornada.getValue();
+            jornadaSeleccionada.setCalendarioByCalendarioId(calendario);
+            jornadaSeleccionada.setNumero(numero);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Timestamp timestamp = new java.sql.Timestamp(fecha.getTime());
+            jornadaSeleccionada.setFecha(timestamp);
+            jornadadao.actualizarJornada(jornadaSeleccionada);
+            jornadas = mostrarTablaJornada(menuLigas);
+        });
+        
+        buttonBorrarJornada.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            JornadaDAO jornadadao = new JornadaDAO();
+            jornadadao.borrarJornada(jornadaSeleccionada);
+            jornadas = mostrarTablaJornada(menuLigas);
         });
         
         this.tablaJornada.addItemClickListener(new ItemClickEvent.ItemClickListener() {
@@ -435,6 +454,7 @@ public class Dashboard extends UI {
         menuLigas.removeAllComponents();
         JornadaDAO jornadadao = new JornadaDAO();
         //Tabla
+        tablaJornada.removeAllItems();
         tablaJornada.setWidth(100, UNITS_PERCENTAGE);
         tablaJornada.setSelectable(true);
         tablaJornada.setMultiSelect(false);
@@ -473,7 +493,7 @@ public class Dashboard extends UI {
         //Formulario
         formJornada = new FormLayout();
         formJornada.setSizeUndefined();
-        formJornada.addComponents(fieldNumeroJornada,selectCalendario,fieldfechaJornada,buttonCrearJornada);
+        formJornada.addComponents(fieldNumeroJornada,selectCalendario,fieldfechaJornada,buttonCrearJornada,buttonActualizarJornada,buttonBorrarJornada);
         formJornada.setStyleName("formCalendario");
         formJornada.setMargin(true);
         menuLigas.addComponents(tablaJornada,formJornada);
@@ -508,26 +528,32 @@ public class Dashboard extends UI {
         Integer numero = Integer.parseInt(fieldNumeroJornada.getValue());
         Calendario c = (Calendario)selectCalendario.getValue();
         Date fecha = fieldfechaJornada.getValue();
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(fecha);
-        cal.set(Calendar.MILLISECOND, 0);
-        Timestamp timestamp = new java.sql.Timestamp(fecha.getTime());
-        if (!numero.equals("")){
-            LigaDAO ligadao = new LigaDAO();
-            Liga liga = ligadao.buscarLigaporNombre(nombreLigaSelected);
-            Jornada jornada = new Jornada();
-            jornada.setNumero(numero);
-            jornada.setCalendarioByCalendarioId(c);
-            jornada.setFecha(timestamp);
-            JornadaDAO jornadadao = new JornadaDAO();
-            jornadadao.crearJornada(jornada);
-            fieldNumeroJornada.setValue("");
-        }
-        else{
+        if(fecha == null || c ==null){
             Notification n = new Notification("Enter the fields",Notification.Type.ERROR_MESSAGE);
             n.setDelayMsec(1000);
             n.setPosition(Notification.POSITION_CENTERED_TOP);
             n.show(Page.getCurrent());
+        }else{
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(fecha);
+            cal.set(Calendar.MILLISECOND, 0);
+            Timestamp timestamp = new java.sql.Timestamp(fecha.getTime());
+            if (!numero.equals("")){
+                LigaDAO ligadao = new LigaDAO();
+                Liga liga = ligadao.buscarLigaporNombre(nombreLigaSelected);
+                Jornada jornada = new Jornada();
+                jornada.setNumero(numero);
+                jornada.setCalendarioByCalendarioId(c);
+                jornada.setFecha(timestamp);
+                JornadaDAO jornadadao = new JornadaDAO();
+                jornadadao.crearJornada(jornada);
+            }
+            else{
+                Notification n = new Notification("Enter the fields",Notification.Type.ERROR_MESSAGE);
+                n.setDelayMsec(1000);
+                n.setPosition(Notification.POSITION_CENTERED_TOP);
+                n.show(Page.getCurrent());
+            }
         }
     }
 
