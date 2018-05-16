@@ -38,6 +38,8 @@ public class PartidoDAO {
         Transaction tx = session.beginTransaction();
         Query q = session.createQuery("from Partido where jornada_id = "+idJornada);
         List<Partido> partidos = (List<Partido>) q.list();
+        tx.commit();
+        this.session.close();
         return partidos;
     }
     
@@ -49,6 +51,7 @@ public class PartidoDAO {
         Query q = session.createQuery("from Partido where jornada_id = '" + jornada.getId() + "'");
         lstPartidos = (List<Partido>) q.getResultList();
         tx.commit();
+        this.session.close();
         return lstPartidos;
     }
     
@@ -60,6 +63,7 @@ public class PartidoDAO {
         Query q = session.createQuery("from Partido where jornada_id is null");
         lstPartidos = (List<Partido>) q.getResultList();
         tx.commit();
+        this.session.close();
         return lstPartidos;
     }
 
@@ -69,16 +73,17 @@ public class PartidoDAO {
         Query q = session.createQuery("update Partido set jornada_id = " + jornada.getId() + " where id = " + idPartido );
         q.executeUpdate();
         tx.commit();
+        this.session.close();
     }
 
     public List<Partido> getPartidos() {
         List<Partido> lstPartidos = new ArrayList<>();
-        
         this.session = PersistenceJDBC.getSession();
         Transaction tx = session.beginTransaction();
         Query q = session.createQuery("from Partido where jornada_id is not null");
         lstPartidos = (List<Partido>) q.getResultList();
         tx.commit();
+        this.session.close();
         return lstPartidos;
     }
 
@@ -91,6 +96,7 @@ public class PartidoDAO {
         Jornada j = p.getJornadaByJornadaId();
         fecha =  j.getFecha();
         tx.commit();
+        this.session.close();
         return fecha;
     }
 
@@ -103,6 +109,7 @@ public class PartidoDAO {
         Jornada j = p.getJornadaByJornadaId();
         numJornada =  j.getNumero();
         tx.commit();
+        this.session.close();
         return numJornada;
     }
 
@@ -113,6 +120,7 @@ public class PartidoDAO {
         Equipo e = (Equipo) q.uniqueResult();
         Liga  l = e.getLigaByLigaId();
         tx.commit();
+        this.session.close();
         return l.getNombre();
     }
 }

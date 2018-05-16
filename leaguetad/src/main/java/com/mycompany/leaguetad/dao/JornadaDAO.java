@@ -32,8 +32,9 @@ public class JornadaDAO {
     public List<Jornada> getJornadas(Integer idCalendario){
         this.session = PersistenceJDBC.getSession();
         Transaction tx = session.beginTransaction();
-        Query q = session.createQuery("from Jornada where calendario_id = "+idCalendario);
+        Query q = session.createQuery("from Jornada where calendario_id = " + idCalendario);
         List<Jornada> jornadas = (List<Jornada>) q.list();
+        tx.commit();
         this.session.close();
         return jornadas;
     }
@@ -57,6 +58,7 @@ public class JornadaDAO {
         Query q = session.createQuery("from Jornada where fecha = '" + fecha + "'");
         jornada = (Jornada) q.uniqueResult();
         tx.commit();
+        this.session.close();
         return jornada;
     }
     

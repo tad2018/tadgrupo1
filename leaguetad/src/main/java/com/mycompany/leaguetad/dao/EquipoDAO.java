@@ -48,6 +48,7 @@ public class EquipoDAO {
             diccionarioLigas.put(l.getNombre(),equipos);
         }
         tx.commit();
+        this.session.close();
         return diccionarioLigas;
     }
     
@@ -57,6 +58,7 @@ public class EquipoDAO {
         Query q = session.createQuery("from Equipo where liga_id = "+ id);
         List<Equipo> equipos = (List<Equipo>) q.list();
         tx.commit();
+        this.session.close();
         return equipos;
     }
     
@@ -66,6 +68,7 @@ public class EquipoDAO {
         Query q = session.createQuery("from Equipo where nombre = '"+nombre+"'");
         Equipo equipo = (Equipo) q.uniqueResult();
         tx.commit();
+        this.session.close();
         if(equipo!=null){
             return equipo.getId();
         }
@@ -80,6 +83,7 @@ public class EquipoDAO {
         Query q = session.createQuery("from Equipo where liga_id is null");
         List<Equipo> equipos = (List<Equipo>) q.list();
         tx.commit();
+        this.session.close();
         return equipos;
     }
     
@@ -89,6 +93,7 @@ public class EquipoDAO {
         Query q = session.createQuery("from Equipo where id = " + id);
         Equipo equipo = (Equipo) q.uniqueResult();
         tx.commit();
+        this.session.close();
         return equipo;
     }
 
@@ -99,6 +104,7 @@ public class EquipoDAO {
         Query q = session.createQuery("update Equipo set liga_id = " + idLiga + " where nombre = '" + e.getNombre() + "'");
         q.executeUpdate();
         tx.commit();
+        this.session.close();
     }
     
 }

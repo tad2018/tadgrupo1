@@ -30,6 +30,7 @@ public class CalendarioDAO {
         Query q = session.createQuery("from Calendario where liga_id = "+idLiga);
         List<Calendario> calendarios = (List<Calendario>) q.list();
         tx.commit();
+        this.session.close();
         return calendarios;
     }
     
@@ -39,6 +40,7 @@ public class CalendarioDAO {
         Query q = session.createQuery("from Calendario where liga_id = "+idLiga);
         List<Calendario> calendarios = (List<Calendario>) q.list();
         tx.commit();
+        this.session.close();
         Iterator it = calendarios.iterator();
         while (it.hasNext()){
             Calendario c = (Calendario)it.next();
@@ -59,6 +61,7 @@ public class CalendarioDAO {
         Transaction tx = session.beginTransaction();
         Query q = session.createQuery("from Calendario where liga_id = '" + liga + "' and anyo like '" + anyo + "%'");
         tx.commit();
+        this.session.close();
         calendario = (Calendario) q.uniqueResult();
         
         return calendario;
@@ -69,6 +72,7 @@ public class CalendarioDAO {
         Transaction tx = session.beginTransaction();
         this.session.save(calendario);
         tx.commit();
+        this.session.close();
     }
     
     public void actualizarCalendario(Calendario calendario){
@@ -76,6 +80,7 @@ public class CalendarioDAO {
         Transaction tx = session.beginTransaction();
         this.session.update(calendario);
         tx.commit();
+        this.session.close();
     }
 
     public void borrarCalendario(Calendario calendario){
@@ -83,5 +88,6 @@ public class CalendarioDAO {
         Transaction tx = session.beginTransaction();
         this.session.delete(calendario);
         tx.commit();
+        this.session.close();
     }
 }

@@ -29,6 +29,7 @@ public class JugadorDAO {
         Query q = session.createQuery("from Jugador where equipo_id = "+ id);
         List<Jugador> jugadores = (List<Jugador>) q.list();
         tx.commit();
+        this.session.close();
         return jugadores;
     }
     
