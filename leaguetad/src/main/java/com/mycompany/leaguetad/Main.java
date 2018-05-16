@@ -46,6 +46,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
@@ -204,7 +205,7 @@ public class Main extends UI {
 
     public static void mostrarClasificacion(VerticalLayout verticalLayout) {
         TabSheet sample = new TabSheet();
-
+        sample.setSizeFull();
         final VerticalLayout layoutSantander = new VerticalLayout();
         layoutSantander.setSizeFull();
         layoutSantander.setMargin(true);
@@ -450,13 +451,18 @@ public class Main extends UI {
             gridTecnicos.addComponents(panelTecnicos);
         }
         layoutCuerpoTecnico.addComponent(gridTecnicos);
-
+        sample.addTab(layoutCuerpoTecnico, "CUERPO TÉCNICO");
+        
         /* ESTADISTICA */
         final VerticalLayout layoutEstadistica = new VerticalLayout();
+        TabSheet sampleEstadistica = new TabSheet();
         layoutEstadistica.setSizeFull();
         layoutEstadistica.setMargin(true);
         sample.addTab(layoutEstadistica, "ESTADÍSTICA EQUIPO");
         layoutEstadistica.setMargin(true);
+        final VerticalLayout layoutEstadisticaGoles = new VerticalLayout();
+        final VerticalLayout layoutEstadisticaPases = new VerticalLayout();
+        final VerticalLayout layoutEstadisticaTiros = new VerticalLayout();
 
         /* GOLES */
         Chart chartGoles = new Chart(ChartType.PIE);
@@ -540,9 +546,16 @@ public class Main extends UI {
         confGoles.addSeries(seriesGoles);
         confPases.addSeries(seriesPases);
         confTiros.addSeries(seriesTiros);
-
-        layoutEstadistica.addComponents(chartGoles, chartTiros);
-
+        
+        layoutEstadisticaGoles.addComponent(chartGoles);
+        layoutEstadisticaTiros.addComponent(chartTiros);
+        layoutEstadisticaPases.addComponent(chartPases);
+        
+        sampleEstadistica.addTab(layoutEstadisticaGoles, "GOLES");
+        sampleEstadistica.addTab(layoutEstadisticaTiros, "TIROS");
+        sampleEstadistica.addTab(layoutEstadisticaPases, "PASES");
+        
+        layoutEstadistica.addComponents(sampleEstadistica);
         verticalLayout.removeAllComponents();
         verticalLayout.addComponent(sample);
 
