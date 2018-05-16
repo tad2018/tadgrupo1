@@ -44,7 +44,7 @@ public class Equipo {
     public void setPuntos(Integer puntos) {
         this.puntos = puntos;
     }
-    
+
     @ManyToOne
     @JoinColumn(name = "liga_id", referencedColumnName = "id")
     public Liga getLigaByLigaId() {

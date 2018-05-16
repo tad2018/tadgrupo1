@@ -7,41 +7,40 @@ package com.mycompany.leaguetad.dao;
 
 import com.mycompany.leaguetad.persistence.Jugador;
 import com.mycompany.leaguetad.persistence.PersistenceJDBC;
-import java.util.Iterator;
 import java.util.List;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.Query;
 
 /**
- *
  * @author expositod
  */
 public class JugadorDAO {
     Session session = null;
-    public JugadorDAO(){
+
+    public JugadorDAO() {
         this.session = PersistenceJDBC.getSession();
     }
-    
-    public List<Jugador> getJugadoresIdEquipo(Integer id){
+
+    public List<Jugador> getJugadoresIdEquipo(Integer id) {
         this.session = PersistenceJDBC.getSession();
         Transaction tx = session.beginTransaction();
-        Query q = session.createQuery("from Jugador where equipo_id = "+ id);
+        Query q = session.createQuery("from Jugador where equipo_id = " + id);
         List<Jugador> jugadores = (List<Jugador>) q.list();
         tx.commit();
         this.session.close();
         return jugadores;
     }
-    
-    public void crearJugador(Jugador jugador){
+
+    public void crearJugador(Jugador jugador) {
         this.session = PersistenceJDBC.getSession();
         Transaction tx = session.beginTransaction();
         this.session.save(jugador);
         tx.commit();
         this.session.close();
     }
-    
-    public void actualizarJugador(Jugador jugador){
+
+    public void actualizarJugador(Jugador jugador) {
         this.session = PersistenceJDBC.getSession();
         Transaction tx = session.beginTransaction();
         this.session.update(jugador);
@@ -49,7 +48,7 @@ public class JugadorDAO {
         this.session.close();
     }
 
-    public void borrarJugador(Jugador jugador){
+    public void borrarJugador(Jugador jugador) {
         this.session = PersistenceJDBC.getSession();
         Transaction tx = session.beginTransaction();
         this.session.delete(jugador);

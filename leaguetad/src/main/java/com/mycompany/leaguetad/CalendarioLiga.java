@@ -7,10 +7,8 @@ package com.mycompany.leaguetad;
 
 import com.mycompany.leaguetad.dao.CalendarioDAO;
 import com.mycompany.leaguetad.dao.JornadaDAO;
-import com.mycompany.leaguetad.dao.LigaDAO;
 import com.mycompany.leaguetad.dao.PartidoDAO;
 import com.mycompany.leaguetad.persistence.Calendario;
-import com.mycompany.leaguetad.persistence.Equipo;
 import com.mycompany.leaguetad.persistence.Jornada;
 import com.mycompany.leaguetad.persistence.Partido;
 import com.vaadin.annotations.Theme;
@@ -45,7 +43,6 @@ import java.util.Locale;
 import javax.servlet.annotation.WebServlet;
 
 /**
- *
  * @author expositod
  */
 @Theme("tests-valo-dark")
@@ -91,11 +88,11 @@ public class CalendarioLiga extends UI {
         tablaPartidos.addContainerProperty("Liga", String.class, null);
         tablaPartidos.addContainerProperty("Local", String.class, null);
         tablaPartidos.addContainerProperty("Visitante", String.class, null);
-        
 
         for (int i = 0; i < psj.size(); i++) {
             Partido par = (Partido) psj.get(i);
-            tablaPartidos.addItem(new Object[]{partidoDAO.obtenerLigaPartido(par.getEquipoByLocalId()), par.getEquipoByLocalId().getNombre(), par.getEquipoByVisitanteId().getNombre()}, par.getId());
+            tablaPartidos.addItem(new Object[] { partidoDAO.obtenerLigaPartido(par.getEquipoByLocalId()),
+                    par.getEquipoByLocalId().getNombre(), par.getEquipoByVisitanteId().getNombre() }, par.getId());
         }
         tablaPartidos.setPageLength(tablaPartidos.size());
         tablaPartidos.setSelectable(true);
@@ -108,7 +105,7 @@ public class CalendarioLiga extends UI {
         calendar.setCaption("<b style='color:white'>PARTIDOS POR JORNADA</b>");
         calendar.setWidth("800px");  // Undefined by default
         calendar.setHeight("500px"); // Undefined by default
-        
+
         calendar.setLocale(new Locale("es", "ES"));
 
         // Set start date to first date in this month
@@ -128,13 +125,16 @@ public class CalendarioLiga extends UI {
         BasicEvent dayEvent = null;
         while (it.hasNext()) {
             Partido pp = (Partido) it.next();
-            dayEvent = new BasicEvent(pp.getEquipoByLocalId().getNombre() + " - " + pp.getEquipoByVisitanteId().getNombre(),
-                    partidoDAO.obtenerLigaPartido(pp.getEquipoByLocalId()) + ", Jornada " + partidoDAO.obtenerJornadaPartido(pp.getId()) + ": " + pp.getEquipoByLocalId().getNombre() + " - " + pp.getEquipoByVisitanteId().getNombre(),
+            dayEvent = new BasicEvent(
+                    pp.getEquipoByLocalId().getNombre() + " - " + pp.getEquipoByVisitanteId().getNombre(),
+                    partidoDAO.obtenerLigaPartido(pp.getEquipoByLocalId()) + ", Jornada " + partidoDAO
+                            .obtenerJornadaPartido(pp.getId()) + ": " + pp.getEquipoByLocalId().getNombre() + " - " + pp
+                            .getEquipoByVisitanteId().getNombre(),
                     partidoDAO.obtenerFechaPartido(pp.getId()));
             dayEvent.setAllDay(true);
             calendar.addEvent(dayEvent);
         }
-        
+
         calendar.setDropHandler(new DropHandler() {
             public void drop(DragAndDropEvent event) {
                 CalendarTargetDetails details
@@ -162,9 +162,11 @@ public class CalendarioLiga extends UI {
                 Item draggedItem = transferable.getSourceComponent().
                         getItem(transferable.getItemId());
 
-                String eventType = (String) draggedItem.getItemProperty("Local").getValue() + "-" + (String) draggedItem.getItemProperty("Visitante").getValue();
+                String eventType = (String) draggedItem.getItemProperty("Local").getValue() + "-" + (String) draggedItem
+                        .getItemProperty("Visitante").getValue();
 
-                String eventDescription = (String) draggedItem.getItemProperty("Local").getValue() + "-" + (String) draggedItem.getItemProperty("Visitante").getValue();
+                String eventDescription = (String) draggedItem.getItemProperty("Local").getValue() + "-"
+                        + (String) draggedItem.getItemProperty("Visitante").getValue();
 
                 BasicEvent newEvent = new BasicEvent();
                 newEvent.setAllDay(!details.hasDropTime());
@@ -172,14 +174,14 @@ public class CalendarioLiga extends UI {
                 newEvent.setDescription(eventDescription);
                 newEvent.setStart(dropTime);
                 newEvent.setEnd(endTime);
-                
+
                 Date fecha = dropTime;
-                
+
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String fechaFormat = sdf.format(fecha);
-                
+
                 int idPartido = (int) transferable.getItemId();
-                
+
                 Jornada jornada = jornadaDAO.obtenerJornadaPorFecha(fechaFormat);
                 partidoDAO.updateJornadaAPartido(jornada, idPartido);
 
@@ -194,7 +196,7 @@ public class CalendarioLiga extends UI {
 
         });
 
-//        //Handle clicks on dates
+        //        //Handle clicks on dates
         calendar.setHandler(new BasicDateClickHandler() {
             public void dateClick(DateClickEvent event) {
                 Calendar cal = event.getComponent();

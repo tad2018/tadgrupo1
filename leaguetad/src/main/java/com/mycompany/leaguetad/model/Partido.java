@@ -23,15 +23,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
  * @author abarroso
  */
 @Entity
 @Table(name = "partido", catalog = "leaguetad", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Partido.findAll", query = "SELECT p FROM Partido p")
-    , @NamedQuery(name = "Partido.findById", query = "SELECT p FROM Partido p WHERE p.id = :id")})
+        @NamedQuery(name = "Partido.findAll", query = "SELECT p FROM Partido p")
+        , @NamedQuery(name = "Partido.findById", query = "SELECT p FROM Partido p WHERE p.id = :id") })
 public class Partido implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -124,5 +123,5 @@ public class Partido implements Serializable {
     public String toString() {
         return "com.mycompany.leaguetad.model.Partido[ id=" + id + " ]";
     }
-    
+
 }

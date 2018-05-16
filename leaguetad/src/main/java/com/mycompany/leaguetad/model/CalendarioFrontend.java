@@ -6,7 +6,6 @@
 package com.mycompany.leaguetad.model;
 
 /**
- *
  * @author expositod
  */
 public class CalendarioFrontend {
@@ -23,5 +22,5 @@ public class CalendarioFrontend {
     public void setAnyo(String anyo) {
         this.anyo = anyo;
     }
-    
+
 }

@@ -9,7 +9,6 @@ import com.mycompany.leaguetad.dao.CalendarioDAO;
 import com.mycompany.leaguetad.dao.JornadaDAO;
 import com.mycompany.leaguetad.dao.LigaDAO;
 import com.mycompany.leaguetad.persistence.Calendario;
-import com.mycompany.leaguetad.persistence.Equipo;
 import com.mycompany.leaguetad.persistence.Jornada;
 import com.mycompany.leaguetad.persistence.Liga;
 import com.vaadin.annotations.Theme;
@@ -17,8 +16,6 @@ import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.server.FileResource;
 import com.vaadin.server.Page;
-import static com.vaadin.server.Sizeable.UNITS_PERCENTAGE;
-import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServlet;
@@ -43,10 +40,8 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.VerticalSplitPanel;
 import java.io.File;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -57,7 +52,6 @@ import java.util.logging.Logger;
 import javax.servlet.annotation.WebServlet;
 
 /**
- *
  * @author expositod
  */
 @Theme("tests-valo-dark")
@@ -102,7 +96,7 @@ public class Dashboard extends UI {
         HorizontalLayout menuLigas = new HorizontalLayout();
         layout.setStyleName("fondo");
         MenuBar menu = new MenuBar();
-        
+
         tablaCalendario.setSelectable(true);
         tablaJornada.setSelectable(true);
 
@@ -115,13 +109,13 @@ public class Dashboard extends UI {
                 getPage().setLocation("/clasificacion");
             }
         };
-        
+
         MenuBar.Command mycommandDashboard = new MenuBar.Command() {
             public void menuSelected(MenuItem selectedItem) {
                 getPage().setLocation("/dashboard");
             }
         };
-        
+
         MenuBar.Command mycommandLiga = new MenuBar.Command() {
             public void menuSelected(MenuItem selectedItem) {
                 getPage().setLocation("/dashboard");
@@ -146,17 +140,15 @@ public class Dashboard extends UI {
             Liga l = (Liga) listadoLigas[i];
             ligas.addItem(l.getNombre(), new Command() {
                 public void menuSelected(MenuItem selectedItem) {
-                    if(l.getNombre().equals("Liga Santander")){
+                    if (l.getNombre().equals("Liga Santander")) {
                         menuLigas.removeAllComponents();
                         nombreLigaSelected = "Liga Santander";
                         mostrarMenuDashboard(menuLigas);
-                    }
-                    else if(l.getNombre().equals("Premier League")){
+                    } else if (l.getNombre().equals("Premier League")) {
                         menuLigas.removeAllComponents();
                         nombreLigaSelected = "Premier League";
                         mostrarMenuDashboard(menuLigas);
-                    }
-                    else if(l.getNombre().equals("Lega Calcio")){
+                    } else if (l.getNombre().equals("Lega Calcio")) {
                         menuLigas.removeAllComponents();
                         nombreLigaSelected = "Lega Calcio";
                         mostrarMenuDashboard(menuLigas);
@@ -167,7 +159,8 @@ public class Dashboard extends UI {
             panel.setWidth("280px");
             VerticalLayout content = new VerticalLayout();
             String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
-            FileResource resourceSantander = new FileResource(new File(basepath + "/VAADIN/themes/tests-valo-dark/ligas/" + l.getId() + ".png"));
+            FileResource resourceSantander = new FileResource(new File(
+                    basepath + "/VAADIN/themes/tests-valo-dark/ligas/" + l.getId() + ".png"));
             Image logo = new Image("", resourceSantander);
             logo.setWidth("200px");
             logo.setHeight("190px");
@@ -193,24 +186,24 @@ public class Dashboard extends UI {
             nombreLigaSelected = "Liga Santander";
             mostrarMenuDashboard(menuLigas);
         });
-        
+
         buttonPremier.addClickListener(e -> {
             menuLigas.removeAllComponents();
             nombreLigaSelected = "Premier League";
             mostrarMenuDashboard(menuLigas);
         });
-        
+
         buttonCalcio.addClickListener(e -> {
             menuLigas.removeAllComponents();
             nombreLigaSelected = "Lega Calcio";
             mostrarMenuDashboard(menuLigas);
         });
-        
+
         buttonCalendario.addClickListener(e -> {
             menuLigas.removeAllComponents();
             calendarios = mostrarTablaCalendario(menuLigas);
         });
-        
+
         buttonCrearCalendario.addClickListener(e -> {
             menuLigas.removeAllComponents();
             try {
@@ -220,7 +213,7 @@ public class Dashboard extends UI {
             }
             mostrarTablaCalendario(menuLigas);
         });
-        
+
         buttonActualizarCalendario.addClickListener(e -> {
             menuLigas.removeAllComponents();
             CalendarioDAO calendariodao = new CalendarioDAO();
@@ -237,14 +230,14 @@ public class Dashboard extends UI {
             calendariodao.actualizarCalendario(calendarioSeleccionado);
             mostrarTablaCalendario(menuLigas);
         });
-        
+
         buttonBorrarCalendario.addClickListener(e -> {
             menuLigas.removeAllComponents();
             CalendarioDAO calendariodao = new CalendarioDAO();
             calendariodao.borrarCalendario(calendarioSeleccionado);
             mostrarTablaCalendario(menuLigas);
         });
-        
+
         this.tablaCalendario.addItemClickListener(new ItemClickEvent.ItemClickListener() {
             @Override
             public void itemClick(ItemClickEvent event) {
@@ -252,16 +245,15 @@ public class Dashboard extends UI {
                 Calendario calendario = calendarios.get(calendarioSelec);
                 Object value = event.getItem().getItemProperty("AÑO").getValue();
                 fieldAnyoCalendario.setValue(value.toString());
-                calendarioSeleccionado =  calendario;
+                calendarioSeleccionado = calendario;
             }
         });
-        
-        
+
         buttonJornada.addClickListener(e -> {
             menuLigas.removeAllComponents();
             jornadas = mostrarTablaJornada(menuLigas);
         });
-        
+
         buttonCrearJornada.addClickListener(e -> {
             menuLigas.removeAllComponents();
             try {
@@ -271,11 +263,11 @@ public class Dashboard extends UI {
             }
             jornadas = mostrarTablaJornada(menuLigas);
         });
-        
+
         buttonActualizarJornada.addClickListener(e -> {
             menuLigas.removeAllComponents();
             JornadaDAO jornadadao = new JornadaDAO();
-            
+
             Calendario calendario = (Calendario) selectCalendario.getValue();
             int numero = Integer.parseInt(fieldNumeroJornada.getValue());
             Date fecha = fieldfechaJornada.getValue();
@@ -287,14 +279,14 @@ public class Dashboard extends UI {
             jornadadao.actualizarJornada(jornadaSeleccionada);
             jornadas = mostrarTablaJornada(menuLigas);
         });
-        
+
         buttonBorrarJornada.addClickListener(e -> {
             menuLigas.removeAllComponents();
             JornadaDAO jornadadao = new JornadaDAO();
             jornadadao.borrarJornada(jornadaSeleccionada);
             jornadas = mostrarTablaJornada(menuLigas);
         });
-        
+
         this.tablaJornada.addItemClickListener(new ItemClickEvent.ItemClickListener() {
             public void itemClick(ItemClickEvent event) {
                 int jornadaSelec = (Integer) event.getItemId() - 1;
@@ -326,11 +318,12 @@ public class Dashboard extends UI {
         //Calendario
         Panel panelCalendario = new Panel("<center>CALENDARIO</center>");
         VerticalLayout contentCalendario = new VerticalLayout();
-        FileResource resourceCalendario = new FileResource(new File(basepath + "/VAADIN/themes/tests-valo-dark/dashboard/calendario.png"));
+        FileResource resourceCalendario = new FileResource(new File(
+                basepath + "/VAADIN/themes/tests-valo-dark/dashboard/calendario.png"));
         Image logoCalendario = new Image("", resourceCalendario);
         logoCalendario.setWidth("130px");
         logoCalendario.setHeight("130px");
-        contentCalendario.addComponents(logoCalendario,buttonCalendario);
+        contentCalendario.addComponents(logoCalendario, buttonCalendario);
         contentCalendario.setComponentAlignment(logoCalendario, Alignment.TOP_CENTER);
         contentCalendario.setComponentAlignment(buttonCalendario, Alignment.BOTTOM_CENTER);
         contentCalendario.setMargin(true);
@@ -340,11 +333,12 @@ public class Dashboard extends UI {
         //Jornada
         Panel panelJornada = new Panel("<center>JORNADAS</center>");
         VerticalLayout contentJornada = new VerticalLayout();
-        FileResource resourceJornada = new FileResource(new File(basepath + "/VAADIN/themes/tests-valo-dark/dashboard/jornada.png"));
+        FileResource resourceJornada = new FileResource(new File(
+                basepath + "/VAADIN/themes/tests-valo-dark/dashboard/jornada.png"));
         Image logoJornada = new Image("", resourceJornada);
         logoJornada.setWidth("130px");
         logoJornada.setHeight("130px");
-        contentJornada.addComponents(logoJornada,buttonJornada);
+        contentJornada.addComponents(logoJornada, buttonJornada);
         contentJornada.setComponentAlignment(logoJornada, Alignment.TOP_CENTER);
         contentJornada.setComponentAlignment(buttonJornada, Alignment.BOTTOM_CENTER);
         contentJornada.setMargin(true);
@@ -354,11 +348,12 @@ public class Dashboard extends UI {
         //Partido
         Panel panelPartido = new Panel("<center>PARTIDOS</center>");
         VerticalLayout contentPartido = new VerticalLayout();
-        FileResource resourcePartido = new FileResource(new File(basepath + "/VAADIN/themes/tests-valo-dark/dashboard/partido.png"));
+        FileResource resourcePartido = new FileResource(new File(
+                basepath + "/VAADIN/themes/tests-valo-dark/dashboard/partido.png"));
         Image logoPartido = new Image("", resourcePartido);
         logoPartido.setWidth("130px");
         logoPartido.setHeight("130px");
-        contentPartido.addComponents(logoPartido,buttonPartido);
+        contentPartido.addComponents(logoPartido, buttonPartido);
         contentPartido.setComponentAlignment(logoPartido, Alignment.TOP_CENTER);
         contentPartido.setComponentAlignment(buttonPartido, Alignment.BOTTOM_CENTER);
         contentPartido.setMargin(true);
@@ -368,11 +363,12 @@ public class Dashboard extends UI {
         //Equipo
         Panel panelEquipo = new Panel("<center>EQUIPOS</center>");
         VerticalLayout contentEquipo = new VerticalLayout();
-        FileResource resourceEquipo = new FileResource(new File(basepath + "/VAADIN/themes/tests-valo-dark/dashboard/equipo.png"));
+        FileResource resourceEquipo = new FileResource(new File(
+                basepath + "/VAADIN/themes/tests-valo-dark/dashboard/equipo.png"));
         Image logoEquipo = new Image("", resourceEquipo);
         logoEquipo.setWidth("130px");
         logoEquipo.setHeight("130px");
-        contentEquipo.addComponents(logoEquipo,buttonEquipo);
+        contentEquipo.addComponents(logoEquipo, buttonEquipo);
         contentEquipo.setComponentAlignment(logoEquipo, Alignment.TOP_CENTER);
         contentEquipo.setComponentAlignment(buttonEquipo, Alignment.BOTTOM_CENTER);
         contentEquipo.setMargin(true);
@@ -382,11 +378,12 @@ public class Dashboard extends UI {
         //Jugador
         Panel panelJugador = new Panel("<center>JUGADOR</center>");
         VerticalLayout contentJugador = new VerticalLayout();
-        FileResource resourceJugador = new FileResource(new File(basepath + "/VAADIN/themes/tests-valo-dark/dashboard/jugador.png"));
+        FileResource resourceJugador = new FileResource(new File(
+                basepath + "/VAADIN/themes/tests-valo-dark/dashboard/jugador.png"));
         Image logoJugador = new Image("", resourceJugador);
         logoJugador.setWidth("130px");
         logoJugador.setHeight("130px");
-        contentJugador.addComponents(logoJugador,buttonJugador);
+        contentJugador.addComponents(logoJugador, buttonJugador);
         contentJugador.setComponentAlignment(logoJugador, Alignment.TOP_CENTER);
         contentJugador.setComponentAlignment(buttonJugador, Alignment.BOTTOM_CENTER);
         contentJugador.setMargin(true);
@@ -396,11 +393,12 @@ public class Dashboard extends UI {
         //Tecnico
         Panel panelTecnico = new Panel("<center>TECNICO</center>");
         VerticalLayout contentTecnico = new VerticalLayout();
-        FileResource resourceTecnico = new FileResource(new File(basepath + "/VAADIN/themes/tests-valo-dark/dashboard/tecnico.png"));
+        FileResource resourceTecnico = new FileResource(new File(
+                basepath + "/VAADIN/themes/tests-valo-dark/dashboard/tecnico.png"));
         Image logoTecnico = new Image("", resourceTecnico);
         logoTecnico.setWidth("130px");
         logoTecnico.setHeight("130px");
-        contentTecnico.addComponents(logoTecnico,buttonTecnico);
+        contentTecnico.addComponents(logoTecnico, buttonTecnico);
         contentTecnico.setComponentAlignment(logoTecnico, Alignment.TOP_CENTER);
         contentTecnico.setComponentAlignment(buttonTecnico, Alignment.BOTTOM_CENTER);
         contentTecnico.setMargin(true);
@@ -411,7 +409,7 @@ public class Dashboard extends UI {
         menuLigas.setMargin(true);
         gridDashboard.setSizeFull();
     }
-    
+
     public static List<Calendario> mostrarTablaCalendario(HorizontalLayout menuLigas) {
         menuLigas.removeAllComponents();
         LigaDAO ligadao = new LigaDAO();
@@ -422,34 +420,34 @@ public class Dashboard extends UI {
         tablaCalendario.setMultiSelect(false);
         tablaCalendario.setImmediate(true);
         tablaCalendario.addContainerProperty("AÑO", Integer.class, null);
-        
+
         CalendarioDAO calendariodao = new CalendarioDAO();
         Liga liga = ligadao.buscarLigaporNombre(nombreLigaSelected);
         List<Calendario> calendarios = calendariodao.getCalendarios(liga.getId());
         Iterator it1 = calendarios.iterator();
         int i = 1;
-        while(it1.hasNext()){
-            Calendario c = (Calendario)it1.next();
+        while (it1.hasNext()) {
+            Calendario c = (Calendario) it1.next();
             long timestamp = c.getAnyo().getTime();
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(timestamp);
-            tablaCalendario.addItem(new Object[]{cal.get(Calendar.YEAR)}, i);
+            tablaCalendario.addItem(new Object[] { cal.get(Calendar.YEAR) }, i);
             i++;
         }
         tablaCalendario.setPageLength(calendarios.size());
-        
-        
+
         //Formulario
         formCalendario = new FormLayout();
         formCalendario.setSizeUndefined();
-        formCalendario.addComponents(fieldAnyoCalendario,buttonCrearCalendario,buttonActualizarCalendario,buttonBorrarCalendario);
+        formCalendario
+                .addComponents(fieldAnyoCalendario, buttonCrearCalendario, buttonActualizarCalendario, buttonBorrarCalendario);
         formCalendario.setStyleName("formCalendario");
         formCalendario.setMargin(true);
-        menuLigas.addComponents(tablaCalendario,formCalendario);
+        menuLigas.addComponents(tablaCalendario, formCalendario);
         menuLigas.setSpacing(true);
         return calendarios;
     }
-    
+
     public static List<Jornada> mostrarTablaJornada(HorizontalLayout menuLigas) {
         menuLigas.removeAllComponents();
         JornadaDAO jornadadao = new JornadaDAO();
@@ -462,7 +460,7 @@ public class Dashboard extends UI {
         tablaJornada.addContainerProperty("NÚMERO", Integer.class, null);
         tablaJornada.addContainerProperty("FECHA", String.class, null);
         tablaJornada.addContainerProperty("CALENDARIO", Integer.class, null);
-        
+
         LigaDAO ligadao = new LigaDAO();
         Liga liga = ligadao.buscarLigaporNombre(nombreLigaSelected);
         CalendarioDAO calendariodao = new CalendarioDAO();
@@ -470,40 +468,42 @@ public class Dashboard extends UI {
         Iterator it = calendarios.iterator();
         int i = 1;
         List<Jornada> returnJornadas = new ArrayList<Jornada>();
-        while(it.hasNext()){
-            Calendario c = (Calendario)it.next();
+        while (it.hasNext()) {
+            Calendario c = (Calendario) it.next();
             long timestamp = c.getAnyo().getTime();
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(timestamp);
             List<Jornada> listaJornadas = jornadadao.getJornadas(c.getId());
             Iterator it1 = listaJornadas.iterator();
-            while(it1.hasNext()){
-                Jornada j = (Jornada)it1.next();
+            while (it1.hasNext()) {
+                Jornada j = (Jornada) it1.next();
                 returnJornadas.add(j);
-                tablaJornada.addItem(new Object[]{j.getNumero(),new SimpleDateFormat("dd/MM/yyyy").format(j.getFecha()),cal.get(Calendar.YEAR)}, i);
+                tablaJornada
+                        .addItem(new Object[] { j.getNumero(), new SimpleDateFormat("dd/MM/yyyy").format(j.getFecha()),
+                                cal.get(Calendar.YEAR) }, i);
                 i++;
             }
             selectCalendario.addItem(c);
             selectCalendario.setItemCaption(c, String.valueOf(cal.get(Calendar.YEAR)));
             selectCalendario.setNullSelectionAllowed(false);
         }
-        tablaJornada.setPageLength(i-1);
-        
-        
+        tablaJornada.setPageLength(i - 1);
+
         //Formulario
         formJornada = new FormLayout();
         formJornada.setSizeUndefined();
-        formJornada.addComponents(fieldNumeroJornada,selectCalendario,fieldfechaJornada,buttonCrearJornada,buttonActualizarJornada,buttonBorrarJornada);
+        formJornada
+                .addComponents(fieldNumeroJornada, selectCalendario, fieldfechaJornada, buttonCrearJornada, buttonActualizarJornada, buttonBorrarJornada);
         formJornada.setStyleName("formCalendario");
         formJornada.setMargin(true);
-        menuLigas.addComponents(tablaJornada,formJornada);
+        menuLigas.addComponents(tablaJornada, formJornada);
         menuLigas.setSpacing(true);
         return returnJornadas;
     }
-    
-    public static void crearCalendario() throws ParseException{
+
+    public static void crearCalendario() throws ParseException {
         String anyo = fieldAnyoCalendario.getValue();
-        if (!anyo.equals("")){
+        if (!anyo.equals("")) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
             Date parsedDate = dateFormat.parse(anyo);
             Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
@@ -515,30 +515,29 @@ public class Dashboard extends UI {
             CalendarioDAO calendariodao = new CalendarioDAO();
             calendariodao.crearCalendario(calendario);
             fieldAnyoCalendario.setValue("");
-        }
-        else{
-            Notification n = new Notification("Enter the fields",Notification.Type.ERROR_MESSAGE);
+        } else {
+            Notification n = new Notification("Enter the fields", Notification.Type.ERROR_MESSAGE);
             n.setDelayMsec(1000);
             n.setPosition(Notification.POSITION_CENTERED_TOP);
             n.show(Page.getCurrent());
         }
     }
-    
-    public static void crearJornada() throws ParseException{
+
+    public static void crearJornada() throws ParseException {
         Integer numero = Integer.parseInt(fieldNumeroJornada.getValue());
-        Calendario c = (Calendario)selectCalendario.getValue();
+        Calendario c = (Calendario) selectCalendario.getValue();
         Date fecha = fieldfechaJornada.getValue();
-        if(fecha == null || c ==null){
-            Notification n = new Notification("Enter the fields",Notification.Type.ERROR_MESSAGE);
+        if (fecha == null || c == null) {
+            Notification n = new Notification("Enter the fields", Notification.Type.ERROR_MESSAGE);
             n.setDelayMsec(1000);
             n.setPosition(Notification.POSITION_CENTERED_TOP);
             n.show(Page.getCurrent());
-        }else{
+        } else {
             Calendar cal = Calendar.getInstance();
             cal.setTime(fecha);
             cal.set(Calendar.MILLISECOND, 0);
             Timestamp timestamp = new java.sql.Timestamp(fecha.getTime());
-            if (!numero.equals("")){
+            if (!numero.equals("")) {
                 LigaDAO ligadao = new LigaDAO();
                 Liga liga = ligadao.buscarLigaporNombre(nombreLigaSelected);
                 Jornada jornada = new Jornada();
@@ -547,9 +546,8 @@ public class Dashboard extends UI {
                 jornada.setFecha(timestamp);
                 JornadaDAO jornadadao = new JornadaDAO();
                 jornadadao.crearJornada(jornada);
-            }
-            else{
-                Notification n = new Notification("Enter the fields",Notification.Type.ERROR_MESSAGE);
+            } else {
+                Notification n = new Notification("Enter the fields", Notification.Type.ERROR_MESSAGE);
                 n.setDelayMsec(1000);
                 n.setPosition(Notification.POSITION_CENTERED_TOP);
                 n.show(Page.getCurrent());

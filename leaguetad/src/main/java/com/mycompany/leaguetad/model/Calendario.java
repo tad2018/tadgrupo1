@@ -26,16 +26,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
  * @author abarroso
  */
 @Entity
 @Table(name = "calendario", catalog = "leaguetad", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Calendario.findAll", query = "SELECT c FROM Calendario c")
-    , @NamedQuery(name = "Calendario.findById", query = "SELECT c FROM Calendario c WHERE c.id = :id")
-    , @NamedQuery(name = "Calendario.findByAnyo", query = "SELECT c FROM Calendario c WHERE c.anyo = :anyo")})
+        @NamedQuery(name = "Calendario.findAll", query = "SELECT c FROM Calendario c")
+        , @NamedQuery(name = "Calendario.findById", query = "SELECT c FROM Calendario c WHERE c.id = :id")
+        , @NamedQuery(name = "Calendario.findByAnyo", query = "SELECT c FROM Calendario c WHERE c.anyo = :anyo") })
 public class Calendario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -117,5 +116,5 @@ public class Calendario implements Serializable {
     public String toString() {
         return "com.mycompany.leaguetad.model.Calendario[ id=" + id + " ]";
     }
-    
+
 }

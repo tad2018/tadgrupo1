@@ -20,17 +20,16 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
  * @author abarroso
  */
 @Entity
 @Table(name = "tecnico", catalog = "leaguetad", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Tecnico.findAll", query = "SELECT t FROM Tecnico t")
-    , @NamedQuery(name = "Tecnico.findById", query = "SELECT t FROM Tecnico t WHERE t.id = :id")
-    , @NamedQuery(name = "Tecnico.findByNombre", query = "SELECT t FROM Tecnico t WHERE t.nombre = :nombre")
-    , @NamedQuery(name = "Tecnico.findByPuesto", query = "SELECT t FROM Tecnico t WHERE t.puesto = :puesto")})
+        @NamedQuery(name = "Tecnico.findAll", query = "SELECT t FROM Tecnico t")
+        , @NamedQuery(name = "Tecnico.findById", query = "SELECT t FROM Tecnico t WHERE t.id = :id")
+        , @NamedQuery(name = "Tecnico.findByNombre", query = "SELECT t FROM Tecnico t WHERE t.nombre = :nombre")
+        , @NamedQuery(name = "Tecnico.findByPuesto", query = "SELECT t FROM Tecnico t WHERE t.puesto = :puesto") })
 public class Tecnico implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -110,5 +109,5 @@ public class Tecnico implements Serializable {
     public String toString() {
         return "com.mycompany.leaguetad.model.Tecnico[ id=" + id + " ]";
     }
-    
+
 }

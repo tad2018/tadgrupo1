@@ -21,17 +21,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
  * @author abarroso
  */
 @Entity
 @Table(name = "liga", catalog = "leaguetad", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Liga.findAll", query = "SELECT l FROM Liga l")
-    , @NamedQuery(name = "Liga.findById", query = "SELECT l FROM Liga l WHERE l.id = :id")
-    , @NamedQuery(name = "Liga.findByNombre", query = "SELECT l FROM Liga l WHERE l.nombre = :nombre")
-    , @NamedQuery(name = "Liga.findByPais", query = "SELECT l FROM Liga l WHERE l.pais = :pais")})
+        @NamedQuery(name = "Liga.findAll", query = "SELECT l FROM Liga l")
+        , @NamedQuery(name = "Liga.findById", query = "SELECT l FROM Liga l WHERE l.id = :id")
+        , @NamedQuery(name = "Liga.findByNombre", query = "SELECT l FROM Liga l WHERE l.nombre = :nombre")
+        , @NamedQuery(name = "Liga.findByPais", query = "SELECT l FROM Liga l WHERE l.pais = :pais") })
 public class Liga implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -122,5 +121,5 @@ public class Liga implements Serializable {
     public String toString() {
         return "com.mycompany.leaguetad.model.Liga[ id=" + id + " ]";
     }
-    
+
 }

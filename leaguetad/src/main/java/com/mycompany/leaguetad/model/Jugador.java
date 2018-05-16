@@ -20,25 +20,26 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
  * @author abarroso
  */
 @Entity
 @Table(name = "jugador", catalog = "leaguetad", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Jugador.findAll", query = "SELECT j FROM Jugador j")
-    , @NamedQuery(name = "Jugador.findById", query = "SELECT j FROM Jugador j WHERE j.id = :id")
-    , @NamedQuery(name = "Jugador.findByNombre", query = "SELECT j FROM Jugador j WHERE j.nombre = :nombre")
-    , @NamedQuery(name = "Jugador.findByNacionalidad", query = "SELECT j FROM Jugador j WHERE j.nacionalidad = :nacionalidad")
-    , @NamedQuery(name = "Jugador.findByPosicion", query = "SELECT j FROM Jugador j WHERE j.posicion = :posicion")
-    , @NamedQuery(name = "Jugador.findByEdad", query = "SELECT j FROM Jugador j WHERE j.edad = :edad")
-    , @NamedQuery(name = "Jugador.findByGoles", query = "SELECT j FROM Jugador j WHERE j.goles = :goles")
-    , @NamedQuery(name = "Jugador.findByPases", query = "SELECT j FROM Jugador j WHERE j.pases = :pases")
-    , @NamedQuery(name = "Jugador.findByFaltas", query = "SELECT j FROM Jugador j WHERE j.faltas = :faltas")
-    , @NamedQuery(name = "Jugador.findByExpulsiones", query = "SELECT j FROM Jugador j WHERE j.expulsiones = :expulsiones")
-    , @NamedQuery(name = "Jugador.findByParadas", query = "SELECT j FROM Jugador j WHERE j.paradas = :paradas")
-    , @NamedQuery(name = "Jugador.findByTiros", query = "SELECT j FROM Jugador j WHERE j.tiros = :tiros")})
+        @NamedQuery(name = "Jugador.findAll", query = "SELECT j FROM Jugador j")
+        , @NamedQuery(name = "Jugador.findById", query = "SELECT j FROM Jugador j WHERE j.id = :id")
+        , @NamedQuery(name = "Jugador.findByNombre", query = "SELECT j FROM Jugador j WHERE j.nombre = :nombre")
+        , @NamedQuery(name = "Jugador.findByNacionalidad",
+        query = "SELECT j FROM Jugador j WHERE j.nacionalidad = :nacionalidad")
+        , @NamedQuery(name = "Jugador.findByPosicion", query = "SELECT j FROM Jugador j WHERE j.posicion = :posicion")
+        , @NamedQuery(name = "Jugador.findByEdad", query = "SELECT j FROM Jugador j WHERE j.edad = :edad")
+        , @NamedQuery(name = "Jugador.findByGoles", query = "SELECT j FROM Jugador j WHERE j.goles = :goles")
+        , @NamedQuery(name = "Jugador.findByPases", query = "SELECT j FROM Jugador j WHERE j.pases = :pases")
+        , @NamedQuery(name = "Jugador.findByFaltas", query = "SELECT j FROM Jugador j WHERE j.faltas = :faltas")
+        , @NamedQuery(name = "Jugador.findByExpulsiones",
+        query = "SELECT j FROM Jugador j WHERE j.expulsiones = :expulsiones")
+        , @NamedQuery(name = "Jugador.findByParadas", query = "SELECT j FROM Jugador j WHERE j.paradas = :paradas")
+        , @NamedQuery(name = "Jugador.findByTiros", query = "SELECT j FROM Jugador j WHERE j.tiros = :tiros") })
 public class Jugador implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -198,5 +199,5 @@ public class Jugador implements Serializable {
     public String toString() {
         return "com.mycompany.leaguetad.model.Jugador[ id=" + id + " ]";
     }
-    
+
 }

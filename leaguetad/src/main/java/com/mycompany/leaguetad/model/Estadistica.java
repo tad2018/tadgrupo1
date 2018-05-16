@@ -20,23 +20,30 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
  * @author abarroso
  */
 @Entity
 @Table(name = "estadistica", catalog = "leaguetad", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Estadistica.findAll", query = "SELECT e FROM Estadistica e")
-    , @NamedQuery(name = "Estadistica.findById", query = "SELECT e FROM Estadistica e WHERE e.id = :id")
-    , @NamedQuery(name = "Estadistica.findByGolesLocal", query = "SELECT e FROM Estadistica e WHERE e.golesLocal = :golesLocal")
-    , @NamedQuery(name = "Estadistica.findByGolesVisitante", query = "SELECT e FROM Estadistica e WHERE e.golesVisitante = :golesVisitante")
-    , @NamedQuery(name = "Estadistica.findByPasesLocal", query = "SELECT e FROM Estadistica e WHERE e.pasesLocal = :pasesLocal")
-    , @NamedQuery(name = "Estadistica.findByPasesVisitante", query = "SELECT e FROM Estadistica e WHERE e.pasesVisitante = :pasesVisitante")
-    , @NamedQuery(name = "Estadistica.findByFaltasLocal", query = "SELECT e FROM Estadistica e WHERE e.faltasLocal = :faltasLocal")
-    , @NamedQuery(name = "Estadistica.findByFaltasVisitante", query = "SELECT e FROM Estadistica e WHERE e.faltasVisitante = :faltasVisitante")
-    , @NamedQuery(name = "Estadistica.findByTirosLocal", query = "SELECT e FROM Estadistica e WHERE e.tirosLocal = :tirosLocal")
-    , @NamedQuery(name = "Estadistica.findByTirosVisitante", query = "SELECT e FROM Estadistica e WHERE e.tirosVisitante = :tirosVisitante")})
+        @NamedQuery(name = "Estadistica.findAll", query = "SELECT e FROM Estadistica e")
+        , @NamedQuery(name = "Estadistica.findById", query = "SELECT e FROM Estadistica e WHERE e.id = :id")
+        , @NamedQuery(name = "Estadistica.findByGolesLocal",
+        query = "SELECT e FROM Estadistica e WHERE e.golesLocal = :golesLocal")
+        , @NamedQuery(name = "Estadistica.findByGolesVisitante",
+        query = "SELECT e FROM Estadistica e WHERE e.golesVisitante = :golesVisitante")
+        , @NamedQuery(name = "Estadistica.findByPasesLocal",
+        query = "SELECT e FROM Estadistica e WHERE e.pasesLocal = :pasesLocal")
+        , @NamedQuery(name = "Estadistica.findByPasesVisitante",
+        query = "SELECT e FROM Estadistica e WHERE e.pasesVisitante = :pasesVisitante")
+        , @NamedQuery(name = "Estadistica.findByFaltasLocal",
+        query = "SELECT e FROM Estadistica e WHERE e.faltasLocal = :faltasLocal")
+        , @NamedQuery(name = "Estadistica.findByFaltasVisitante",
+        query = "SELECT e FROM Estadistica e WHERE e.faltasVisitante = :faltasVisitante")
+        , @NamedQuery(name = "Estadistica.findByTirosLocal",
+        query = "SELECT e FROM Estadistica e WHERE e.tirosLocal = :tirosLocal")
+        , @NamedQuery(name = "Estadistica.findByTirosVisitante",
+        query = "SELECT e FROM Estadistica e WHERE e.tirosVisitante = :tirosVisitante") })
 public class Estadistica implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -176,5 +183,5 @@ public class Estadistica implements Serializable {
     public String toString() {
         return "com.mycompany.leaguetad.model.Estadistica[ id=" + id + " ]";
     }
-    
+
 }

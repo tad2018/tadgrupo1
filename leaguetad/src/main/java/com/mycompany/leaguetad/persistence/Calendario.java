@@ -34,7 +34,7 @@ public class Calendario {
     public void setAnyo(Timestamp anyo) {
         this.anyo = anyo;
     }
-    
+
     @ManyToOne
     @JoinColumn(name = "liga_id", referencedColumnName = "id")
     public Liga getLigaId() {
