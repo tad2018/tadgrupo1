@@ -68,7 +68,9 @@ import javax.servlet.annotation.WebServlet;
 public class Dashboard extends UI {
 
     static String nombreLigaSelected = new String();
- 
+    
+    static Button buttonAsignarPartido = new Button("AsignarPartido");
+    
     //Componentes calendario
     static Button buttonCalendario = new Button("Ir a Calendario");
     static Button buttonCrearCalendario = new Button("Crear Calendario");
@@ -442,7 +444,7 @@ public class Dashboard extends UI {
                 Equipo e2 = partido.getEquipoByVisitanteId();
                 selectEquipoLocal.setValue(e1);
                 selectEquipoVisitante.setValue(e2);
-                partidoSeleccionadoNull = partido;
+                partidoSeleccionado = partido;
             }
         });
 
@@ -513,6 +515,10 @@ public class Dashboard extends UI {
         buttonTecnico.addClickListener(e -> {
             menuLigas.removeAllComponents();
             tecnicos = mostrarTablaTecnico(menuLigas);
+        });
+        
+        buttonAsignarPartido.addClickListener(e -> {
+            getPage().setLocation("/calendarioLiga");
         });
         
         this.tablaTecnico.addItemClickListener(new ItemClickEvent.ItemClickListener() {
@@ -659,6 +665,20 @@ public class Dashboard extends UI {
         contentTecnico.setMargin(true);
         panelTecnico.setContent(contentTecnico);
         gridDashboard.addComponent(panelTecnico);
+        
+        Panel panelAsignar = new Panel("<center>ASIGNAR PARTIDO</center>");
+        VerticalLayout contentAsignar = new VerticalLayout();
+        FileResource resourceAsignar = new FileResource(new File(
+                basepath + "/VAADIN/themes/tests-valo-dark/dashboard/asignar.jpg"));
+        Image logoAsignar = new Image("", resourceAsignar);
+        logoAsignar.setWidth("130px");
+        logoAsignar.setHeight("130px");
+        contentAsignar.setMargin(true);
+        contentAsignar.addComponents(logoAsignar,buttonAsignarPartido);
+        contentAsignar.setComponentAlignment(logoAsignar, Alignment.TOP_CENTER);
+        contentAsignar.setComponentAlignment(buttonAsignarPartido, Alignment.BOTTOM_CENTER);
+        panelAsignar.setContent(contentAsignar);
+        gridDashboard.addComponent(panelAsignar);
 
         menuLigas.addComponent(gridDashboard);
         menuLigas.setMargin(true);

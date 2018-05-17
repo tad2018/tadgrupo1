@@ -20,8 +20,10 @@ import com.vaadin.event.dd.acceptcriteria.AcceptAll;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.server.WrappedSession;
 import com.vaadin.shared.ui.calendar.DateConstants;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Calendar;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
@@ -60,11 +62,15 @@ public class CalendarioLiga extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
+        WrappedSession session = getSession().getSession();
+        if(session.getAttribute("user")==null){
+            getPage().setLocation("/admin");
+        }
         final VerticalLayout layout = new VerticalLayout();
         layout.setStyleName("fondo");
         layout.setMargin(true);
         layout.setSpacing(true);
-
+        final Button volverDashboard = new Button("Volver a Dashboard");
         final HorizontalLayout arriba = new HorizontalLayout();
         arriba.setSizeFull();
         final HorizontalLayout abajo = new HorizontalLayout();
@@ -73,11 +79,15 @@ public class CalendarioLiga extends UI {
         mostrarTablaPartidos();
         mostrarCalendario();
 
+        volverDashboard.addClickListener(e -> {
+            getPage().setLocation("/dashboard");
+        });
+        
         arriba.addComponent(tablaPartidos);
         arriba.setComponentAlignment(tablaPartidos, Alignment.MIDDLE_CENTER);
         abajo.addComponent(calendar);
         abajo.setComponentAlignment(calendar, Alignment.MIDDLE_CENTER);
-        layout.addComponents(arriba, abajo);
+        layout.addComponents(arriba, abajo,volverDashboard);
         setContent(layout);
     }
 
