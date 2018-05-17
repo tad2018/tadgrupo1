@@ -61,9 +61,8 @@ public class CalendarioDAO {
         Transaction tx = session.beginTransaction();
         Query q = session.createQuery("from Calendario where liga_id = '" + liga + "' and anyo like '" + anyo + "%'");
         tx.commit();
-        this.session.close();
         calendario = (Calendario) q.uniqueResult();
-        
+        this.session.close();
         return calendario;
     } 
     

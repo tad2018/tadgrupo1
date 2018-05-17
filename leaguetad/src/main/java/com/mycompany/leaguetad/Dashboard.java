@@ -6,12 +6,15 @@
 package com.mycompany.leaguetad;
 
 import com.mycompany.leaguetad.dao.CalendarioDAO;
+import com.mycompany.leaguetad.dao.EquipoDAO;
 import com.mycompany.leaguetad.dao.JornadaDAO;
 import com.mycompany.leaguetad.dao.LigaDAO;
+import com.mycompany.leaguetad.dao.PartidoDAO;
 import com.mycompany.leaguetad.persistence.Calendario;
 import com.mycompany.leaguetad.persistence.Equipo;
 import com.mycompany.leaguetad.persistence.Jornada;
 import com.mycompany.leaguetad.persistence.Liga;
+import com.mycompany.leaguetad.persistence.Partido;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.event.ItemClickEvent;
@@ -36,6 +39,7 @@ import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
@@ -64,24 +68,12 @@ import javax.servlet.annotation.WebServlet;
 public class Dashboard extends UI {
 
     static String nombreLigaSelected = new String();
+ 
+    //Componentes calendario
     static Button buttonCalendario = new Button("Ir a Calendario");
-    static Button buttonJornada = new Button("Ir a Jornada");
-    static Button buttonPartido = new Button("Ir a Partido");
-    static Button buttonEquipo = new Button("Ir a Equipo");
-    static Button buttonJugador = new Button("Ir a Jugador");
-    static Button buttonTecnico = new Button("Ir a Técnico");
     static Button buttonCrearCalendario = new Button("Crear Calendario");
     static Button buttonActualizarCalendario = new Button("Actualizar Calendario");
     static Button buttonBorrarCalendario = new Button("Borrar Calendario");
-    static Button buttonCrearJornada = new Button("Crear Jornada");
-    static Button buttonActualizarJornada = new Button("Actualizar Jornada");
-    static Button buttonBorrarJornada = new Button("Borrar Jornada");
-    static Button buttonCrearJugador = new Button("Crear Jugador");
-    static Button buttonActualizarJugador = new Button("Actualizar Jugador");
-    static Button buttonBorrarJugador = new Button("Borrar Jugador");
-    static Button buttonCrearTecnico = new Button("Crear Técnico");
-    static Button buttonActualizarTecnico = new Button("Actualizar Técnico");
-    static Button buttonBorrarTecnico = new Button("Borrar Técnico");
     static TextField fieldAnyoCalendario = new TextField("Año Calendario");
     final static Table tablaCalendario = new Table();
     static FormLayout formCalendario = new FormLayout();
@@ -90,11 +82,50 @@ public class Dashboard extends UI {
     static TextField fieldNumeroJornada = new TextField("Número de la Jornada");
     static ComboBox selectCalendario = new ComboBox("Calendarios");
     static DateField fieldfechaJornada = new DateField("Fecha Jornada");
+    
+    //Componentes jornada
+    static Button buttonCrearJornada = new Button("Crear Jornada");
+    static Button buttonActualizarJornada = new Button("Actualizar Jornada");
+    static Button buttonBorrarJornada = new Button("Borrar Jornada");
+    static Button buttonJornada = new Button("Ir a Jornada");
     final static Table tablaJornada = new Table();
     static FormLayout formJornada = new FormLayout();
     static List<Jornada> jornadas = new ArrayList<>();
     static Jornada jornadaSeleccionada = new Jornada();
-
+    
+    //Componentes partido
+    static Button buttonPartido = new Button("Ir a Partido");
+    static Button buttonCrearPartido = new Button("Crear Partido");
+    static Button buttonActualizarPartido = new Button("Actualizar Partido");
+    static Button buttonBorrarPartido = new Button("Borrar Partido");
+    final static Table tablaPartido = new Table();
+    final static Table tablaPartidoNull = new Table();
+    static List<Partido> partidos = new ArrayList<>();
+    static List<Partido> partidosNull = new ArrayList<>();    
+    static FormLayout formPartido = new FormLayout();
+    static ComboBox selectEquipoLocal = new ComboBox("Equipo Local");
+    static ComboBox selectEquipoVisitante = new ComboBox("Equipo Visitante");
+    static Partido partidoSeleccionado = new Partido();
+    static Partido partidoSeleccionadoNull = new Partido();
+    static TabSheet tabPartido = new TabSheet();
+    static VerticalLayout layoutPartido = new VerticalLayout();
+    
+    //Componentes equipo
+    static Button buttonEquipo = new Button("Ir a Equipo");
+    
+    //Componentes jugador
+    static Button buttonJugador = new Button("Ir a Jugador");
+    static Button buttonCrearJugador = new Button("Crear Jugador");
+    static Button buttonActualizarJugador = new Button("Actualizar Jugador");
+    static Button buttonBorrarJugador = new Button("Borrar Jugador");
+    
+    //Componentes equipo tecnico
+    static Button buttonTecnico = new Button("Ir a Técnico");
+    static Button buttonCrearTecnico = new Button("Crear Técnico");
+    static Button buttonActualizarTecnico = new Button("Actualizar Técnico");
+    static Button buttonBorrarTecnico = new Button("Borrar Técnico");
+    
+    
     @Override
     protected void init(VaadinRequest request) {
         VerticalSplitPanel layout = new VerticalSplitPanel();
@@ -206,6 +237,7 @@ public class Dashboard extends UI {
             mostrarMenuDashboard(menuLigas);
         });
         
+        //CALENDARIO
         buttonCalendario.addClickListener(e -> {
             menuLigas.removeAllComponents();
             calendarios = mostrarTablaCalendario(menuLigas);
@@ -256,7 +288,7 @@ public class Dashboard extends UI {
             }
         });
         
-        
+        //JORNADA
         buttonJornada.addClickListener(e -> {
             menuLigas.removeAllComponents();
             jornadas = mostrarTablaJornada(menuLigas);
@@ -305,7 +337,71 @@ public class Dashboard extends UI {
                 jornadaSeleccionada = jornada;
             }
         });
-
+        
+        //PARTIDO
+        buttonPartido.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            partidosNull = mostrarTablaPartidosNull(menuLigas);
+            partidos = mostrarTablaPartidos(menuLigas);
+        });
+        
+        buttonCrearPartido.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            try {
+                crearPartido();
+            } catch (ParseException ex) {
+                Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            partidosNull = mostrarTablaPartidosNull(menuLigas);
+            partidos = mostrarTablaPartidos(menuLigas);
+        });
+        
+        buttonActualizarPartido.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            PartidoDAO partidoDAO = new PartidoDAO();
+            Equipo eLocal = (Equipo) selectEquipoLocal.getValue();
+            Equipo eVisitante = (Equipo) selectEquipoVisitante.getValue();
+            
+            partidoSeleccionado.setEquipoByLocalId(eLocal);
+            partidoSeleccionado.setEquipoByVisitanteId(eVisitante);
+            partidoDAO.actualizarPartido(partidoSeleccionado);
+            
+            partidosNull = mostrarTablaPartidosNull(menuLigas);
+            partidos = mostrarTablaPartidos(menuLigas);
+        });
+        
+        buttonBorrarPartido.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            PartidoDAO partidoDAO = new PartidoDAO();
+            partidoDAO.borrarPartido(partidoSeleccionado);
+            partidosNull = mostrarTablaPartidosNull(menuLigas);
+            partidos = mostrarTablaPartidos(menuLigas);
+        });
+        
+        this.tablaPartido.addItemClickListener(new ItemClickEvent.ItemClickListener() {
+            public void itemClick(ItemClickEvent event) {
+                int partidoSelec = (Integer) event.getItemId() - 1;
+                Partido partido = partidos.get(partidoSelec);
+                Equipo e1 = partido.getEquipoByLocalId();
+                Equipo e2 = partido.getEquipoByVisitanteId();
+                selectEquipoLocal.setValue(e1);
+                selectEquipoVisitante.setValue(e2);
+                partidoSeleccionado = partido;
+            }
+        });
+        
+        this.tablaPartidoNull.addItemClickListener(new ItemClickEvent.ItemClickListener() {
+            public void itemClick(ItemClickEvent event) {
+                int partidoSelec = (Integer) event.getItemId() - 1;
+                Partido partido = partidosNull.get(partidoSelec);
+                Equipo e1 = partido.getEquipoByLocalId();
+                Equipo e2 = partido.getEquipoByVisitanteId();
+                selectEquipoLocal.setValue(e1);
+                selectEquipoVisitante.setValue(e2);
+                partidoSeleccionadoNull = partido;
+            }
+        });
+        
         menuHorizontal.addComponents(selection, menu);
         menuLigas.addComponent(gridLigas);
         menuLigas.setSizeFull();
@@ -501,6 +597,98 @@ public class Dashboard extends UI {
         return returnJornadas;
     }
     
+    public static List<Partido> mostrarTablaPartidos(HorizontalLayout menuLigas){
+        menuLigas.removeAllComponents();
+        PartidoDAO partidoDAO = new PartidoDAO();
+        HorizontalLayout partidosCrud = new HorizontalLayout();
+        partidosCrud.setSizeFull();
+        partidosCrud.setMargin(true);
+        partidosCrud.setSpacing(true);
+        
+        //Tabla
+        tablaPartido.setCaptionAsHtml(true);
+        tablaPartido.setCaption("<b style='color:white'>PARTIDOS CON JORNADA ASIGNADA</b>");
+        tablaPartido.removeAllItems();
+        tablaPartido.setWidth(100, UNITS_PERCENTAGE);
+        tablaPartido.setSelectable(true);
+        tablaPartido.setMultiSelect(false);
+        tablaPartido.setImmediate(true);
+        tablaPartido.addContainerProperty("LOCAL", String.class, null);
+        tablaPartido.addContainerProperty("VISITANTE", String.class, null);
+        tablaPartido.addContainerProperty("JORNADA", Integer.class, null);
+        
+        LigaDAO ligadao = new LigaDAO();
+        Liga liga = ligadao.buscarLigaporNombre(nombreLigaSelected);
+        partidos = partidoDAO.getPartidosPorLiga(liga);
+        Iterator it = partidos.iterator();
+        int i = 1;
+        while (it.hasNext()){
+            Partido p = (Partido)it.next();
+            tablaPartido.addItem(new Object[]{p.getEquipoByLocalId().getNombre(), p.getEquipoByVisitanteId().getNombre(), p.getJornadaByJornadaId().getNumero()}, i);
+            i++;
+        }
+        
+        EquipoDAO equipoDAO = new EquipoDAO();
+        List<Equipo> lstEquipo = equipoDAO.getEquiposIdLiga(liga.getId());
+        Iterator it2 = lstEquipo.iterator();
+        while (it2.hasNext()){
+            Equipo e = (Equipo) it2.next();
+            selectEquipoLocal.addItem(e);
+            selectEquipoLocal.setItemCaption(e, e.getNombre());
+            selectEquipoLocal.setNullSelectionAllowed(false);
+            
+            selectEquipoVisitante.addItem(e);
+            selectEquipoVisitante.setItemCaption(e, e.getNombre());
+            selectEquipoVisitante.setNullSelectionAllowed(false);
+        }
+        
+        tablaPartido.setPageLength(partidos.size());
+        
+        //Formulario
+        formPartido = new FormLayout();
+        formPartido.setSizeUndefined();
+        formPartido.addComponents(selectEquipoLocal, selectEquipoVisitante, buttonCrearPartido, buttonActualizarPartido, buttonBorrarPartido);
+        formPartido.setStyleName("formCalendario");
+        formPartido.setMargin(true);
+        
+        partidosCrud.addComponents(tablaPartido, tablaPartidoNull, formPartido);
+        tabPartido.addTab(partidosCrud, "GESTIÓN PARTIDOS");
+        menuLigas.addComponent(tabPartido);
+        menuLigas.setSpacing(true);
+        return partidos;
+    }
+    
+    public static List<Partido> mostrarTablaPartidosNull(HorizontalLayout menuLigas){
+        menuLigas.removeAllComponents();
+        PartidoDAO partidoDAO = new PartidoDAO();
+        //Tabla
+        tablaPartidoNull.setCaptionAsHtml(true);
+        tablaPartidoNull.setCaption("<b style='color:white'>PARTIDOS SIN JORNADA ASIGNADA</b>");
+        tablaPartidoNull.removeAllItems();
+        tablaPartidoNull.setWidth(100, UNITS_PERCENTAGE);
+        tablaPartidoNull.setSelectable(true);
+        tablaPartidoNull.setMultiSelect(false);
+        tablaPartidoNull.setImmediate(true);
+        tablaPartidoNull.addContainerProperty("LOCAL", String.class, null);
+        tablaPartidoNull.addContainerProperty("VISITANTE", String.class, null);
+        tablaPartidoNull.addContainerProperty("JORNADA", String.class, null);
+        
+        LigaDAO ligadao = new LigaDAO();
+        Liga liga = ligadao.buscarLigaporNombre(nombreLigaSelected);
+        partidosNull = partidoDAO.getPartidosNullPorLiga(liga);
+        Iterator it = partidosNull.iterator();
+        int i = 1;
+        while (it.hasNext()){
+            Partido p = (Partido)it.next();
+            tablaPartidoNull.addItem(new Object[]{p.getEquipoByLocalId().getNombre(), p.getEquipoByVisitanteId().getNombre(), "SIN JORNADA"}, i);
+            i++;
+        }
+        
+        tablaPartidoNull.setPageLength(partidosNull.size());
+        
+        return partidosNull;
+    }
+    
     public static void crearCalendario() throws ParseException{
         String anyo = fieldAnyoCalendario.getValue();
         if (!anyo.equals("")){
@@ -555,6 +743,17 @@ public class Dashboard extends UI {
                 n.show(Page.getCurrent());
             }
         }
+    }
+    
+    public static void crearPartido() throws ParseException{
+        PartidoDAO partidoDAO = new PartidoDAO();
+        Equipo eLocal = (Equipo) selectEquipoLocal.getValue();
+        Equipo eVisitante = (Equipo) selectEquipoVisitante.getValue();
+        
+        Partido partido = new Partido();
+        partido.setEquipoByLocalId(eLocal);
+        partido.setEquipoByVisitanteId(eVisitante);
+        partidoDAO.crearPartido(partido);
     }
 
     @WebServlet(urlPatterns = "/dashboard/*", name = "DashboardServlet", asyncSupported = true)
