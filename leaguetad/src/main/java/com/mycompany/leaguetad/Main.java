@@ -584,7 +584,6 @@ public class Main extends UI {
                 long timestamp = j.getFecha().getTime();
                 Calendar cal = Calendar.getInstance();
                 cal.setTimeInMillis(timestamp);
-                System.out.println("Año: " + cal.get(Calendar.YEAR));
                 panel = new Panel(
                         "<center>JORNADA " + j.getNumero() + " - " + cal.get(Calendar.DAY_OF_MONTH) + "/" + cal
                                 .get(Calendar.MONTH) + "/" + cal.get(Calendar.YEAR) + "</center>");
