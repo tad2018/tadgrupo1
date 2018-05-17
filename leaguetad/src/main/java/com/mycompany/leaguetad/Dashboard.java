@@ -19,6 +19,7 @@ import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.server.WrappedSession;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -91,6 +92,10 @@ public class Dashboard extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
+        WrappedSession session = getSession().getSession();
+        if(session.getAttribute("user")==null){
+            getPage().setLocation("/admin");
+        }
         VerticalSplitPanel layout = new VerticalSplitPanel();
         HorizontalLayout menuHorizontal = new HorizontalLayout();
         HorizontalLayout menuLigas = new HorizontalLayout();
@@ -121,10 +126,18 @@ public class Dashboard extends UI {
                 getPage().setLocation("/dashboard");
             }
         };
+        
+         MenuBar.Command mycommandSesion = new MenuBar.Command() {
+            public void menuSelected(MenuItem selectedItem) {
+                session.invalidate();
+                getPage().setLocation("/admin");
+            }
+        };
         // A top-level menu item that opens a submenu
         MenuItem ligas = menu.addItem("Ligas", null, null);
         MenuItem clasificacion = menu.addItem("Clasificación", null, mycommand);
         MenuItem dashboard = menu.addItem("Dashboard", null, mycommandDashboard);
+        MenuItem cerrarSesion = menu.addItem("Cerrar Sesion", null, mycommandSesion);
 
         LigaDAO ligadao = new LigaDAO();
         final Liga[] listadoLigas = ligadao.getLigas();

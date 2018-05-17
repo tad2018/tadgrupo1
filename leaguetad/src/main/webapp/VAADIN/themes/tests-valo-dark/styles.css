@@ -1572,10 +1572,6 @@ div.v-layout.v-horizontal.v-widget {
 	cursor: pointer;
 }
 
-.layoutEstadistica {
-	overflow: auto;
-}
-
 /**
  * Checks if a list contains a certain value.
  * 
