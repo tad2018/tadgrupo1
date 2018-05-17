@@ -59,7 +59,7 @@ public class LigaDAO {
         Transaction tx = session.beginTransaction();
         Query q = session.createQuery("from Liga where pais = 'España'");
         liga = (Liga) q.uniqueResult();
-        Query q2 = session.createQuery("from Equipo where liga_id = " + liga.getId() + "");
+        Query q2 = session.createQuery("from Equipo where liga_id = " + liga.getId() + " ORDER BY puntos DESC");
         List equipos = (List<Equipo>) q2.list();
         tx.commit();
         this.session.close();
@@ -80,7 +80,7 @@ public class LigaDAO {
         Transaction tx = session.beginTransaction();
         Query q = session.createQuery("from Liga where pais = 'Inglaterra'");
         liga = (Liga) q.uniqueResult();
-        Query q2 = session.createQuery("from Equipo where liga_id = " + liga.getId() + "");
+        Query q2 = session.createQuery("from Equipo where liga_id = " + liga.getId() + " ORDER BY puntos DESC");
         List equipos = (List<Equipo>) q2.list();
         tx.commit();
         this.session.close();
@@ -112,7 +112,7 @@ public class LigaDAO {
         Transaction tx = session.beginTransaction();
         Query q = session.createQuery("from Liga where pais = 'Italia'");
         liga = (Liga) q.uniqueResult();
-        Query q2 = session.createQuery("from Equipo where liga_id = " + liga.getId() + "");
+        Query q2 = session.createQuery("from Equipo where liga_id = " + liga.getId() + " ORDER BY puntos DESC");
         List equipos = (List<Equipo>) q2.list();
         tx.commit();
         this.session.close();
