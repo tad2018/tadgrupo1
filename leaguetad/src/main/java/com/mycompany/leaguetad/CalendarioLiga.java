@@ -102,7 +102,7 @@ public class CalendarioLiga extends UI {
         for (int i = 0; i < psj.size(); i++) {
             Partido par = (Partido) psj.get(i);
             tablaPartidos.addItem(new Object[] { partidoDAO.obtenerLigaPartido(par.getEquipoByLocalId()),
-                    par.getEquipoByLocalId().getNombre(), par.getEquipoByVisitanteId().getNombre() }, i+1);
+                    par.getEquipoByLocalId().getNombre(), par.getEquipoByVisitanteId().getNombre() }, par.getId());
         }
         tablaPartidos.setPageLength(tablaPartidos.size());
         tablaPartidos.setSelectable(true);
@@ -192,7 +192,7 @@ public class CalendarioLiga extends UI {
 
                 int idPartido = (int) transferable.getItemId();
 
-                Jornada jornada = jornadaDAO.obtenerJornadaPorFecha(fechaFormat);
+                Jornada jornada = jornadaDAO.obtenerJornadaPorFecha(fechaFormat, 2);
                 partidoDAO.updateJornadaAPartido(jornada, idPartido);
 
                 BasicEventProvider ep = (BasicEventProvider) details
