@@ -7,6 +7,7 @@ package com.mycompany.leaguetad;
 
 import com.mycompany.leaguetad.dao.CalendarioDAO;
 import com.mycompany.leaguetad.dao.EquipoDAO;
+import com.mycompany.leaguetad.dao.EquipoTecnicoDAO;
 import com.mycompany.leaguetad.dao.JornadaDAO;
 import com.mycompany.leaguetad.dao.JugadorDAO;
 import com.mycompany.leaguetad.dao.LigaDAO;
@@ -15,6 +16,7 @@ import com.mycompany.leaguetad.persistence.Equipo;
 import com.mycompany.leaguetad.persistence.Jornada;
 import com.mycompany.leaguetad.persistence.Jugador;
 import com.mycompany.leaguetad.persistence.Liga;
+import com.mycompany.leaguetad.persistence.Tecnico;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.event.ItemClickEvent;
@@ -118,6 +120,15 @@ public class Dashboard extends UI {
     static TextField fieldTirosJugador = new TextField("Tiros");
     static ComboBox selectEquipo = new ComboBox("Equipos");
     static Jugador jugadorSeleccionado = new Jugador();
+    
+    /*Tecnico*/
+    final static Table tablaTecnico = new Table();
+    static FormLayout formTecnico = new FormLayout();
+    static List<Tecnico> tecnicos = new ArrayList<>();
+    static TextField fieldNombreTecnico = new TextField("Nombre");
+    static TextField fieldPuestoTecnico = new TextField("Puesto");
+    static ComboBox selectEquipoTecnico = new ComboBox("Equipos");
+    static Tecnico tecnicoSeleccionado = new Tecnico();
 
     @Override
     protected void init(VaadinRequest request) {
@@ -404,7 +415,48 @@ public class Dashboard extends UI {
             jugadores = mostrarTablaJugador(menuLigas);
         });
         
+        buttonTecnico.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            tecnicos = mostrarTablaTecnico(menuLigas);
+        });
         
+        this.tablaTecnico.addItemClickListener(new ItemClickEvent.ItemClickListener() {
+            public void itemClick(ItemClickEvent event) {
+                int tecnicoSelec = (Integer) event.getItemId() - 1;
+                Tecnico tecnico = tecnicos.get(tecnicoSelec);
+                fieldNombreTecnico.setValue(tecnico.getNombre());
+                fieldPuestoTecnico.setValue(tecnico.getPuesto());
+                selectEquipoTecnico.setValue(tecnico.getEquipoByEquipoId());
+                tecnicoSeleccionado = tecnico;
+            }
+        });
+        
+        buttonCrearTecnico.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            try {
+                crearTecnico();
+            } catch (ParseException ex) {
+                Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            tecnicos = mostrarTablaTecnico(menuLigas);
+        });
+
+        buttonActualizarTecnico.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            EquipoTecnicoDAO tecnicodao = new EquipoTecnicoDAO();
+            tecnicoSeleccionado.setNombre(fieldNombreTecnico.getValue());
+            tecnicoSeleccionado.setPuesto(fieldPuestoTecnico.getValue());
+            tecnicoSeleccionado.setEquipoByEquipoId((Equipo)selectEquipoTecnico.getValue());
+            tecnicodao.actualizarTecnico(tecnicoSeleccionado);
+            tecnicos = mostrarTablaTecnico(menuLigas);
+        });
+
+        buttonBorrarTecnico.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            EquipoTecnicoDAO tecnicodao = new EquipoTecnicoDAO();
+            tecnicodao.borrarTecnico(tecnicoSeleccionado);
+            tecnicos = mostrarTablaTecnico(menuLigas);
+        });
 
         menuHorizontal.addComponents(selection, menu);
         menuLigas.addComponent(gridLigas);
@@ -647,19 +699,6 @@ public class Dashboard extends UI {
         EquipoDAO equipodao = new EquipoDAO();
         JugadorDAO jugadordao = new JugadorDAO();
         
-        //Limpiar form
-//        fieldNombreJugador.setValue("");
-//        fieldNacionalidadJugador.setValue("");
-//        fieldPosicionJugador.setValue("");
-//        fieldEdadJugador.setValue("");
-//        fieldGolesJugador.setValue("");
-//        fieldPasesJugador.setValue("");
-//        fieldFaltasJugador.setValue("");
-//        fieldExpulsionesJugador.setValue("");
-//        fieldParadasJugador.setValue("");
-//        fieldTirosJugador.setValue("");
-//        selectEquipo.removeAllItems();
-        
         //Tabla
         tablaJugador.removeAllItems();
         tablaJugador.setWidth(100, UNITS_PERCENTAGE);
@@ -718,6 +757,56 @@ public class Dashboard extends UI {
         menuLigas.addComponents(tablaJugador, layoutFormJugador);
         menuLigas.setSpacing(true);
         return returnJugadores;
+    }
+    
+     public static List<Tecnico> mostrarTablaTecnico(HorizontalLayout menuLigas) {
+        menuLigas.removeAllComponents();
+        LigaDAO ligadao = new LigaDAO();
+        EquipoDAO equipodao = new EquipoDAO();
+        EquipoTecnicoDAO tecnicodao = new EquipoTecnicoDAO();
+        
+        //Tabla
+        tablaTecnico.removeAllItems();
+        tablaTecnico.setWidth(100, UNITS_PERCENTAGE);
+        tablaTecnico.setSelectable(true);
+        tablaTecnico.setMultiSelect(false);
+        tablaTecnico.setImmediate(true);
+        tablaTecnico.setSizeFull();
+        tablaTecnico.addContainerProperty("NOMBRE", String.class, null);
+        tablaTecnico.addContainerProperty("PUESTO", String.class, null);
+        tablaTecnico.addContainerProperty("EQUIPO", String.class, null);
+
+        Liga liga = ligadao.buscarLigaporNombre(nombreLigaSelected);
+        List<Equipo> equipos = equipodao.getEquiposIdLiga(liga.getId());
+        Iterator it = equipos.iterator();
+        List<Tecnico> returnTecnicos = new ArrayList<Tecnico>();
+        int i = 1;
+        while (it.hasNext()) {
+            Equipo e = (Equipo) it.next();
+            List<Tecnico> listaTecnicos = tecnicodao.getEquipoTecnicoIdEquipo(e.getId());
+            Iterator it1 = listaTecnicos.iterator();
+            while (it1.hasNext()) {
+                Tecnico t = (Tecnico) it1.next();
+                returnTecnicos.add(t);
+                tablaTecnico.addItem(new Object[] { t.getNombre(), t.getPuesto(),t.getEquipoByEquipoId().getNombre()}, i);
+                i++;
+            }
+            selectEquipoTecnico.addItem(e);
+            selectEquipoTecnico.setItemCaption(e, e.getNombre());
+            selectEquipoTecnico.setNullSelectionAllowed(false);
+        }
+        tablaTecnico.setPageLength(i - 1);
+
+        //Formulario
+        formTecnico = new FormLayout();
+        formTecnico.setSizeUndefined();
+        formTecnico
+                .addComponents(fieldNombreTecnico, fieldPuestoTecnico, selectEquipoTecnico,buttonCrearTecnico,buttonActualizarTecnico,buttonBorrarTecnico);
+        formTecnico.setStyleName("formCalendario");
+        formTecnico.setMargin(true);
+        menuLigas.addComponents(tablaTecnico, formTecnico);
+        menuLigas.setSpacing(true);
+        return returnTecnicos;
     }
 
     public static void crearCalendario() throws ParseException {
@@ -807,6 +896,27 @@ public class Dashboard extends UI {
                 jugador.setTiros(tiros);
                 jugador.setEquipoByEquipoId(equipo);
                 jugadordao.createJugador(jugador);
+            }
+        }
+    }
+    
+    public static void crearTecnico() throws ParseException {
+        String nombre = fieldNombreTecnico.getValue();
+        String puesto = fieldPuestoTecnico.getValue();
+        Equipo equipo = (Equipo)selectEquipoTecnico.getValue();
+        if (nombre == null || puesto == null || equipo == null) {
+            Notification n = new Notification("Enter the fields", Notification.Type.ERROR_MESSAGE);
+            n.setDelayMsec(1000);
+            n.setPosition(Notification.POSITION_CENTERED_TOP);
+            n.show(Page.getCurrent());
+        } else {
+            EquipoTecnicoDAO tecnicodao = new EquipoTecnicoDAO();
+            if (tecnicodao.getTecnico(nombre)==null){
+                Tecnico tecnico = new Tecnico();
+                tecnico.setNombre(nombre);
+                tecnico.setPuesto(puesto);
+                tecnico.setEquipoByEquipoId(equipo);
+                tecnicodao.crearTecnico(tecnico);
             }
         }
     }
