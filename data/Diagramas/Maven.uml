@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>MODULES</ID>
+  <OriginalElement>mdl-leaguetad</OriginalElement>
+  <nodes>
+    <node x="529.0" y="1272.0">lib-Maven: com.fasterxml.jackson.core:jackson-core:2.5.1</node>
+    <node x="1353.0" y="626.0">lib-Maven: org.hibernate.common:hibernate-commons-annotations:5.0.1.Final</node>
+    <node x="476.0" y="716.0">lib-Maven: org.jboss:jandex:2.0.3.Final</node>
+    <node x="614.0" y="70.0">lib-Maven: com.vaadin:vaadin-shared:7.7.7</node>
+    <node x="1275.0" y="1003.0">lib-Maven: org.jboss.logging:jboss-logging:3.3.1.Final</node>
+    <node x="950.0" y="460.0">lib-Maven: org.w3c.css:sac:1.3</node>
+    <node x="850.0" y="0.0">lib-Maven: com.vaadin:vaadin-server:7.7.7</node>
+    <node x="855.0" y="1132.0">lib-Maven: com.vaadin:vaadin-sass-compiler:0.9.13</node>
+    <node x="540.0" y="140.0">lib-Maven: javax.servlet:javax.servlet-api:3.0.1</node>
+    <node x="590.0" y="1059.0">lib-Maven: xml-apis:xml-apis:1.0.b2</node>
+    <node x="529.0" y="793.0">lib-Maven: org.hibernate:hibernate-core:5.2.16.Final</node>
+    <node x="0.0" y="565.0">lib-Maven: com.fasterxml.jackson.core:jackson-annotations:2.5.0</node>
+    <node x="810.0" y="680.0">mdl-leaguetad</node>
+    <node x="942.0" y="769.0">lib-Maven: com.vaadin:vaadin-themes:7.7.7</node>
+    <node x="986.0" y="543.0">lib-Maven: org.jsoup:jsoup:1.8.3</node>
+    <node x="1267.0" y="480.0">lib-Maven: com.fasterxml.jackson.core:jackson-databind:2.5.2</node>
+    <node x="872.0" y="933.0">lib-Maven: org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final</node>
+    <node x="319.0" y="250.0">lib-Maven: com.vaadin:vaadin-push:7.7.7</node>
+    <node x="667.0" y="530.0">lib-Maven: commons-io:commons-io:1.4</node>
+    <node x="1172.0" y="263.0">lib-Maven: com.fasterxml:classmate:1.3.0</node>
+    <node x="659.0" y="390.0">lib-Maven: com.vaadin.external.slf4j:vaadin-slf4j-jdk14:1.6.1</node>
+    <node x="995.0" y="193.0">lib-Maven: org.hibernate:hibernate-entitymanager:4.3.1.Final</node>
+    <node x="715.0" y="610.0">lib-Maven: antlr:antlr:2.7.7</node>
+    <node x="210.0" y="47.0">lib-Maven: com.vaadin.addon:vaadin-charts-model:3.0.0</node>
+    <node x="874.0" y="1202.0">lib-Maven: org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.0.1.Final</node>
+    <node x="339.0" y="495.0">lib-Maven: org.javassist:javassist:3.22.0-GA</node>
+    <node x="211.0" y="937.0">lib-Maven: com.vaadin:vaadin-client-compiled:7.7.7</node>
+    <node x="600.0" y="863.0">lib-Maven: com.vaadin.addon:vaadin-charts:3.0.0</node>
+    <node x="944.0" y="82.0">lib-Maven: org.jboss.logging:jboss-logging-annotations:1.2.0.Beta1</node>
+    <node x="457.0" y="636.0">lib-Maven: dom4j:dom4j:1.6.1</node>
+    <node x="9.0" y="1010.0">lib-Maven: com.vaadin.external.atmosphere:atmosphere-runtime:2.2.9.vaadin2</node>
+    <node x="1008.0" y="663.0">lib-Maven: mysql:mysql-connector-java:5.1.42</node>
+    <node x="564.0" y="320.0">lib-Maven: com.vaadin.external.flute:flute:1.3.0.gg2</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="mdl-leaguetad" target="lib-Maven: xml-apis:xml-apis:1.0.b2">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: com.vaadin.addon:vaadin-charts:3.0.0">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: org.jboss.logging:jboss-logging-annotations:1.2.0.Beta1">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: com.vaadin:vaadin-push:7.7.7">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: com.vaadin.external.flute:flute:1.3.0.gg2">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: org.jsoup:jsoup:1.8.3">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: mysql:mysql-connector-java:5.1.42">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: dom4j:dom4j:1.6.1">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: org.jboss:jandex:2.0.3.Final">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: com.vaadin:vaadin-shared:7.7.7">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: commons-io:commons-io:1.4">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: antlr:antlr:2.7.7">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: com.vaadin.addon:vaadin-charts-model:3.0.0">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: com.vaadin:vaadin-sass-compiler:0.9.13">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: com.vaadin:vaadin-server:7.7.7">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.0.1.Final">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: com.vaadin.external.slf4j:vaadin-slf4j-jdk14:1.6.1">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: com.vaadin:vaadin-client-compiled:7.7.7">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: org.hibernate:hibernate-core:5.2.16.Final">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: org.javassist:javassist:3.22.0-GA">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: com.fasterxml.jackson.core:jackson-annotations:2.5.0">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: com.vaadin.external.atmosphere:atmosphere-runtime:2.2.9.vaadin2">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: com.vaadin:vaadin-themes:7.7.7">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: com.fasterxml.jackson.core:jackson-databind:2.5.2">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: com.fasterxml.jackson.core:jackson-core:2.5.1">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: javax.servlet:javax.servlet-api:3.0.1">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: org.w3c.css:sac:1.3">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: com.fasterxml:classmate:1.3.0">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: org.hibernate.common:hibernate-commons-annotations:5.0.1.Final">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: org.jboss.logging:jboss-logging:3.3.1.Final">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="mdl-leaguetad" target="lib-Maven: org.hibernate:hibernate-entitymanager:4.3.1.Final">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.20000000000000015" x="2407.0" y="2034.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Libraries</Category>
+  </Categories>
+</Diagram>
+

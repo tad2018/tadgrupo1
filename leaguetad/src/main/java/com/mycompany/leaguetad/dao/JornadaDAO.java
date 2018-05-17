@@ -5,31 +5,25 @@
  */
 package com.mycompany.leaguetad.dao;
 
+import com.mycompany.leaguetad.persistence.Calendario;
 import com.mycompany.leaguetad.persistence.Jornada;
 import com.mycompany.leaguetad.persistence.PersistenceJDBC;
-import java.util.Calendar;
-import java.util.Iterator;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import com.mycompany.leaguetad.persistence.Calendario;
-import com.mycompany.leaguetad.persistence.Jornada;
-import com.mycompany.leaguetad.persistence.PersistenceJDBC;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 /**
- *
  * @author expositod
  */
 public class JornadaDAO {
     Session session = null;
-    public JornadaDAO(){
+
+    public JornadaDAO() {
         this.session = PersistenceJDBC.getSession();
     }
-    
-    public List<Jornada> getJornadas(Integer idCalendario){
+
+    public List<Jornada> getJornadas(Integer idCalendario) {
         this.session = PersistenceJDBC.getSession();
         Transaction tx = session.beginTransaction();
         Query q = session.createQuery("from Jornada where calendario_id = " + idCalendario);
@@ -38,13 +32,14 @@ public class JornadaDAO {
         this.session.close();
         return jornadas;
     }
-    
-    public Jornada getJornada(int numJornada, Calendario calendario){
+
+    public Jornada getJornada(int numJornada, Calendario calendario) {
         Jornada jornada = null;
-        
+
         this.session = PersistenceJDBC.getSession();
         Transaction tx = session.beginTransaction();
-        Query q = session.createQuery("from Jornada where numero = '" + numJornada + "' and calendario_id ='" + calendario.getId() + "'");
+        Query q = session.createQuery(
+                "from Jornada where numero = '" + numJornada + "' and calendario_id ='" + calendario.getId() + "'");
         jornada = (Jornada) q.uniqueResult();
         tx.commit();
         this.session.close();
@@ -61,16 +56,16 @@ public class JornadaDAO {
         this.session.close();
         return jornada;
     }
-    
-    public void crearJornada(Jornada jornada){
+
+    public void crearJornada(Jornada jornada) {
         this.session = PersistenceJDBC.getSession();
         Transaction tx = session.beginTransaction();
         this.session.save(jornada);
         tx.commit();
         this.session.close();
     }
-    
-    public void actualizarJornada(Jornada jornada){
+
+    public void actualizarJornada(Jornada jornada) {
         this.session = PersistenceJDBC.getSession();
         Transaction tx = session.beginTransaction();
         this.session.update(jornada);
@@ -78,7 +73,7 @@ public class JornadaDAO {
         this.session.close();
     }
 
-    public void borrarJornada(Jornada jornada){
+    public void borrarJornada(Jornada jornada) {
         this.session = PersistenceJDBC.getSession();
         Transaction tx = session.beginTransaction();
         this.session.delete(jornada);

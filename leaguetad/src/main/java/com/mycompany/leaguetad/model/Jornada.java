@@ -26,17 +26,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
  * @author abarroso
  */
 @Entity
 @Table(name = "jornada", catalog = "leaguetad", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Jornada.findAll", query = "SELECT j FROM Jornada j")
-    , @NamedQuery(name = "Jornada.findById", query = "SELECT j FROM Jornada j WHERE j.id = :id")
-    , @NamedQuery(name = "Jornada.findByNumero", query = "SELECT j FROM Jornada j WHERE j.numero = :numero")
-    , @NamedQuery(name = "Jornada.findByFecha", query = "SELECT j FROM Jornada j WHERE j.fecha = :fecha")})
+        @NamedQuery(name = "Jornada.findAll", query = "SELECT j FROM Jornada j")
+        , @NamedQuery(name = "Jornada.findById", query = "SELECT j FROM Jornada j WHERE j.id = :id")
+        , @NamedQuery(name = "Jornada.findByNumero", query = "SELECT j FROM Jornada j WHERE j.numero = :numero")
+        , @NamedQuery(name = "Jornada.findByFecha", query = "SELECT j FROM Jornada j WHERE j.fecha = :fecha") })
 public class Jornada implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -128,5 +127,5 @@ public class Jornada implements Serializable {
     public String toString() {
         return "com.mycompany.leaguetad.model.Jornada[ id=" + id + " ]";
     }
-    
+
 }

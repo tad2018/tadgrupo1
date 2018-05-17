@@ -9,13 +9,13 @@ $v-app-loading-text: "Dark Valo";
     background-repeat: no-repeat;
 }*/
 .fondo {
-    background: url("img/fondo-cesped.jpg") !important;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
+  background: url("img/fondo-cesped.jpg") !important;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
 }
 
-.formCalendario{
-    background-color: white;
+.formCalendario {
+  background-color: white;
 }
 
 $v-focus-color: #07a9ca;
@@ -27,7 +27,7 @@ $v-font-family: Roboto, sans-serif;
 $v-font-weight: 400;
 $v-font-weight--header: 400;
 $v-bevel: inset 0 1px 2px v-tint, inset 0 0 1px (v-tint 0.1);
-$v-shadow: 0 0 0 3px rgba(0,0,0,0.32), 0 1px 0 3px rgba(255,255,255,0.14);
+$v-shadow: 0 0 0 3px rgba(0, 0, 0, 0.32), 0 1px 0 3px rgba(255, 255, 255, 0.14);
 $v-textfield-bevel: inset 0 2px 2px v-shade;
 $v-textfield-shadow: $v-shadow;
 $v-unit-size: 40px;
@@ -36,32 +36,33 @@ $v-component-group-spacing: 6px;
 
 @import "../valo/valo";
 
-.titleLigaEspanola{
-    color: white;
-    margin-top: 30px;
-}
-.titleLigaInglesa{
-    color: white;
-    margin-top: 30px;
+.titleLigaEspanola {
+  color: white;
+  margin-top: 30px;
 }
 
-.panelLogin{
-    padding: 20px;
-    width: 500px;
-    height: 300px;
+.titleLigaInglesa {
+  color: white;
+  margin-top: 30px;
 }
 
-.buttonSuccess{
-    background-color: #42a638;
-    border: none;
-    color: green;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
+.panelLogin {
+  padding: 20px;
+  width: 500px;
+  height: 300px;
+}
+
+.buttonSuccess {
+  background-color: #42a638;
+  border: none;
+  color: green;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
 }
 
 /*.calendarioPartidos-month-day{

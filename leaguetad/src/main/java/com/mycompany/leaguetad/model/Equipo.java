@@ -23,17 +23,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
  * @author abarroso
  */
 @Entity
 @Table(name = "equipo", catalog = "leaguetad", schema = "")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Equipo.findAll", query = "SELECT e FROM Equipo e")
-    , @NamedQuery(name = "Equipo.findById", query = "SELECT e FROM Equipo e WHERE e.id = :id")
-    , @NamedQuery(name = "Equipo.findByNombre", query = "SELECT e FROM Equipo e WHERE e.nombre = :nombre")
-    , @NamedQuery(name = "Equipo.findByPuntos", query = "SELECT e FROM Equipo e WHERE e.puntos = :puntos")})
+        @NamedQuery(name = "Equipo.findAll", query = "SELECT e FROM Equipo e")
+        , @NamedQuery(name = "Equipo.findById", query = "SELECT e FROM Equipo e WHERE e.id = :id")
+        , @NamedQuery(name = "Equipo.findByNombre", query = "SELECT e FROM Equipo e WHERE e.nombre = :nombre")
+        , @NamedQuery(name = "Equipo.findByPuntos", query = "SELECT e FROM Equipo e WHERE e.puntos = :puntos") })
 public class Equipo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -157,5 +156,5 @@ public class Equipo implements Serializable {
     public String toString() {
         return "com.mycompany.leaguetad.model.Equipo[ id=" + id + " ]";
     }
-    
+
 }
