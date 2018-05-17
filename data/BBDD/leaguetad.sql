@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-05-2018 a las 20:00:42
+-- Tiempo de generación: 17-05-2018 a las 18:25:16
 -- Versión del servidor: 10.1.31-MariaDB
 -- Versión de PHP: 7.2.4
 
@@ -40,6 +40,8 @@ CREATE TABLE `calendario` (
 -- RELACIONES PARA LA TABLA `calendario`:
 --   `liga_id`
 --       `liga` -> `id`
+--   `liga_id`
+--       `liga` -> `id`
 --
 
 --
@@ -49,7 +51,10 @@ CREATE TABLE `calendario` (
 INSERT INTO `calendario` (`id`, `anyo`, `liga_id`) VALUES
 (1, '2018-08-01 00:00:00', 1),
 (2, '2018-08-01 00:00:00', 3),
-(3, '2018-08-01 00:00:00', 2);
+(3, '2018-08-01 00:00:00', 2),
+(13, '2017-01-01 00:00:00', 1),
+(14, '2016-01-01 00:00:00', 1),
+(16, '2013-01-01 00:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -66,6 +71,8 @@ CREATE TABLE `equipo` (
 
 --
 -- RELACIONES PARA LA TABLA `equipo`:
+--   `liga_id`
+--       `liga` -> `id`
 --   `liga_id`
 --       `liga` -> `id`
 --
@@ -145,7 +152,16 @@ INSERT INTO `jornada` (`id`, `numero`, `fecha`, `calendario_id`) VALUES
 (1, 1, '2018-08-03 00:00:00', 1),
 (2, 1, '2018-08-03 00:00:00', 2),
 (3, 1, '2018-08-03 00:00:00', 3),
-(4, 2, '2018-08-11 00:00:00', 1);
+(4, 2, '2018-08-11 00:00:00', 1),
+(5, 3, '2018-08-25 00:00:00', 1),
+(6, 4, '2018-09-01 00:00:00', 1),
+(7, 5, '2018-09-08 00:00:00', 1),
+(8, 6, '2018-09-15 00:00:00', 1),
+(9, 8, '2018-05-26 00:00:00', 1),
+(10, 9, '2018-06-02 00:00:00', 1),
+(11, 11, '2018-05-25 00:00:00', 1),
+(13, 12, '2018-05-25 00:00:00', 1),
+(14, 13, '2018-05-25 00:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -363,7 +379,7 @@ ALTER TABLE `tecnico`
 -- AUTO_INCREMENT de la tabla `calendario`
 --
 ALTER TABLE `calendario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `equipo`
@@ -381,7 +397,7 @@ ALTER TABLE `estadistica`
 -- AUTO_INCREMENT de la tabla `jornada`
 --
 ALTER TABLE `jornada`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `jugador`
@@ -415,12 +431,14 @@ ALTER TABLE `tecnico`
 -- Filtros para la tabla `calendario`
 --
 ALTER TABLE `calendario`
+  ADD CONSTRAINT `FK3j9nmcj931stnkp84jn4wgmvn` FOREIGN KEY (`liga_id`) REFERENCES `liga` (`id`),
   ADD CONSTRAINT `fk_calendario_liga` FOREIGN KEY (`liga_id`) REFERENCES `liga` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `equipo`
 --
 ALTER TABLE `equipo`
+  ADD CONSTRAINT `FKmfpijwlspqsfg01epy96ffh6k` FOREIGN KEY (`liga_id`) REFERENCES `liga` (`id`),
   ADD CONSTRAINT `fk_equipo_liga` FOREIGN KEY (`liga_id`) REFERENCES `liga` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
