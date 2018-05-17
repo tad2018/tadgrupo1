@@ -102,7 +102,7 @@ public class CalendarioLiga extends UI {
         for (int i = 0; i < psj.size(); i++) {
             Partido par = (Partido) psj.get(i);
             tablaPartidos.addItem(new Object[] { partidoDAO.obtenerLigaPartido(par.getEquipoByLocalId()),
-                    par.getEquipoByLocalId().getNombre(), par.getEquipoByVisitanteId().getNombre() }, par.getId());
+                    par.getEquipoByLocalId().getNombre(), par.getEquipoByVisitanteId().getNombre() }, i+1);
         }
         tablaPartidos.setPageLength(tablaPartidos.size());
         tablaPartidos.setSelectable(true);
