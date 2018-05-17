@@ -768,7 +768,7 @@ public class Dashboard extends UI {
         formJornada = new FormLayout();
         formJornada.setSizeUndefined();
         formJornada
-                .addComponents(fieldNumeroJornada, selectCalendario, fieldfechaJornada, buttonCrearJornada, buttonActualizarJornada, buttonBorrarJornada);
+                .addComponents(fieldNumeroJornada, selectCalendario, fieldfechaJornada, buttonCrearJornada, buttonActualizarJornada);
         formJornada.setStyleName("formCalendario");
         formJornada.setMargin(true);
         menuLigas.addComponents(tablaJornada, formJornada);
@@ -1075,11 +1075,13 @@ public class Dashboard extends UI {
         PartidoDAO partidoDAO = new PartidoDAO();
         Equipo eLocal = (Equipo) selectEquipoLocal.getValue();
         Equipo eVisitante = (Equipo) selectEquipoVisitante.getValue();
+        if (partidoDAO.buscarPartidoIdaVuelta(eLocal, eVisitante)==null){
+            Partido partido = new Partido();
+            partido.setEquipoByLocalId(eLocal);
+            partido.setEquipoByVisitanteId(eVisitante);
+            partidoDAO.crearPartido(partido);
+        }
         
-        Partido partido = new Partido();
-        partido.setEquipoByLocalId(eLocal);
-        partido.setEquipoByVisitanteId(eVisitante);
-        partidoDAO.crearPartido(partido);
     }
         
     public static void crearJugador() throws ParseException {

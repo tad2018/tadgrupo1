@@ -193,6 +193,20 @@ public class PartidoDAO {
         this.session.close();
     }
 
+    public Partido buscarPartidoIdaVuelta(Equipo local, Equipo visitante) {
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        Query q = session.createQuery("from Partido where local_id = " + local.getId()+" and visitante_id = "+visitante.getId() +" and jornada_id is null");
+        Partido p = (Partido) q.uniqueResult();
+        tx.commit();
+        this.session.close();
+        if(p != null){
+            return p;
+        }
+        else{
+            return null;
+        }
+    }
     
     
     
