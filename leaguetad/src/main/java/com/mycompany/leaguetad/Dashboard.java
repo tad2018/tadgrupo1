@@ -6,10 +6,14 @@
 package com.mycompany.leaguetad;
 
 import com.mycompany.leaguetad.dao.CalendarioDAO;
+import com.mycompany.leaguetad.dao.EquipoDAO;
 import com.mycompany.leaguetad.dao.JornadaDAO;
+import com.mycompany.leaguetad.dao.JugadorDAO;
 import com.mycompany.leaguetad.dao.LigaDAO;
 import com.mycompany.leaguetad.persistence.Calendario;
+import com.mycompany.leaguetad.persistence.Equipo;
 import com.mycompany.leaguetad.persistence.Jornada;
+import com.mycompany.leaguetad.persistence.Jugador;
 import com.mycompany.leaguetad.persistence.Liga;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -77,11 +81,15 @@ public class Dashboard extends UI {
     static Button buttonCrearTecnico = new Button("Crear Técnico");
     static Button buttonActualizarTecnico = new Button("Actualizar Técnico");
     static Button buttonBorrarTecnico = new Button("Borrar Técnico");
+    
+    /* Calendario */
     static TextField fieldAnyoCalendario = new TextField("Año Calendario");
     final static Table tablaCalendario = new Table();
     static FormLayout formCalendario = new FormLayout();
     static Calendario calendarioSeleccionado = new Calendario();
     static List<Calendario> calendarios = new ArrayList<>();
+    
+    /* Jornada */
     static TextField fieldNumeroJornada = new TextField("Número de la Jornada");
     static ComboBox selectCalendario = new ComboBox("Calendarios");
     static DateField fieldfechaJornada = new DateField("Fecha Jornada");
@@ -89,6 +97,27 @@ public class Dashboard extends UI {
     static FormLayout formJornada = new FormLayout();
     static List<Jornada> jornadas = new ArrayList<>();
     static Jornada jornadaSeleccionada = new Jornada();
+    
+    /* Equipo */
+    final static Table tablaEquipo = new Table();
+    
+    /*Jugador*/
+    final static Table tablaJugador = new Table();
+    static FormLayout formJugador = new FormLayout();
+    static FormLayout formJugador2 = new FormLayout();
+    static List<Jugador> jugadores = new ArrayList<>();
+    static TextField fieldNombreJugador = new TextField("Nombre");
+    static TextField fieldNacionalidadJugador = new TextField("Nacionalidad");
+    static TextField fieldPosicionJugador = new TextField("Posición");
+    static TextField fieldEdadJugador = new TextField("Edad");
+    static TextField fieldGolesJugador = new TextField("Goles");
+    static TextField fieldPasesJugador = new TextField("Pases");
+    static TextField fieldFaltasJugador = new TextField("Faltas");
+    static TextField fieldExpulsionesJugador = new TextField("Expulsiones");
+    static TextField fieldParadasJugador = new TextField("Paradas");
+    static TextField fieldTirosJugador = new TextField("Tiros");
+    static ComboBox selectEquipo = new ComboBox("Equipos");
+    static Jugador jugadorSeleccionado = new Jugador();
 
     @Override
     protected void init(VaadinRequest request) {
@@ -310,6 +339,72 @@ public class Dashboard extends UI {
                 jornadaSeleccionada = jornada;
             }
         });
+        
+        buttonEquipo.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            mostrarTablaEquipo(menuLigas);
+        });
+        
+        buttonJugador.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            jugadores = mostrarTablaJugador(menuLigas);
+        });
+        
+        this.tablaJugador.addItemClickListener(new ItemClickEvent.ItemClickListener() {
+            public void itemClick(ItemClickEvent event) {
+                int jugadorSelec = (Integer) event.getItemId() - 1;
+                Jugador jugador = jugadores.get(jugadorSelec);
+                fieldNombreJugador.setValue(jugador.getNombre());
+                fieldNacionalidadJugador.setValue(jugador.getNacionalidad());
+                fieldPosicionJugador.setValue(jugador.getPosicion());
+                fieldEdadJugador.setValue(String.valueOf(jugador.getEdad()));
+                fieldGolesJugador.setValue(String.valueOf(jugador.getGoles()));
+                fieldPasesJugador.setValue(String.valueOf(jugador.getPases()));
+                fieldFaltasJugador.setValue(String.valueOf(jugador.getPases()));
+                fieldExpulsionesJugador.setValue(String.valueOf(jugador.getExpulsiones()));
+                fieldParadasJugador.setValue(String.valueOf(jugador.getParadas()));
+                fieldTirosJugador.setValue(String.valueOf(jugador.getTiros()));
+                selectEquipo.setValue(jugador.getEquipoByEquipoId());
+                jugadorSeleccionado = jugador;
+            }
+        });
+        
+        buttonCrearJugador.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            try {
+                crearJugador();
+            } catch (ParseException ex) {
+                Logger.getLogger(Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            jugadores = mostrarTablaJugador(menuLigas);
+        });
+
+        buttonActualizarJugador.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            JugadorDAO jugadordao = new JugadorDAO();
+            jugadorSeleccionado.setNombre(fieldNombreJugador.getValue());
+            jugadorSeleccionado.setNacionalidad(fieldNacionalidadJugador.getValue());
+            jugadorSeleccionado.setPosicion(fieldPosicionJugador.getValue());
+            jugadorSeleccionado.setEdad(Integer.parseInt(fieldEdadJugador.getValue()));
+            jugadorSeleccionado.setGoles(Integer.parseInt(fieldGolesJugador.getValue()));
+            jugadorSeleccionado.setPases(Integer.parseInt(fieldPasesJugador.getValue()));
+            jugadorSeleccionado.setFaltas(Integer.parseInt(fieldFaltasJugador.getValue()));
+            jugadorSeleccionado.setExpulsiones(Integer.parseInt(fieldExpulsionesJugador.getValue()));
+            jugadorSeleccionado.setParadas(Integer.parseInt(fieldParadasJugador.getValue()));
+            jugadorSeleccionado.setTiros(Integer.parseInt(fieldTirosJugador.getValue()));
+            jugadorSeleccionado.setEquipoByEquipoId((Equipo)selectEquipo.getValue());
+            jugadordao.actualizarJugador(jugadorSeleccionado);
+            jugadores = mostrarTablaJugador(menuLigas);
+        });
+
+        buttonBorrarJugador.addClickListener(e -> {
+            menuLigas.removeAllComponents();
+            JugadorDAO jugadordao = new JugadorDAO();
+            jugadordao.borrarJugador(jugadorSeleccionado);
+            jugadores = mostrarTablaJugador(menuLigas);
+        });
+        
+        
 
         menuHorizontal.addComponents(selection, menu);
         menuLigas.addComponent(gridLigas);
@@ -513,6 +608,117 @@ public class Dashboard extends UI {
         menuLigas.setSpacing(true);
         return returnJornadas;
     }
+    
+    public static void mostrarTablaEquipo(HorizontalLayout menuLigas) {
+        menuLigas.removeAllComponents();
+        LigaDAO ligadao = new LigaDAO();
+        EquipoDAO equipodao = new EquipoDAO();
+        JugadorDAO jugadordao = new JugadorDAO();
+        
+        //Tabla
+        tablaEquipo.removeAllItems();
+        tablaEquipo.setWidth(100, UNITS_PERCENTAGE);
+        tablaEquipo.setSelectable(true);
+        tablaEquipo.setMultiSelect(false);
+        tablaEquipo.setImmediate(true);
+        tablaEquipo.addContainerProperty("EQUIPO", String.class, null);
+        tablaEquipo.addContainerProperty("LIGA", String.class, null);
+        tablaEquipo.addContainerProperty("PUNTOS", Integer.class, null);
+
+        Liga liga = ligadao.buscarLigaporNombre(nombreLigaSelected);
+        List<Equipo> equipos = equipodao.getEquiposIdLiga(liga.getId());
+        Iterator it = equipos.iterator();
+        int i = 1;
+        while (it.hasNext()) {
+            Equipo e = (Equipo) it.next();
+            tablaEquipo.addItem(new Object[] { e.getNombre(), e.getLigaByLigaId().getNombre(),e.getPuntos()}, i);
+            i++;
+        }
+        tablaEquipo.setPageLength(i - 1);
+
+      
+        menuLigas.addComponent(tablaEquipo);
+        menuLigas.setSpacing(true);
+    }
+    
+    public static List<Jugador> mostrarTablaJugador(HorizontalLayout menuLigas) {
+        menuLigas.removeAllComponents();
+        LigaDAO ligadao = new LigaDAO();
+        EquipoDAO equipodao = new EquipoDAO();
+        JugadorDAO jugadordao = new JugadorDAO();
+        
+        //Limpiar form
+//        fieldNombreJugador.setValue("");
+//        fieldNacionalidadJugador.setValue("");
+//        fieldPosicionJugador.setValue("");
+//        fieldEdadJugador.setValue("");
+//        fieldGolesJugador.setValue("");
+//        fieldPasesJugador.setValue("");
+//        fieldFaltasJugador.setValue("");
+//        fieldExpulsionesJugador.setValue("");
+//        fieldParadasJugador.setValue("");
+//        fieldTirosJugador.setValue("");
+//        selectEquipo.removeAllItems();
+        
+        //Tabla
+        tablaJugador.removeAllItems();
+        tablaJugador.setWidth(100, UNITS_PERCENTAGE);
+        tablaJugador.setSelectable(true);
+        tablaJugador.setMultiSelect(false);
+        tablaJugador.setImmediate(true);
+        tablaJugador.setSizeFull();
+        tablaJugador.addContainerProperty("NOMBRE", String.class, null);
+        tablaJugador.addContainerProperty("NACIONALIDAD", String.class, null);
+        tablaJugador.addContainerProperty("POSICIÓN", String.class, null);
+        tablaJugador.addContainerProperty("EDAD", Integer.class, null);
+        tablaJugador.addContainerProperty("GOLES", Integer.class, null);
+        tablaJugador.addContainerProperty("PASES", Integer.class, null);
+        tablaJugador.addContainerProperty("FALTAS", Integer.class, null);
+        tablaJugador.addContainerProperty("EXPULSIONES", Integer.class, null);
+        tablaJugador.addContainerProperty("PARADAS", Integer.class, null);
+        tablaJugador.addContainerProperty("TIROS", Integer.class, null);
+        tablaJugador.addContainerProperty("EQUIPO", String.class, null);
+
+        Liga liga = ligadao.buscarLigaporNombre(nombreLigaSelected);
+        List<Equipo> equipos = equipodao.getEquiposIdLiga(liga.getId());
+        Iterator it = equipos.iterator();
+        List<Jugador> returnJugadores = new ArrayList<Jugador>();
+        int i = 1;
+        while (it.hasNext()) {
+            Equipo e = (Equipo) it.next();
+            List<Jugador> listaJugadores = jugadordao.getJugadoresIdEquipo(e.getId());
+            Iterator it1 = listaJugadores.iterator();
+            while (it1.hasNext()) {
+                Jugador j = (Jugador) it1.next();
+                returnJugadores.add(j);
+                tablaJugador.addItem(new Object[] { j.getNombre(), j.getNacionalidad(),j.getPosicion(),j.getEdad(), j.getGoles(), j.getPases(), j.getFaltas(), j.getExpulsiones(), j.getParadas(),j.getTiros(),j.getEquipoByEquipoId().getNombre() }, i);
+                i++;
+            }
+            selectEquipo.addItem(e);
+            selectEquipo.setItemCaption(e, e.getNombre());
+            selectEquipo.setNullSelectionAllowed(false);
+        }
+        tablaJugador.setPageLength(i - 1);
+
+        //Formulario
+        HorizontalLayout layoutFormJugador = new HorizontalLayout();
+        formJugador = new FormLayout();
+        formJugador.setSizeUndefined();
+        formJugador
+                .addComponents(fieldNombreJugador, fieldNacionalidadJugador, fieldPosicionJugador, fieldEdadJugador, fieldGolesJugador, fieldPasesJugador,fieldFaltasJugador,fieldExpulsionesJugador);
+        formJugador.setStyleName("formCalendario");
+        formJugador.setMargin(true);
+        formJugador2 = new FormLayout();
+        formJugador2.setSizeUndefined();
+        formJugador2
+                .addComponents(fieldParadasJugador,fieldTirosJugador,selectEquipo,buttonCrearJugador,buttonActualizarJugador,buttonBorrarJugador);
+        formJugador2.setStyleName("formCalendario");
+        formJugador2.setMargin(true);
+        layoutFormJugador.addComponents(formJugador,formJugador2);
+        menuLigas.addComponents(tablaJugador, layoutFormJugador);
+        menuLigas.setSpacing(true);
+        return returnJugadores;
+    }
 
     public static void crearCalendario() throws ParseException {
         String anyo = fieldAnyoCalendario.getValue();
@@ -564,6 +770,43 @@ public class Dashboard extends UI {
                 n.setDelayMsec(1000);
                 n.setPosition(Notification.POSITION_CENTERED_TOP);
                 n.show(Page.getCurrent());
+            }
+        }
+    }
+        
+    public static void crearJugador() throws ParseException {
+        String nombre = fieldNombreJugador.getValue();
+        String nacionalidad = fieldNacionalidadJugador.getValue();
+        String posicion = fieldPosicionJugador.getValue();
+        Integer edad = Integer.parseInt(fieldEdadJugador.getValue());
+        Integer goles = Integer.parseInt(fieldGolesJugador.getValue());
+        Integer pases = Integer.parseInt(fieldPasesJugador.getValue());
+        Integer faltas = Integer.parseInt(fieldFaltasJugador.getValue());
+        Integer expulsiones = Integer.parseInt(fieldExpulsionesJugador.getValue());
+        Integer paradas = Integer.parseInt(fieldParadasJugador.getValue());
+        Integer tiros = Integer.parseInt(fieldTirosJugador.getValue());
+        Equipo equipo = (Equipo)selectEquipo.getValue();
+        if (nombre == null || nacionalidad == null || posicion == null || equipo == null) {
+            Notification n = new Notification("Enter the fields", Notification.Type.ERROR_MESSAGE);
+            n.setDelayMsec(1000);
+            n.setPosition(Notification.POSITION_CENTERED_TOP);
+            n.show(Page.getCurrent());
+        } else {
+            JugadorDAO jugadordao = new JugadorDAO();
+            if (jugadordao.getJugadoresPorNombre(nombre)==null){
+                Jugador jugador = new Jugador();
+                jugador.setNombre(nombre);
+                jugador.setNacionalidad(nacionalidad);
+                jugador.setPosicion(posicion);
+                jugador.setEdad(edad);
+                jugador.setGoles(goles);
+                jugador.setPases(pases);
+                jugador.setFaltas(faltas);
+                jugador.setExpulsiones(expulsiones);
+                jugador.setParadas(paradas);
+                jugador.setTiros(tiros);
+                jugador.setEquipoByEquipoId(equipo);
+                jugadordao.createJugador(jugador);
             }
         }
     }

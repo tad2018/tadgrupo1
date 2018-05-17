@@ -34,7 +34,7 @@ public class CalendarioDAO {
         return calendarios;
     }
 
-    public Calendario getCalendario(Integer anyo, Integer idLiga) {
+    public Calendario getCalendarioIndex(Integer anyo, Integer idLiga) {
         this.session = PersistenceJDBC.getSession();
         Transaction tx = session.beginTransaction();
         Query q = session.createQuery("from Calendario where liga_id = " + idLiga);
@@ -61,9 +61,8 @@ public class CalendarioDAO {
         Transaction tx = session.beginTransaction();
         Query q = session.createQuery("from Calendario where liga_id = '" + liga + "' and anyo like '" + anyo + "%'");
         tx.commit();
-        this.session.close();
         calendario = (Calendario) q.uniqueResult();
-
+        this.session.close();
         return calendario;
     }
 

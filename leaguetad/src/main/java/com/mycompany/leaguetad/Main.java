@@ -155,6 +155,7 @@ public class Main extends UI {
                 CalendarioFrontend anyo2 = new CalendarioFrontend("2018");
                 CalendarioFrontend anyo3 = new CalendarioFrontend("2019");
 
+                select.removeAllItems();
                 select.addItem(anyo1);
                 select.addItem(anyo2);
                 select.addItem(anyo3);
@@ -566,7 +567,7 @@ public class Main extends UI {
         CalendarioDAO calendariodao = new CalendarioDAO();
         JornadaDAO jornadadao = new JornadaDAO();
         PartidoDAO partidodao = new PartidoDAO();
-        Calendario calendario = calendariodao.getCalendario(Integer.parseInt(anyo), liga.getId());
+        Calendario calendario = calendariodao.getCalendarioIndex(Integer.parseInt(anyo), liga.getId());
         if (calendario != null) {
             List<Jornada> listaJornadas = jornadadao.getJornadas(calendario.getId());
             Iterator it = listaJornadas.iterator();

@@ -31,8 +31,18 @@ public class JugadorDAO {
         this.session.close();
         return jugadores;
     }
+    
+    public Jugador getJugadoresPorNombre(String nombre) {
+        this.session = PersistenceJDBC.getSession();
+        Transaction tx = session.beginTransaction();
+        Query q = session.createQuery("from Jugador where nombre = '" + nombre+"'");
+        Jugador jugador = (Jugador) q.uniqueResult();
+        tx.commit();
+        this.session.close();
+        return jugador;
+    }
 
-    public void crearJugador(Jugador jugador) {
+    public void createJugador(Jugador jugador) {
         this.session = PersistenceJDBC.getSession();
         Transaction tx = session.beginTransaction();
         this.session.save(jugador);
