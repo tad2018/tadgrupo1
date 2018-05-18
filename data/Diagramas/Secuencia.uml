@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.mycompany.leaguetad</OriginalElement>
+  <nodes>
+    <node x="208.69770633012823" y="321.451171875">com.mycompany.leaguetad.Main</node>
+    <node x="0.0" y="395.451171875">com.mycompany.leaguetad.Index</node>
+    <node x="457.18753004807695" y="321.451171875">com.mycompany.leaguetad.CalendarioLiga</node>
+    <node x="322.18753004807695" y="321.451171875">com.mycompany.leaguetad.Clasificacion</node>
+    <node x="293.1352063301282" y="162.451171875">com.mycompany.leaguetad.dao</node>
+    <node x="4.25" y="321.451171875">com.mycompany.leaguetad.Dashboard</node>
+    <node x="144.4977063301282" y="162.451171875">com.mycompany.leaguetad.model</node>
+    <node x="227.9020032051282" y="13.451171875">com.mycompany.leaguetad.persistence</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.mycompany.leaguetad.Dashboard" target="com.mycompany.leaguetad.persistence">
+      <point x="-26.25" y="-14.5" />
+      <point x="30.5" y="291.451171875" />
+      <point x="43.5" y="291.451171875" />
+      <point x="43.5" y="112.451171875" />
+      <point x="265.05584935897434" y="112.451171875" />
+      <point x="-31.84615384615384" y="14.5" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.Clasificacion" target="com.mycompany.leaguetad.dao">
+      <point x="-7.105427357601002E-15" y="-14.5" />
+      <point x="379.68753004807695" y="301.451171875" />
+      <point x="361.1977063301282" y="301.451171875" />
+      <point x="18.5625" y="14.5" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.CalendarioLiga" target="com.mycompany.leaguetad.persistence">
+      <point x="25.39999999999995" y="-14.5" />
+      <point x="546.0875300480768" y="301.451171875" />
+      <point x="541.5101262019231" y="301.451171875" />
+      <point x="541.5101262019231" y="102.451171875" />
+      <point x="349.97892628205125" y="102.451171875" />
+      <point x="53.076923076923066" y="14.5" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.Main" target="com.mycompany.leaguetad.model">
+      <point x="-15.0" y="-14.5" />
+      <point x="231.19770633012823" y="251.451171875" />
+      <point x="223.59770633012823" y="251.451171875" />
+      <point x="22.600000000000023" y="14.5" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.dao" target="com.mycompany.leaguetad.persistence">
+      <point x="24.75" y="-14.5" />
+      <point x="367.3852063301282" y="132.451171875" />
+      <point x="318.13277243589744" y="132.451171875" />
+      <point x="21.230769230769226" y="14.5" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.CalendarioLiga" target="com.mycompany.leaguetad.dao">
+      <point x="-25.399999999999977" y="-14.5" />
+      <point x="495.287530048077" y="281.451171875" />
+      <point x="385.9477063301282" y="281.451171875" />
+      <point x="43.3125" y="14.5" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.Dashboard" target="com.mycompany.leaguetad.dao">
+      <point x="26.25" y="-14.5" />
+      <point x="83.0" y="261.451171875" />
+      <point x="299.3227063301282" y="261.451171875" />
+      <point x="-43.3125" y="14.5" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.Main" target="com.mycompany.leaguetad.dao">
+      <point x="30.0" y="-14.5" />
+      <point x="276.1977063301282" y="291.451171875" />
+      <point x="336.4477063301282" y="291.451171875" />
+      <point x="-6.1875" y="14.5" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.persistence" target="com.mycompany.leaguetad.persistence">
+      <point x="-63.69230769230769" y="14.5" />
+      <point x="233.2096955128205" y="62.451171875" />
+      <point x="207.9020032051282" y="62.451171875" />
+      <point x="207.9020032051282" y="35.201171875" />
+      <point x="-69.0" y="7.25" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.Main" target="com.mycompany.leaguetad.persistence">
+      <point x="-30.0" y="-14.5" />
+      <point x="216.19770633012823" y="251.451171875" />
+      <point x="93.99770633012821" y="251.451171875" />
+      <point x="93.99770633012821" y="142.451171875" />
+      <point x="296.9020032051282" y="142.451171875" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.model" target="com.mycompany.leaguetad.model">
+      <point x="-45.2" y="14.5" />
+      <point x="155.79770633012822" y="211.451171875" />
+      <point x="124.49770633012821" y="211.451171875" />
+      <point x="124.49770633012821" y="186.61783854166666" />
+      <point x="-56.5" y="9.666666666666657" />
+    </edge>
+    <edge source="com.mycompany.leaguetad.Clasificacion" target="com.mycompany.leaguetad.persistence">
+      <point x="38.33333333333334" y="-14.5" />
+      <point x="418.02086338141027" y="301.451171875" />
+      <point x="420.8403044871795" y="301.451171875" />
+      <point x="420.8403044871795" y="122.451171875" />
+      <point x="328.748157051282" y="122.451171875" />
+      <point x="31.84615384615384" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="494.5" y="411.5" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>Project Files</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
