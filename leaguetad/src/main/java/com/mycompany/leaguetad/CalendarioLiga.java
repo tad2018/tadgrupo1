@@ -192,7 +192,7 @@ public class CalendarioLiga extends UI {
 
                 int idPartido = (int) transferable.getItemId();
 
-                Jornada jornada = jornadaDAO.obtenerJornadaPorFecha(fechaFormat, 2);
+                Jornada jornada = jornadaDAO.obtenerJornadaPorFecha(fechaFormat, 1);
                 partidoDAO.updateJornadaAPartido(jornada, idPartido);
 
                 BasicEventProvider ep = (BasicEventProvider) details

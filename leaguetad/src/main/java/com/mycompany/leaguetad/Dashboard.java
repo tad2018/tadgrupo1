@@ -1057,11 +1057,13 @@ public class Dashboard extends UI {
                 LigaDAO ligadao = new LigaDAO();
                 Liga liga = ligadao.buscarLigaporNombre(nombreLigaSelected);
                 Jornada jornada = new Jornada();
-                jornada.setNumero(numero);
-                jornada.setCalendarioByCalendarioId(c);
-                jornada.setFecha(timestamp);
                 JornadaDAO jornadadao = new JornadaDAO();
-                jornadadao.crearJornada(jornada);
+                if(jornadadao.getJornada(numero, c) == null){
+                    jornada.setNumero(numero);
+                    jornada.setCalendarioByCalendarioId(c);
+                    jornada.setFecha(timestamp);
+                    jornadadao.crearJornada(jornada);
+                }
             } else {
                 Notification n = new Notification("Enter the fields", Notification.Type.ERROR_MESSAGE);
                 n.setDelayMsec(1000);
